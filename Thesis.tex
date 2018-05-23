@@ -1,0 +1,407 @@
+\documentclass[12pt,fleqn,a4paper]{book}
+
+\usepackage[ngerman,english]{babel}
+
+\usepackage{todonotes}
+
+% \usepackage{pdflscape} Not needed because I don't use landscape pages 
+\usepackage{tocloft} % toc entries spacing (https://latex.org/forum/viewtopic.php?t=7701)
+%\renewcommand{\cftchapafterpnum}{\vspace{5pt}}
+%\setlength\cftparskip{1pt}
+%\setlength\cftbeforesecskip{0pt}
+%\setlength\cftaftertoctitleskip{15pt}
+
+% toc entries spacing (https://texblog.org/2013/07/16/how-to-add-extra-space-to-the-table-of-contents-list-of-figures-and-tables/)
+\usepackage{etoolbox}
+\preto\section{%
+  \ifnum\value{section}=0\addtocontents{toc}{\vskip5pt}\fi
+}
+
+\usepackage{epsfig}
+%%FONTS - if using Winedt then standard fo nt is good
+%\usepackage{pslatex} %provides times font for roman and maths and helvet for sansserif (ie same as mathptmx + helvet)
+%\usepackage{mathptmx, helvet} % equivalent to (but not as good as) pslatex
+%\usepackage{txfonts} % supposed to be a good times package
+\usepackage{times} % redundant use mathptmx and helvet together or pslatex
+\usepackage{amssymb, amsmath, amsbsy} % needed for AMSLatex maths fonts, amsbsy needed for \boldsymbol
+\usepackage{exscale, relsize} % allows relative sizes (\larger \smaller[2] \mathlarger etc) -needs exscale package
+%\usepackage{bbm} % needed for mathbbm - used for \IR & \IP (see MyCommands.sty)
+
+\usepackage{multirow} % jan: For spanning of cells in Tables
+
+\usepackage{graphicx} %% THE package to use for images (as opposed to epsfig or graphic)
+% \usepackage{url} % formats urls nicely (or use hyperref which also creates clickable links in pdfs)
+
+\usepackage[depth=subsubsection]{bookmark}
+
+\usepackage{xcolor}
+\hypersetup{
+	colorlinks,
+	linkcolor = {blue!50!black},   % Color in TOC
+	citecolor = {blue!50!black},
+	urlcolor = {blue!50!black}
+}
+\usepackage{fancyhdr} % Nice headers (and footers)
+\usepackage[Lenny]{fncychap} % Nice Chapter headings
+%\usepackage{sectsty} % Alter section styles
+\usepackage{setspace} % allows use \doublespace etc
+%\usepackage{color} % not needed if using graphicx
+%\usepackage{colortbl}
+\usepackage[margin = 0.7cm, font=normalsize, labelfont=bf, textfont=sl]{caption} % set caption fonts
+\usepackage{subfig} % subfig package for creating subfigures -requires caption package
+\usepackage[ruled, chapter]{algorithm} % allows use of algorithm environment
+\usepackage{algorithmicx}
+\usepackage{algpseudocode} % part of algorithmicx package to allow writing/typesetting of algorithms
+%\usepackage{algorithmic}
+%\usepackage{algorithm2e}
+\usepackage[below]{placeins} % [section] ensures floats are placed within the section they are declared or if [below] then could be in next section if at least some of old section on that page
+\usepackage{booktabs}
+\usepackage{ctable}
+
+\usepackage{textcomp} % Needed for \textdegree symbol (Jan 2016/05)
+\usepackage{longtable} % Needed for page breeaking Taples (Jan 2016/05)
+
+\usepackage[sort, numbers]{natbib} % improved bibliography options (sort = sort citations in text, numbers = use numbers not alpha)
+
+% Jan enable to configure item lists
+\usepackage{enumitem}
+
+% \usepackage[style = ieee]{biblatex} % Jan alternative
+% \bibliographystyle{abbrvnat} % natbib equivavlent of plain bibliography style
+
+\usepackage{mathtools} % Jan for floor and ceil
+% \newcommand{\noopsort}[1]{} % fix sorting in bibliography for Dutch names
+
+
+
+\usepackage{siunitx} % Jan e-8 notation
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}} % Jan e-8 notation
+
+% Jan higher subs for Rec.709 notation
+\usepackage[low-sup]{subdepth}
+
+% Jan Hyperref should be loaded last
+\usepackage{hyperref} % hyperref creates clickable links in pdfs)
+
+% \usepackage{breakcites}
+\def\UrlBreaks{\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\,\do\?\do\'\do+\do\=\do\#\do\-\do\:\do\&}% New linebreaks for URLs in bibliography
+% \urlstyle{same}
+
+\clubpenalty10000
+\widowpenalty10000
+
+%\DeclareGraphicsExtensions{.jpg, .eps}
+%\DeclareGraphicsRule{.jpg}{eps}{.jpg.bb}{`jpeg2ps -h -r 600 #1}
+
+% Define if Rasterized Gamut Plots or Trinagle Vector versions are used:
+\newcommand{\gamutPlotExtension}{_AI_Rasterized}
+% \newcommand{\gamutPlotExtension}{_AI}
+
+\setlength{\hoffset}{-1in} % move origin of margin measure to edge of page!
+\setlength{\oddsidemargin}{40mm}
+%\setlength{\evensidemargin}{40mm} % use this when single-sided
+\setlength{\evensidemargin}{20mm} % use this when double-sided
+\setlength{\textwidth}{150mm} % width of main body of text
+
+\setlength{\topmargin}{0mm} % normally want this at 0 - use voffset instead
+\setlength{\voffset}{0mm} % This means top margin is 25.4mm (1 in) reduce with -ve value
+\setlength{\headheight}{8mm} % vertical size of header
+\setlength{\headsep}{10mm} % gap between bottom of header and text
+\setlength{\footskip}{40mm} % gap between bottom of text and bottom of footer
+\setlength{\textheight}{220mm} % height of main body of text
+%%HENRY'S THING FOR SETTING OUT MARIGNS FOR WHOLE DOC \usepackage[]{layout}
+\skip\footins 8mm % gap between footnotes and text (only when footnotes actually on a page)
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{\baselineskip}
+
+%Lists settings
+\setlength{\topsep}{11pt}
+\setlength{\partopsep}{-\parskip}
+\setlength{\itemsep}{11pt}
+\setlength{\parsep}{11pt}
+
+%\setcounter{topnumber}{2} % max floats at top of page (Jan was 1)
+%\setcounter{bottomnumber}{2} % max floats at bottom of page (Jan was 0)
+%\setcounter{totalnumber}{4} % total floats per page (unless an all-float page) (Jan was 1)
+
+% Try from the internet
+\setcounter{topnumber}{9}
+\setcounter{bottomnumber}{9}
+\setcounter{totalnumber}{20}
+\setcounter{dbltopnumber}{9}
+
+\renewcommand{\topfraction}{.85}
+\renewcommand{\bottomfraction}{.7}
+\renewcommand{\textfraction}{.15}
+\renewcommand{\floatpagefraction}{.66}
+\renewcommand{\dbltopfraction}{.66}
+\renewcommand{\dblfloatpagefraction}{.66}
+
+% Jan: Remove Header from empty pages
+\makeatletter
+\renewcommand*{\cleardoublepage}{\clearpage\if@twoside \ifodd\c@page\else
+	\hbox{}%
+	% \thispagestyle{empty}%
+	\fancyhead[LO]{~} 
+	\fancyhead[RE]{~}
+	\newpage%
+	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+% From Timo
+%\renewcommand{\topfraction}{0.85}
+%\renewcommand{\textfraction}{0.15}
+
+\setcounter{secnumdepth}{3} % set depth before subsections become unnumbered (i.e. at subsubsection)
+\setcounter{tocdepth}{3} % Set septh to include in TOC
+
+\usepackage[utf8]{inputenc} %% For ü ö
+\usepackage[charter]{mathdesign}
+%\usepackage{titlesec} 
+%\renewcommand*{\sfdefault}{phv}
+
+\author{Jan Froehlich}
+\date{\today}
+
+%% Jan useful commands
+\newcommand{\jCom}[1]{\textcolor{blue}{\colorbox{lightgray}{Com: #1}}}
+\newcommand{\jToDo}[1]{\textcolor{red}{\colorbox{yellow}{#1}}}
+\newcommand{\jDan}[1]{\textcolor{red}{\colorbox{yellow}{Daniel: #1}}}
+\newcommand{\jJan}[1]{\textcolor{red}{\colorbox{yellow}{Jan: #1}}}
+\newcommand{\jBernd}[1]{\textcolor{red}{\colorbox{yellow}{Bernd: #1}}}
+\newcommand{\jAndreas}[1]{\textcolor{red}{\colorbox{yellow}{Andreas: #1}}}
+\newcommand{\jLaTeX}[1]{\textcolor{magenta}{\colorbox{cyan}{LaTeX: #1}}}
+
+% Possibility to comment in First names in the Related Work chapter.
+\newcommand{\jFN}[1]{\ignorespaces}
+
+\DeclareMathOperator{\atant}{atan2}
+\DeclareMathOperator{\sign}{sign}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
+\newcommand{\cdmm}[1]{#1\,cd/m\textsuperscript{2}}
+% \newcommand{\CIECAMOT}{CIECAM02}
+\newcommand{\ICaCb}{IC\textsubscript{A}C\textsubscript{B}}
+\newcommand{\Ca}{C\textsubscript{A}}
+\newcommand{\Cb}{C\textsubscript{B}}
+\newcommand{\Ct}{C\textsubscript{T}}
+\newcommand{\Cp}{C\textsubscript{P}}
+\newcommand{\HLG}{Hybrid Log-Gamma}
+\newcommand{\ICtCp}{IC\textsubscript{T}C\textsubscript{P}}
+\newcommand{\IPT}{IPT}
+\newcommand{\Lab}{CIE L*a*b*}
+\newcommand{\Luv}{CIE L*u*v*}
+\newcommand{\RecTTBBC}{Rec.2100 HLG}
+\newcommand{\RecTTPQ}{Rec.2100 PQ}
+\newcommand{\RGBP}{R$^\prime$G$^\prime$B$^\prime$}
+\newcommand{\XYZ}{CIE 1931 XYZ}
+% \newcommand{\xyY}{CIE xyY}
+\newcommand{\xy}{CIE 1931 xy}
+\newcommand{\uv}{CIE 1976 u$^\prime$v$^\prime$}
+\newcommand{\YCbCr}{Y$^\prime$C\textsubscript{B}C\textsubscript{R}}
+\newcommand{\YuvDP}{Y$^{\prime\prime}$u$^{\prime\prime}$v$^{\prime\prime}$}
+\newcommand{\YP}{Y$^\prime$}
+
+% Fix Hyphenatrion Problems
+\hyphenation{speci-fi-cally} % 1
+\hyphenation{quan-ti-zation} % 1.1
+\hyphenation{re-so-lu-ti-on} % {Outline and Contributions} 1.3
+\hyphenation{image} % {fig:iPhone_HDR_Flames}
+\hyphenation{spe-ci-fied} % List of Symbols
+\hyphenation{ima-ge-ry} % pu transfer function
+\hyphenation{threshold} % \label{ICaCbNumericalVerification}
+% \hyphenation{tech-nology} % Abbrevarions
+% \hyphenation{photo-graphy} % Abbrevarions
+% Only some chapters
+% \includeonly{02_Introduction/Introduction}
+% \includeonly{04_Related_Work/Related_Work}
+% \includeonly{05_HdM-HDR-2014/HdM-HDR-2014}
+% \includeonly{06_ICaCb/ICaCb}
+% \includeonly{07_Reshaping/Reshaping}
+% \includeonly{08_Conclusion/Conclusion}
+% \includeonly{09_Appendices/Appendix_HdM-HDR-2014}
+
+% Experiment to have left aline tables still specifying column width
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+%\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+%\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+
+\begin{document}
+
+\include{01_preamble/Title} 
+\cleardoublepage
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\fancyfoot{} % clear all footer fields
+
+
+\fancyhead[RO]{\thepage}
+\fancyhead[LE]{\thepage}
+
+
+%\onehalfspacing % set one and a half linespacing
+%\begin{spacing}{0.5}
+{\hypersetup{linkcolor=black}  % begin: Make Links in TOCs black, but dark blue in the rest of the Document
+
+
+\addtocontents{toc}{\vspace{\normalbaselineskip}} % hack: Add some space to aling toc haedlines better
+
+%\addcontentsline{toc}{chapter}{Table of Contents}
+%% Jan Fix for weird LaTex behaviour:
+%\fancyhead[LO]{\bfseries Table of Contents} 
+%\fancyhead[RE]{\bfseries Table of Contents}
+
+\renewcommand{\baselinestretch}{0.1}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1.0}\normalsize
+
+\cleardoublepage
+
+
+\addcontentsline{toc}{chapter}{List of Figures}
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries List of Figures} 
+\fancyhead[RE]{\bfseries List of Figures}
+\listoffigures
+\cleardoublepage
+
+\addcontentsline{toc}{chapter}{List of Tables}
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries List of Tables} 
+\fancyhead[RE]{\bfseries List of Tables}
+\listoftables
+\cleardoublepage
+
+
+} % end: Make Links in TOCs black, but dark blue in the rest of the Document
+%\end{spacing}
+
+%\onehalfspacing % set one and a half linespacing
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries List of Abbreviations} 
+\fancyhead[RE]{\bfseries List of Abbreviations}
+\include{01_Preamble/Abbreviations}
+\cleardoublepage
+
+
+\addcontentsline{toc}{chapter}{List of Symbols}
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries List of Symbols} 
+\fancyhead[RE]{\bfseries List of Symbols}
+\include{01_Preamble/Notation}
+
+\cleardoublepage
+%\onehalfspacing % set one and a half linespacing
+\addcontentsline{toc}{chapter}{Abstract}
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries Abstract} 
+\fancyhead[RE]{\bfseries Abstract}
+\include{01_Preamble/Abstract} 
+\cleardoublepage
+
+\addcontentsline{toc}{chapter}{Zusammenfassung (German Abstract)}
+%\onehalfspacing % set one and a half linespacing
+% Jan Fix for weird LaTex behaviour:
+\fancyhead[LO]{\bfseries Zusammenfassung (German Abstract)} 
+\fancyhead[RE]{\bfseries Zusammenfassung (German Abstract)}
+\include{01_Preamble/AbstractDE} 
+\cleardoublepage
+
+%\begin{spacing}{1.19} % Hack to prevent the Acknowledgements to need more than 2 pages
+% Jan Fix for weird LaTex behaviour:
+%\fancyhead[LO]{\bfseries Acknowledgements} 
+%\fancyhead[RE]{\bfseries Acknowledgements}
+%\include{01_Preamble/Acknowledgements}
+%\end{spacing}
+\cleardoublepage
+
+% \include{01_Preamble/Declaration} 
+%
+%
+%\pagestyle{plain}
+%
+%
+
+\cleardoublepage % Beendet eine Seite und erzwingt auf den nachfolgenden Seiten die Ausgabe aller Gleitobjekte (z.B. Abbildungen), die bislang definiert, aber noch nicht ausgegeben wurden. Dieser Befehl fügt, falls nötig, eine leere Seite ein, sodaß die nächste Seite nach den Gleitobjekten eine ungerade Seitennummer hat.
+
+%\onehalfspacing % set one and a half linespacing
+
+
+
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\fancyfoot{} % clear all footer fields
+
+\fancyhead[RO]{\thepage} % Jan
+\fancyhead[LE]{\thepage} % Jan
+
+\fancyhead[LO]{\bfseries \rightmark} % Jan
+\fancyhead[RE]{\bfseries \leftmark} % Jan
+
+
+% Sart with new Page numbers all over
+% \pagenumbering{arabic}
+
+\include{02_Introduction/introduction}
+\include{03_foundations_of_light_transport_simulation/foundations}
+\include{04_pn_method/pn_method}
+\include{05_diffusion_approximation/diffusion_approximation}
+\include{06_fld/fld}
+\include{07_conclusion/conclusion}
+
+
+
+%\include{03_Background/Background}
+%\include{04_Related_Work/Related_Work}
+%\include{05_HdM-HDR-2014/HdM-HDR-2014}
+%\include{06_ICaCb/ICaCb}
+%\include{07_Reshaping/Reshaping}
+%\include{08_Conclusion/Conclusion}
+
+%
+% Jan Fix for weird LaTex behaviour:
+%\fancyhead[LO]{\bfseries Publications} 
+%\fancyhead[RE]{\bfseries Publications}
+%\include{01_Preamble/Publications} 
+%\cleardoublepage
+%
+% Jan Fix for weird LaTex behaviour:
+%\fancyhead[LO]{\bfseries Bibliography} 
+%\fancyhead[RE]{\bfseries Bibliography}
+%\addcontentsline{toc}{chapter}{Bibliography}
+%
+%%GATHER{Bibliography.bib}   % For Gather Purpose Only (v useful in winedt)
+%
+%\singlespacing
+%
+%%\bibliographystyle{ACM-Reference-Format-Journals} % {abbrvnatjan}% {abbrvnat} % abbrvnat
+%\bibliographystyle{abbrvnat}
+%%\bibliographystyle{ieeetr} % Jan 2016/05 better numbering but loosing URLs
+%
+%% \emergencystretch 1.5em % Should split URLS
+%%\interlinepenalty=10000 % should remove splitting of items over pages
+%\bibliography{JanBib}
+%%\interlinepenalty=10000 % should remove splitting of items over pages
+%
+%\cleardoublepage
+%
+%\onehalfspacing
+
+% Jan Fix for weird LaTex behaviour:
+%\fancyhead[LO]{\bfseries Appendix} 
+%\fancyhead[RE]{\bfseries Appendix}
+%\appendix
+%
+
+%\include{09_Appendices/Appendix_HdM-HDR-2014}
+
+%
+\end{document}

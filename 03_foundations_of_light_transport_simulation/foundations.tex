@@ -1,0 +1,82 @@
+\chapter{Foundations of Light Transport Simulation}
+\label{sec:foundations}
+
+% ============================================================
+\section{Quantities in Radiative Transfer}
+
+% ============================================================
+\section{The Radiative Transfer Equation}
+
+
+\todo[inline]{Derive the radiative transfer equation terms}
+\todo[inline]{Advection}
+\todo[inline]{absorption}
+\todo[inline]{scattering (outscattering)}
+\todo[inline]{scattering (inscattering)}
+\todo[inline]{phase function}
+\todo[inline]{isotropic phase function}
+\todo[inline]{anisotropic phase function}
+
+\missingfigure{visualization of inscattering, outscattering and absorption.}
+
+\todo[inline]{Discuss wavelength dependence}
+
+\todo[inline]{Discuss time dependence and steady state}
+
+\todo[inline]{discuss isotropic medium, anisotropic medium}
+
+\todo[inline]{operator notation}
+
+% ============================================================
+\section{Non-deterministic Methods}
+
+\subsection{Ray-marching and Distributed Raytracing}
+\subsection{Path-integral Formulation}
+\subsection{Monte-Carlo Method}
+\todo[inline]{explain incremental path construction}
+\todo[inline]{explain the concept of variance}
+\todo[inline]{explain the concept of bias}
+\subsection{Variance Reduction Techniques}
+\todo[inline]{Explain, that a great variety of Monte Carlo methods exist because there are many ways information and assumptions can be combined with the basic variance reduction techniques available for monte carlo integration}
+\todo[inline]{Local variance reduction technique}
+\todo[inline]{semi-global reduction technique}
+\todo[inline]{global reduction technique}
+\subsubsection{Importance Sampling}
+\todo[inline]{explain importance sampling basics}
+\todo[inline]{multiple importance sampling}
+\todo[inline]{explain JIS as a semi-global technique}
+\todo[inline]{explain SNEE as a semi-global technique}
+\subsubsection{Control Variates}
+\todo[inline]{explain control variates}
+\todo[inline]{multi-level monte carlo}
+\todo[inline]{residual ratio tracking (precomputing the maximum volume height for volume bricks as semi-global))}
+\subsubsection{Russian Roulette and Splitting}
+\todo[inline]{Point out, }
+\todo[inline]{Point out, that the different variance reduction techniques all }
+
+% ============================================================
+\section{Deterministic Methods}
+
+\subsection{Ad-hoc and Heuristical Methods}
+\todo[inline]{What constitutes a heuristic method? Not directly connected to theory.}
+\todo[inline]{Light Propagation Volumes}
+\todo[inline]{Anton Bouthours stuff}
+\todo[inline]{Wavefront stuff from Dreamworks}
+
+\subsection{Discretized Radiative Transfer}
+\todo[inline]{Point out difference to ad-hoc methods (that it is grounded to theory)}
+\todo[inline]{mention isotropic medium, anisotropic medium}
+\todo[inline]{Spatial Discretization}
+\todo[inline]{Finite differences}
+\todo[inline]{Finite elements}
+\todo[inline]{Angular Discretization}
+\todo[inline]{Lattice Boltzmann, Discrete Ordinates, Spherical Harmonics}
+\missingfigure{overview of all angular discretization methods.}
+
+\todo[inline]{reiterate, that in this thesis we are concerned with methods using SH based discretization of angular variable.}
+
+
+% ============================================================
+\subsection{Spherical Harmonics Discretization in Angular Domain}
+\subsubsection{Spherical Harmonics Basis and Properties}
+\subsubsection{Complex-valued $P_N$-equations}
