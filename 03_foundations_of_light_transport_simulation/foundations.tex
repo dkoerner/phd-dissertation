@@ -4,9 +4,18 @@
 % ============================================================
 \section{Quantities in Radiative Transfer}
 
+\TD{radiance}
+\TD{radiance field}
+\TD{fluence}
+\TD{flux}
+
 % ============================================================
 \section{The Radiative Transfer Equation}
 
+\begin{align}
+\label{eq:rte}
+X
+\end{align}
 
 \todo[inline]{Derive the radiative transfer equation terms}
 \todo[inline]{Advection}
@@ -15,6 +24,11 @@
 \todo[inline]{scattering (inscattering)}
 \todo[inline]{phase function}
 \todo[inline]{isotropic phase function}
+\todo[inline]{mean cosine}
+\begin{align}
+\label{eq:foundations_mean_cosine}
+X
+\end{align}
 \todo[inline]{anisotropic phase function}
 
 \missingfigure{visualization of inscattering, outscattering and absorption.}
@@ -79,4 +93,11 @@
 % ============================================================
 \subsection{Spherical Harmonics Discretization in Angular Domain}
 \subsubsection{Spherical Harmonics Basis and Properties}
+
+
+\begin{align}
+\label{eq:sh_projection}
+\alpha^{l,m} = \int_\Omega{ L\left(\vec{x},\omega\right)\SHBC^{l,m}\ud\omega}
+\end{align}
+
 \subsubsection{Complex-valued $P_N$-equations}

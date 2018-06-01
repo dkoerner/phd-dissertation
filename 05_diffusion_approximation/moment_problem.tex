@@ -1,0 +1,80 @@
+\section{Isotropic Moment Closure}
+\label{sec:moment_closure}
+
+The diffusion approximation theories are derived from truncating the moment expansion of the RTE after its first moment and eliminating the unknown $\vec{E}$ by inserting the first moment equations into the zero moment equation to arrive at a single partial differential equation, which contains the zero moment $\phi$ and the second moment $P$ of the radiance field as unknowns. In order to be able to solve this partial differential equation for $\phi$, it has to be closed by eliminating the second moment $P$ as an unknown. Finding or making an educated guess for the closure $P$ is therfore called the moment closure problem. In this section, we will outline the closure for the classical diffusion approximation and revise it in chapter~\ref{sec:fld} to introduce more sophisticated closures.
+
+When trying to make an educated guess for $P$, there is actually some information available we could use: the lower moments. The zero moment $\phi$ expresses the power at $\vec{x}$. That is, the total amount of energy arriving from all directions. So what is not known, more specifically, is how this power is distributed over solid angle. The distribution can be expressed using the normalized radiance field $\hat{L}$:
+\begin{align*}
+L(\vec{x}, \omega) = \hat{L}(\vec{x}, \omega)\phi(\vec{x})
+\end{align*}
+The normalized radiance field is a probability distribution and tells us how radiative power at $x$ is distributed over solid angle. Its first moment is called the normalized flux $\widehat{\vec{E}}$ and will become important later with more advanced diffusion theories:
+\begin{align*}
+\widehat{\vec{E}}(\vec{x}) = \hat{L}_1(\vec{x}) = \int_{\Omega}\frac{L(\vec{x}, \omega)}{\phi(\vec{x})}\omega\ud\omega = \frac{1}{\phi(\vec{x})}\int_{\Omega}L(\vec{x}, \omega)\omega\ud\omega = \frac{\vec{E}(\vec{x})}{\phi(\vec{x})}
+\end{align*}
+Seperating the radiance field into power and its distribution over solid angle, allows us to factorize the unknown $P$ in the same fashion:
+\begin{align*}
+P(\vec{x}) &=
+\int_{\Omega}{\hat{L}(\vec{x}, \omega)\phi(\vec{x})N_2\ud\omega}\\
+&= \int_{\Omega}{\hat{L}(\vec{x}, \omega)N_2\ud\omega}\phi(\vec{x})\\
+&= \hat{L}_2(\vec{x}, \omega)\phi(\vec{x})
+\end{align*}
+The second moment of the radiance field is expressed as the second moment of the angular radiance distribution multiplied by the power $\phi$ at $\vec{x}$. This means, that finding a closure at the end boils down to finding or estimating a spherical distribution function. The second moment of that estimated distribution is called the Eddington tensor~$T$:
+\begin{align*}
+T(\vec{x}) \approx \hat{L}_2(\vec{x}, \omega) =
+\frac{P(\vec{x})}{\phi(\vec{x})} =
+\widehat{P}(\vec{x})
+\end{align*}
+The Eddington tensor is used to distribute the known power $\phi$ over angle and approximate $P$:
+\begin{align*}
+T(\vec{x})\phi(\vec{x}) \approx 
+P(\vec{x})
+\end{align*}
+The simple key assumption behind the classical diffusion approximation is that the radiance field $L$ is constant and does not change for different angles $\omega$. This assumption allows finding an estimate $T$ for the second moment of the radiance distribution. We start by assuming unit power $\phi = 1$:
+\begin{align*}
+1 = \phi\left(\vec{x}\right) = \int_\Omega{L\left(\vec{x}, \omega\right)\ud\omega}
+\end{align*}
+Since $L$ is constant over solid angle ($L(\vec{x}, \omega)=L(\vec{x})$), we can pull it out of the integral to get:
+\begin{align*}
+1 = \phi\left(\vec{x}\right) = L\left(\vec{x}\right)\int_\Omega{\ud\omega}\implies L\left(\vec{x}\right) = \frac{1}{4\pi}
+\end{align*}
+We use our constant radiance field, to compute the components of the radiative pressure tensor:
+\begin{align*}
+P\left(\vec{x}\right) 
+= \int_\Omega{L\left(\vec{x}\right)N_2\ud\omega}
+= \frac{1}{4\pi}\int_\Omega{N_2\ud\omega}
+= \frac{1}{4\pi}\frac{4\pi}{3}\mathbf{I}
+= \frac{1}{3}\mathbf{I}
+\end{align*}
+Since we assumed unit power $\phi(\vec{x})=1$ without loss of generality, we have:
+\begin{align*}
+T(\vec{x})\phi(\vec{x}) = P(\vec{x}) \implies T(\vec{x})=\frac{1}{3}\mathbf{I}
+\end{align*}
+Inserting $P=T\phi=\frac{1}{3}\mathbf{I}\phi$ into equation~\ref{eq:general_diffusion_equation}, gives the diffusion equation for anisotropic emission sources
+\begin{align}
+\label{eq:diffusion_equation_anisotropic_Q}
+\nabla
+\left(
+-\frac{1}{3\sigma_t'\left(\vec{x}\right)}
+\nabla \phi\left(\vec{x}\right)
+\right)&=
+-\phi(\vec{x})\sigma_a(\vec{x})
++Q_0\left(\vec{x}\right)
++\nabla Q_1\left(\vec{x}\right)
+\end{align}
+and becomes the popular diffusion approximation formula for isotropic emission sources ($Q_1=\vec{0}$):
+\begin{align}
+\label{eq:diffusion_equation_anisotropic_Q}
+\nabla
+\left(
+D
+\nabla \phi\left(\vec{x}\right)
+\right)&=
+-\phi(\vec{x})\sigma_a(\vec{x})
++Q_0\left(\vec{x}\right)
+\end{align}
+with the classic linear diffusion coefficient
+\begin{align}
+D=-\frac{1}{3\sigma_t'\left(\vec{x}\right)}
+\end{align}
+
+
