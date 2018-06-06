@@ -10,19 +10,14 @@ The chapter continues to introduce a different view on the spherical harmonics e
 After introducing the moment equations, two extreme transport scenarios are derived. First the diffusion limit in section~\ref{sec:fld_diffusion_approximation}, followed by the streaming limit in section~\ref{sec:fld_streaming_limit_approximation}. Finally, flux-limited diffusion is derived as a means to blend between the two extreme modes of transport using local information. This blending is driven by the variable eddington factor, which introduced in section~\ref{sec:fld_vef}. Various concrete realizations of the eddington factor are given and compared in section~\ref{sec:fld_vef_factors}. Finally, an iterative solver is presented in section~\ref{sec:fld_solver}. The chapter concludes with results in section~\ref{sec:fld_results}.
 
 
+\input{06_fld/moment_problem_revisited}
+\input{06_fld/delta_distribution}
+\input{06_fld/vef}
 
 
-\section{Moment Problem Revisited}
-\TD{talk about moment contraints}
-\todo[inline]{Mention/Discuss how the assumption of isotropic radiance distribution for the 2nd order tensor of the radiance field is violated strongly near boundaries or transitions from low to high density medium}
 
-\section{Delta Radiance Distribution (Streaming Limit Approximation)}
-\label{sec:fld_streaming_limit_approximation}
 
-\section{Varying Radiance Distribution (Variable Eddington Factor)}
-\label{sec:fld_vef}
 
-\TD{mention how VEF is basically blending between isotropic radiance distribution and delta radiance distribution}
 
 \section{Eddington Factors and Flux-limiters}
 \label{sec:fld_vef_factors}

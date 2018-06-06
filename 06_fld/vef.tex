@@ -1,0 +1,35 @@
+\section{Varying Radiance Distribution (Variable Eddington Factor)}
+\label{sec:fld_vef}
+
+In the two previous sections, diffusion theories have been derived for the two extreme limits of transport. That is, purely isotropic radiance which happens in the limit of thick, highly scattering media or a delta distribution which happens in the limit of very transparent, low order scattering media. This section will introduce the Variable Eddington Factor formalism, which is a theoretical framework, in which flux-limited diffusion is embedded. While diffusive transport has been related to diffussive transport, the streaming transport has been shown to relate to advection and the Variable Eddington Factor formalism is a theory which allows to realize and mix both types of transport within a domain.
+
+\TD{show advection and diffusion transport}
+
+Classical diffusion assumed an isotropic distribution of radiance for the second moment, while pure streaming transport assumed a Delta distribution. The Variable Eddington Factor theory assumes a radiance distribution, which is rotationally symmetric around a dominant vector $\vec{n}$. This assumtion allows to to derive a form for $T$, which allows to represent isotropic distribution, as well as a pure Delta distribution and forms inbetween, which are rotationally symmetric around a dominant direction $\vec{x}$.
+
+\TD{show image with isotropic distribution, streaming limit distribution and inbetween forms}
+
+We start deriving the Variable Eddington Factor form of $T$ by considering a principal direction of transport, given by the vector $\vec{n}$ of unit length. Now an important assumption, which is being made, is that the radiance distribution will be radially symmetric about this direction. This means, that the value of $\hat{L}$ will be invariant to a rotation about axis $\vec{n}$. It follows, that its first and second moment $\hat{L}_1$ and $\hat{L}_2$ will also be invariant to rotation about $\vec{n}$. If we approximate $\hat{L}_2$ using the Eddington tensor $T$ with $\hat{L}_2\approx T\phi$, we can conclude that $\vec{n}$ will be an eigenvector of $T$, with some eigenvalue $\chi$:
+\begin{align*}
+T\vec{n} = \chi\vec{n}
+\end{align*}
+\TD{explain/give reference why eigenvectors need to sum up to one}
+The plane perpendicular to $\vec{n}$ is an eigenspace of $T$. By requiring that all eigenvalues sum up to one, we can express the eigenvalues of the two eigenvectors spanning that plane by distributing the remaining eigenvalue $1-\chi$ evenly between both:
+\begin{align}
+\frac{1}{2}\left(1-\chi\right)\mathbf{I}
+\label{eq:iso_var_T_isoterm}
+\end{align}
+From the free streaming limit case (section~\ref{sec:fld_streaming_limit_approximation}), we know that $\chi=1$ when the radiance distribution becomes a delta distribution (see equation~\ref{eq:zero_moment_Lhat} and~\ref{eq:first_moment_Lhat}). In that case, the eigenvalues associated with the eigenvectors perpendicular to $\vec{n}$ become zero and the term above vanishes.
+
+Tensor diagonalization allows us to explicitly add the eigenvector $\vec{n}$ by adding the matrix $\vec{n}_i\vec{n}_j$ (with $\vec{n}$ being of unit length). The scaling of its coefficients is found by considering that the term in equation~\ref{eq:iso_var_T_isoterm} introduces three eigenvectors. The sum of their eigenvalues will be $3/2(1-\chi)$. Since eigenvalues of our final tensor $T$ need to add up to one, we know that the eigenvalue associated with the matrix $\vec{n}_i\vec{n}_j$ will be $\left(1- \frac{3}{2}\left(1 - \chi\right)\right)$. This results in the following form for $T$:
+\begin{align}
+T &= \frac{1}{2}\left(1-\chi\right)\mathbf{I} + \left(1- \frac{3}{2}\left(1 - \chi\right)\right) \vec{n}\otimes\vec{n}
+\nonumber
+\\
+&= \frac{1}{2}\left(1-\chi\right)\mathbf{I} + \frac{1}{2}\left(3\chi-1\right) \vec{n}\otimes\vec{n}
+\label{eq:iso_var_T}
+\end{align}
+This form of $T$ is called the Variable Eddington Tensor (VET). It can be understood as an \emph{interpolation} between an isotropic distribution tensor ($1/3\mathbf{I}$) and a delta distribution tensor ($\vec{n}_i\vec{n}_j$). The variable $1/3 \le \chi \le 1$ is the interpolation variable and it is called the Eddington factor (VEF). We will refer to theories which respect this structure of the eddington tensor as theories under the variable eddington factor formalism (VEF-formalism).
+\TD{show how 1/3 produces isotropic tensor}
+\TD{show how 0.6 produces inbetween tensor}
+\TD{show how 1 produces extreme tensor}

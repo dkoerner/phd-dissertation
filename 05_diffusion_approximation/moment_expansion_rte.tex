@@ -151,7 +151,7 @@ and we further used that the first moment of a phase function, which only depend
 
 The quantity $\sigma_t'$ is called the reduced extinction coefficient and it is defined as
 \begin{align*}
-\sigma_t' = \sigma_t + g\sigma_s
+\sigma_t' = \sigma_t - g\sigma_s
 \end{align*}
 With that we have the two term expansion of the radiative transfer equation
 \begin{align}
@@ -164,7 +164,7 @@ With that we have the two term expansion of the radiative transfer equation
 \nabla P\left(\vec{x}\right) &= -\sigma_t'(\vec{x})\vec{E}\left(\vec{x}\right)
 +Q_1\left(\vec{x}\right)
 \end{align}
-These equations are the direct counterpart to the $P_1$-equations in moment expansion form. The diffusion approximation can be derived by taking the first moment equations and insert them into the zero moment equations by substituting $\vec{E}$. The same step can be carried out for the $P_1$-equations. However, the notation of the moment expansion is much more expressive, which is why this form is much more popular in the literature.
+These equations are the direct counterpart to the $P_1$-equations in moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same step can be carried out for the $P_1$-equations. However, the notation of the moment expansion is much more expressive, which is why this form is much more popular in the literature.
 
 We start by resolving equation~\ref{eq:me_first} for $\vec{E}$:
 \begin{align}
@@ -176,7 +176,7 @@ We start by resolving equation~\ref{eq:me_first} for $\vec{E}$:
 -Q_1\left(\vec{x}\right)
 \right)
 \end{align}
-Then we take equation~\ref{eq:me_first_resolved_E} and use it to subbstitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way we eliminate the unknown $\vec{E}$ and get a single scalar partial differential equation
+Then we take equation~\ref{eq:me_first_resolved_E} and use it to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way we eliminate the unknown $\vec{E}$ and get a single scalar partial differential equation
 \begin{align}
 \nabla
 \left(
@@ -201,7 +201,7 @@ which we can further rearrange into
 +Q_0\left(\vec{x}\right)
 +\nabla Q_1\left(\vec{x}\right)
 \end{align}
-The result comes very close to the popular diffusion approximation equation. A single unknown remains, the second moment of the radiance field $P$, called the radiative pressure tensor. Resolving or better approximating this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
+The result comes very close to the popular diffusion approximation equation. A single unknown remains, the second moment of the radiance field $P$, called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
 
 
 
