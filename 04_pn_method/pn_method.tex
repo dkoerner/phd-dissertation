@@ -2,25 +2,24 @@
 %
 \label{sec:pnmethod}
 
+The $P_N$-method is a deterministic method for computing light transport in a participating media. It is based on the spherical harmonics discretization of the radiative transfer equation and its related quantities in angular domain. The method has its origins in astrophysics and is also popular in nuclear sciences and medical science. It came up in the field of computer graphics only in so far that Kajia~\cite{Kajiya84} brushed over the theory, but did not give any details on implementation or how to solve it. In fact, as Max~\cite{Max95} pointed out, it is not clear if Kajiya succeeded at all at applying the method, as all of the results in his paper were produced with a simpler method\footnote{\cite{Max95} p.4: \emph{``[...] Kajiya attempted to solve these equations for the case of isotropic scattering, but it is unclear whether he succeeded, since all the pictures in \cite{Kajiya84} were produced by the simpler 'slab' method.[...]"}}. This doubt is further strengthened by results in this thesis, which show that a straight forward finite difference discretization of the $P_N$-equations produces unuseable results, due to oscillation artifacts in the solution. 
+\TD{reference for pn method in astrophysics, neutron transport, medical sciences etc.}
 
-% ============================================================
-\section{Spherical Harmonics Discretization in Angular Domain}
-\subsection{Spherical Harmonics Basis and Properties}
+In this chapter, we will give a thorough derivation of the $P_N$-theory. The first section introduces the spherical harmonics expansion and important properties. Then the complex-valued $P_N$-equations are derived in section~\ref{sec:pn_cvalued}. The fact, that the radiance field is positive in every direction can be used to cut the number of unknowns in half. This is done by using the real-valued $P_N$-equations. In section~\ref{sec:pn_rvalued}, a very compact form of the real-valued $P_N$-equations is derived, which has not been given anywhere else in the literature before. After a short note on two-dimensional problems in section~\ref{sec:pn_2d}, The chapter continues by introducing a new method for solving the $P_N$-equations (section~\ref{sec:pn_solver}) and closes by discussing its integration into a rendering framework and giving results (section~\ref{sec:pn_results}).
 
+\input{04_pn_method/spherical_harmonics}
 
-\begin{align}
-\label{eq:sh_projection}
-\alpha^{l,m} = \int_\Omega{ L\left(\vec{x},\omega\right)\SHBC^{l,m}\ud\omega}
-\end{align}
-
-\subsubsection{Complex-valued $P_N$-equations}
-
-\section{Computer Algebra Representation}
+\input{04_pn_method/cvalued_pn_equations}
 
 \input{04_pn_method/rvalued_pn_equations}
 
-
-\section{Stencil Generation}
-\section{System Matrix Construction}
-\section{Solve}
-\section{Results}
+\section{Two-dimensional problems}
+\label{sec:pn_2d}
+\section{$P_N$-Solver with Automated Stencil Generation}
+\label{sec:pn_solver}
+\subsection{Computer Algebra Representation}
+\label{sec:pn_car}
+\subsection{Stencil Generation}
+\subsection{System Matrix Construction and Solution}
+\section{Rendering Integration and Results}
+\label{sec:pn_results}

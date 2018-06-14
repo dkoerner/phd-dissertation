@@ -239,6 +239,15 @@
 \newcommand{\colvec}[3]{\ensuremath{\begin{pmatrix}#1\\#2\\#3\end{pmatrix}}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
+%mathcolor for colored equations in appendix
+\makeatletter
+\def\mathcolor#1#{\@mathcolor{#1}}
+\def\@mathcolor#1#2#3{%
+  \protect\leavevmode
+  \begingroup\color#1{#2}#3\endgroup
+}
+\makeatother
+
 \begin{document}
 
 \include{01_preamble/Title} 
@@ -399,19 +408,19 @@
 %% \emergencystretch 1.5em % Should split URLS
 %%\interlinepenalty=10000 % should remove splitting of items over pages
 \bibliography{bibliography}
-%%\interlinepenalty=10000 % should remove splitting of items over pages
-%
-%\cleardoublepage
-%
-%\onehalfspacing
 
+\cleardoublepage
+%
+\onehalfspacing
+\phantomsection
+\renewcommand{\theHchapter}{\appendixname.\thechapter} % Fixe pdf Link Problem
 % Jan Fix for weird LaTex behaviour:
-%\fancyhead[LO]{\bfseries Appendix} 
-%\fancyhead[RE]{\bfseries Appendix}
-%\appendix
+\fancyhead[LO]{\bfseries Appendix} 
+\fancyhead[RE]{\bfseries Appendix}
+\appendix
 %
-
-%\include{09_Appendices/Appendix_HdM-HDR-2014}
-
+\phantomsection
+\include{08_appendices/appendix_derivation_rvalued_pn}
+%
 %
 \end{document}

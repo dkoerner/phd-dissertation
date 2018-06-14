@@ -1,0 +1,1287 @@
+\chapter{Appendix: Derivation of Real-valued $P_N$-equation Terms}
+\label{app:rpn}
+
+
+We later will have to apply identities and properties for the complex-valued SH basis functions and therefore need to expand the real-valued basis function in $\hat{L}$. The real-valued basis function is different depending on $m$ and therefore gives different expansions for the sign of $m$:
+\begin{align}
+\hat{L}\left(\vec{x}, \omega\right)
+=&
+\left\{
+\begin{array}{lr}
+\sum_{l,m}L^{l,m}\left(\vec{x}\right)\frac{\iu}{\sqrt{2}}\left(\SHBC^{l,m}-\left(-1\right)^m\SHBC^{l,-m}\right), & \text{for } m < 0\\
+\sum_{l,m}L^{l,m}\left(\vec{x}\right)\SHBC^{l,m}, & \text{for } m = 0\\
+\sum_{l,m}L^{l,m}\left(\vec{x}\right)\frac{1}{\sqrt{2}}\left(\SHBC^{l,-m}-\left(-1\right)^m\SHBC^{l,m}\right), & \text{for } m > 0
+\end{array}
+\right.
+\nonumber\\
+=&
+\left\{
+\begin{array}{lr}
+\sum_{l}\sum_{m=-l}^{-1}L^{l,m}\left(\vec{x}\right)\frac{\iu}{\sqrt{2}}\left(\SHBC^{l,m}-\left(-1\right)^m\SHBC^{l,-m}\right), & \text{for } m < 0\\
+L^{l,0}\left(\vec{x}\right)\SHBC^{l,0}, & \text{for } m = 0\\
+\sum_{l}\sum_{m=1}^{l}L^{l,m}\left(\vec{x}\right)\frac{1}{\sqrt{2}}\left(\SHBC^{l,-m}-\left(-1\right)^m\SHBC^{l,m}\right), & \text{for } m > 0
+\end{array}
+\right.
+\nonumber\\
+=&
+\sum_{l=0}^{N}
+\left(
+\sum_{m=-l}^{-1}
+{
+L^{{l,m}}\left (\vec{x} \right )\left(\frac{i}{\sqrt{2}}\SHBC^{l, m}(\omega )-\frac{i}{\sqrt{2}}\left({-1}\right)^{m}\SHBC^{l, -m}(\omega )\right)
+}
+\right.
+\nonumber\\
+&
++L^{l,0}\left (\vec{x} \right )\SHBC^{l, 0}(\omega )
+\nonumber\\
+&
++
+\left.
+\sum_{m=1}^{l}
+{
+L^{{l,m}}\left (\vec{x} \right )\left(\frac{1}{\sqrt{2}}\SHBC^{l, -m}(\omega )+\frac{1}{\sqrt{2}}\left({-1}\right)^{m}\SHBC^{l, m}(\omega )\right)
+}
+\right)
+\nonumber\\=&
+\frac{i}{\sqrt{2}}\left(\sum_{l=0}^{N}{\sum_{m=-l}^{-1}{L^{{l,m}}\left (\vec{x} \right )\SHBC^{l, m}(\omega )}}\right)
+-\frac{i}{\sqrt{2}}\left(\sum_{l=0}^{N}{\sum_{m=-l}^{-1}{L^{{l,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\SHBC^{l, -m}(\omega )}}\right)
+\nonumber\\&
++\sum_{l=0}^{N}{L^{{l,0}}\left (\vec{x} \right )\SHBC^{l, 0}(\omega )}
+\nonumber\\&
++\frac{1}{\sqrt{2}}\left(\sum_{l=0}^{N}{\sum_{m=1}^{l}{L^{{l,m}}\left (\vec{x} \right )\SHBC^{l, -m}(\omega )}}\right)
++\frac{1}{\sqrt{2}}\left(\sum_{l=0}^{N}{\sum_{m=1}^{l}{L^{{l,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\SHBC^{l, m}(\omega )}}\right)
+\end{align}
+
+% ----------------------------------------------------
+\subsubsection{Phase Function}
+
+The real-valued spherical harmonics expansion of the phase function follows the the same derivation as the complex-valued expansion from section~\ref{sec:complex_proj_phase}. We first fix the outgoing direction vector $\omega_o$ to always align with the $z$-axis ($\omega_o=\vec{e}_3$). We compute the spherical harmonics projection over incident direction vector $\omega_i$, using the real-valued spherical harmonics basis functions:
+
+\begin{align*}
+p^{l,m}
+=
+\int_\Omega
+{
+p\left(\omega_i\cdot\vec{e}_3\right)
+\SHBR^{l,m}\left(\omega_i\right)
+\ud\omega_i
+}
+\nonumber
+\end{align*}
+
+Phase functions, which only depend on the angle between incident and outgoing vectors are rotationally symmetric around the pole axis. Like with the complex-values spherical harmonics basis functions, such a rotation $R$ of angle $\alpha$ around the pole axis is given by:
+
+\begin{align*}
+\rho_{R(\alpha)}(\SHBR^{l,m}) = e^{-i m\alpha}\SHBR^{l,m}
+\end{align*}
+
+We formulate symmetry around the pole axis with the following constraint:
+
+\begin{align*}
+\sum_{l,m}
+{
+e^{-i m\alpha}
+p^{l,m}
+\SHBR^{l,m} }\left(\omega_i\right)
+=
+\sum_{l,m}
+{
+p^{l,m}
+\SHBR^{l,m}\left(\omega_i\right)
+}
+\end{align*}
+
+By comparing coefficients we get
+
+\begin{align*}
+p^{l,m} = p^{l,m}e^{-i m\alpha}
+\end{align*}
+
+From this we can infer that $p^{l,m} = 0$ for all $m\ne0$, if the phase function is rotationally symmetric around the pole axis. We therefore have the same property as we have with complex-valued expansions of functions, which are symmetric about the pole axis: Only the $m=0$ coefficients are needed for reconstruction. We therefore have
+
+\begin{align}
+\label{eq:sh_exp_phase}
+p(\omega_i) =
+\sum_l
+{
+p^{l0}
+\SHBR^{l0}(\omega_i)
+}
+\end{align}
+
+
+
+
+
+
+\subsection{Projecting Terms of the RTE}
+
+% -----------------------------------------------------
+\subsubsection{Transport Term}
+
+The transport term of the RTE is given as
+\begin{align}
+(\omega\cdot\nabla)L(\vec{x}, \omega)
+=
+\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )
+\label{eq:real_transport_term}
+\end{align}
+
+To improve readability, we first project the term into SH by multiplying with the conjugate complex of the Sh basis, and replace $L$ by its Sh expansion afterwards. This order was reversed, when we derived the complex-valued $P_N$-equation in section~\ref{sec:complex_transport_term}.
+
+We now multiply equation~\ref{eq:real_transport_term} with the real-valued SH basis and integrate over solid angle. However, the SH basis is different for $m'<0$, $m'=0$ and $m'>0$, and therefore will give us different $P_N$-equations depending on $m'$. We will go through the derivation in detail for the $m'<0$ case and give the results for the other cases at the end.
+
+Multiplying the expanded transport term with the SH basis for $m'<0$ and integrating over solid angle gives:
+\begin{align*}
+&\int{\left(\frac{-i}{\sqrt{2}}\overline{Y^{l', m'}}(\omega )-\frac{-i}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y^{l', -m'}}(\omega )\right)\left(\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\right)\ud\omega}
+\\
+=&
+\int-\frac{i}{\sqrt{2}}\overline{Y^{l', m'}}(\omega )\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )-\frac{i}{\sqrt{2}}\overline{Y^{l', m'}}(\omega )\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )-\frac{i}{\sqrt{2}}\overline{Y^{l', m'}}(\omega )\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y^{l', -m'}}(\omega )\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y^{l', -m'}}(\omega )\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y^{l', -m'}}(\omega )\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\ud\omega
+\end{align*}
+
+After expanding the integrand and splitting the integral, we apply the recursive relation from equation~\ref{eq:recursive_relation} to get:
+\begin{align*}
+&
+\frac{i}{\sqrt{2}}\frac{1}{2}c^{{l'-1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
+-\frac{i}{\sqrt{2}}\frac{1}{2}d^{{l'+1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'-1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\frac{1}{2}e^{{l'-1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'+1}}(\omega )\ud\omega}
++\frac{i}{\sqrt{2}}\frac{1}{2}f^{{l'+1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'+1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\frac{i}{2}c^{{l'-1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
++\frac{i}{\sqrt{2}}\frac{i}{2}d^{{l'+1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'-1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\frac{i}{2}e^{{l'-1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'+1}}(\omega )\ud\omega}
++\frac{i}{\sqrt{2}}\frac{i}{2}f^{{l'+1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'+1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}a^{{l'-1,m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'}}(\omega )\ud\omega}
+-\frac{i}{\sqrt{2}}b^{{l'+1,m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}c^{{l'-1,-m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'-1}}(\omega )\ud\omega}
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}d^{{l'+1,-m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'-1}}(\omega )\ud\omega}
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}e^{{l'-1,-m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'+1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}f^{{l'+1,-m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'+1}}(\omega )\ud\omega}
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}c^{{l'-1,-m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'-1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}d^{{l'+1,-m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'-1}}(\omega )\ud\omega}
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}e^{{l'-1,-m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'+1}}(\omega )\ud\omega}
+\\&
+-\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}f^{{l'+1,-m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'+1}}(\omega )\ud\omega}
+\\&
++\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}a^{{l'-1,-m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'}}(\omega )\ud\omega}+\frac{i}{\sqrt{2}}\left({-1}\right)^{m'}b^{{l'+1,-m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'}}(\omega )\ud\omega}
+\end{align*}
+
+Before we further expand the radiance field $L$ into its SH expansion, we will simplify coefficients by using the following relations:
+\begin{align}
+a^{l,m} = a^{l,-m}, \qquad
+b^{l,m} = b^{l,-m}, \qquad
+c^{l,m} = e^{l,-m}, \qquad
+d^{l,m} = f^{l,-m}
+\label{eq:recursion_identities}
+\end{align}
+
+This allows us to rewrite the equation above as:
+\begin{align*}
+-i\alpha_c\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}i&\alpha_c\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'+1}}(\omega )\ud\omega}
+\\
++i\alpha_d\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'-1}}(\omega )\ud\omega}
+%\\
+-\left({-1}\right)^{m'} i &\alpha_d\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'+1}}(\omega )\ud\omega}
+\\
+-i\alpha_e \int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'+1}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}i &\alpha_e \int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'-1}}(\omega )\ud\omega}
+\\
++i\alpha_f \int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'+1}}(\omega )\ud\omega}
+%\\
+-\left({-1}\right)^{m'}i &\alpha_f \int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'-1}}(\omega )\ud\omega}
+% ---------------------------------------
+\\
++\alpha_c\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}&\alpha_c\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'+1}}(\omega )\ud\omega}
+% ---------------------------------------
+\\
+-\alpha_e\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'+1}}(\omega )\ud\omega}
+%\\
+-\left({-1}\right)^{m'}&\alpha_e\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'-1}}(\omega )\ud\omega}
+% ---------------------------------------
+\\
++\alpha_f\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'+1}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}&\alpha_f\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'-1}}(\omega )\ud\omega}
+\\
+% ---------------------------------------------
+-\alpha_d\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'-1}}(\omega )\ud\omega}
+%\\
+% ---------------------------------------
+-\left({-1}\right)^{m'}&\alpha_d\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'+1}}(\omega )\ud\omega}
+\\
+% ---------------------------------------
+-\alpha_a\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, m'}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}&\alpha_a\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'-1, -m'}}(\omega )\ud\omega}
+% ---------------------------------------
+\\
+-\alpha_b\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, m'}}(\omega )\ud\omega}
+%\\
++\left({-1}\right)^{m'}&\alpha_b\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y^{l'+1, -m'}}(\omega )\ud\omega}
+\end{align*}
+
+with 
+\begin{align*}
+\alpha_c = \frac{i}{\sqrt{2}}\frac{1}{2}c^{{l'-1,m'-1}}
+,\qquad
+%\\
+\alpha_e = \frac{i}{\sqrt{2}}\frac{1}{2}e^{{l'-1,m'+1}}
+,\qquad
+%\\
+\alpha_d = \frac{i}{\sqrt{2}}\frac{1}{2}d^{{l'+1,m'-1}}
+\\
+\alpha_f = \frac{i}{\sqrt{2}}\frac{1}{2}f^{{l'+1,m'+1}}
+,\qquad
+%\\
+\alpha_a = \frac{i}{\sqrt{2}}a^{{l'-1,m'}}
+,\qquad
+%\\
+\alpha_b = \frac{i}{\sqrt{2}}b^{{l'+1,m'}}
+\end{align*}
+
+In the next step, we substitute the radiance field function $L$ with its spherical harmonics expansion and arrive at the following expression after further expansions and transformations:
+\begin{align}
+-i\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term1}
+%\\
++\left({-1}\right)^{m'}i&\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term2}
+\label{eq:real_transport_expansion_unsimplified_term1_term2}
+\\
++i\alpha_d\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term3}
+%\\
+-\left({-1}\right)^{m'} i &\alpha_d\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term4}
+\label{eq:real_transport_expansion_unsimplified_term3_term4}
+\\
+-i\alpha_e \partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term5}
+%\\
++\left({-1}\right)^{m'}i &\alpha_e \partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term6}
+\\
++i\alpha_f \partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term7}
+%\\
+-\left({-1}\right)^{m'}i &\alpha_f \partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'-1}}(\omega )\ud\omega}
+% ---------------------------------------
+%\label{eq:real_transport_expansion_unsimplified_term8}
+\\
++\alpha_c\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term9}
+%\\
++\left({-1}\right)^{m'}&\alpha_c\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'+1}}(\omega )\ud\omega}
+% ---------------------------------------
+%\label{eq:real_transport_expansion_unsimplified_term10}
+\\
+-\alpha_e\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term11}
+%\\
+-\left({-1}\right)^{m'}&\alpha_e\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'-1}}(\omega )\ud\omega}
+% ---------------------------------------
+%\label{eq:real_transport_expansion_unsimplified_term12}
+\\
++\alpha_f\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term13}
+%\\
++\left({-1}\right)^{m'}&\alpha_f\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term14}
+\\
+% ---------------------------------------
+-\alpha_d\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'-1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term15}
+%\\
+% ---------------------------------------
+-\left({-1}\right)^{m'}&\alpha_d\partial_x\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'+1}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term16}
+\\
+% ---------------------------------------
+-\alpha_a\partial_z\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term17}
+% ---------------------------------------
+%\\
++\left({-1}\right)^{m'}&\alpha_a\partial_z\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'}}(\omega )\ud\omega}
+% ---------------------------------------
+%\label{eq:real_transport_expansion_unsimplified_term18}
+\\
+-\alpha_b\partial_z\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term19}
+%\\
++\left({-1}\right)^{m'}&\alpha_b\partial_z\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'}}(\omega )\ud\omega}
+%\label{eq:real_transport_expansion_unsimplified_term20}
+\end{align}
+
+The real-valued $P_N$-equation have an intricate structure which causes many terms to cancel out. We take the first two terms (terms~\ref{eq:real_transport_expansion_unsimplified_term1_term2}) of the $P_N$-equations and apply the following orthogonality property of SH:
+\begin{align}
+\int_\Omega{\SHBR^{l_1, m_1}\overline{\SHBC^{l_2, m_2}}}\ud\omega
+=
+\left\{
+\begin{array}{lr}
+\frac{i}{\sqrt{2}}
+\left(
+\delta_{\scaleto{\substack{l_1=l_2\\m_1=m_2}}{9pt}}
+-\left({-1}\right)^{m_1}
+\delta_{\scaleto{\substack{l_1=l_2\\m_1=-m_2}}{9pt}}
+\right)
+, & \text{for } m_1 < 0
+\\
+\delta_{\scaleto{\substack{l_1=l_2\\m_1=m_2}}{9pt}}, & \text{for } m_1 = 0
+\\
+\frac{1}{\sqrt{2}}
+\left(
+\delta_{\scaleto{\substack{l_1=l_2\\m_1=-m_2}}{9pt}}
++\left({-1}\right)^{m_1}
+\delta_{\scaleto{\substack{l_1=l_2\\m_1=m_2}}{9pt}}
+\right)
+, & \text{for } m_1 > 0
+\end{array}
+\right.
+\label{eq:real_orthogonality_property_with_complex}
+\end{align}
+
+this way we get for the first two terms:
+\begin{align*}
+%-i &\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)
+%\int{Y_{\mathbb{R}}^{l,m}\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}	
+&-i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=-l}^{-1}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i\delta_{\scaleto{\substack{l=l'-1\\m=m'-1}}{9pt}}
+%\\
++i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=-l}^{-1}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\left({-1}\right)^{m}
+\delta_{\scaleto{\substack{l=l'-1\\m=-m'+1}}{9pt}}
+\\&
+-i\alpha_c\partial_y
+\sum_{l=0}^{N}
+L^{l,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{\substack{l=l'-1\\0=m'-1}}{9pt}}
+%\\
+-i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=1}^{l}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{\substack{l=l'-1\\m=-m'+1}}{9pt}}
+\\&
+-i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=1}^{l}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{\substack{l=l'-1\\m=m'-1}}{9pt}}
+%\\
+%\int{Y_{\mathbb{R}}^{l,m}\overline{Y^{l'-1, -m'+1}}(\omega )\ud\omega}
++\left({-1}\right)^{m'}i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=-l}^{-1}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\delta_{\scaleto{\substack{l=l'-1\\m=-m'+1}}{9pt}}
+\\&
+-\left({-1}\right)^{m'}i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=-l}^{-1}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\left({-1}\right)^{m}
+\delta_{\scaleto{\substack{l=l'-1\\m=m'-1}}{9pt}}
+%\\
++
+\left({-1}\right)^{m'}i\alpha_c\partial_y
+\sum_{l=0}^{N}
+L^{l,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{\substack{l=l'-1\\0=-m'+1}}{9pt}}
+\\&
++
+\left({-1}\right)^{m'}i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=1}^{l}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{\substack{l=l'-1\\m=m'-1}}{9pt}}
+%\\
++
+\left({-1}\right)^{m'}i\alpha_c\partial_y
+\sum_{l=0}^{N}
+\sum_{m=1}^{l}L^{l,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{\substack{l=l'-1\\m=-m'+1}}{9pt}}
+\end{align*}
+
+We apply the delta function for the sums which run over the variable $l$:
+\begin{align}
+\sum_{l=0}^{N}\sum_{m=a}^{b}L^{l,m}\delta_{\scaleto{\substack{l=x\\m=y}}{9pt}}=\sum_{m=a}^{b}L^{x,m}\delta_{\scaleto{m=y}{3pt}}
+\end{align}
+
+We get for the first two terms of the transport term of the $P_N$-equation (term~\ref{eq:real_transport_expansion_unsimplified_term1_term2}):
+\begin{align*}
+&
+%-i &\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)
+%\int{Y_{\mathbb{R}}^{l,m}\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
+\mathcolor{red}{-i}
+%&
+\mathcolor{red}{\alpha_c\partial_y
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i\delta_{\scaleto{m=m'-1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}{
++i
+}
+%&
+\mathcolor{blue}{
+\alpha_c\partial_y
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=-m'+1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{blue}
+{
+-i
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_y
+L^{l'-1,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m'=1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{black}
+{
+-i
+}
+%&
+\mathcolor{black}
+{
+\alpha_c\partial_y
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m=-m'+1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}
+{
+-i
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_y
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=m'-1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{blue}
+{
++\left({-1}\right)^{m'}i
+}
+%&
+\mathcolor{blue}{
+\alpha_c\partial_y
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\delta_{\scaleto{m=-m'+1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{red}
+{
+-\left({-1}\right)^{m'}i
+}
+%&
+\mathcolor{red}
+{
+\alpha_c\partial_y
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+i
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=m'-1}{4pt}}
+}
+% -------------------------------------------------
+\\&
+\mathcolor{blue}
+{
++
+\left({-1}\right)^{m'}i
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_y
+L^{l'-1,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m'=1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}
+{
++
+\left({-1}\right)^{m'}i
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_y
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m=m'-1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{black}
+{
++
+\left({-1}\right)^{m'}i
+}
+%&
+\mathcolor{black}
+{
+\alpha_c\partial_y
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=-m'+1}{4pt}}
+}
+\end{align*}
+
+The variables $l'$ and $m'$ specify a particular equation within the given set of $P_N$-equations. We remember that $m'$ originated from multiplying the transport term with the real-valued SH basis function $\SHBR$ for the projection. The real-valued basis function is different for the sign of $m'$ and we derived the transport term of the $P_N$-equations under the assumption of $m'<0$ (different equations have to be derived for $m'=0$ and $m'>0$). We are able to greatly simplify the terms above when considering the parity of $m'$ and that $m'<0$.
+
+The blue terms in the equation above all vanish, since the sums run over all negative (or positive) $m$, up to $-1$ (or l), while the Kronecker deltas in the blue terms only become non-zero for values $m>0$ (or $m<0$). This is because we derived these terms by multiplying with the real-valued SH basis function for $m'<0$.
+
+Consider the seventh and 10th term from the equation above. Due to $\delta_{m=m'-1}$ or $\delta_{m=-m'+1}$, an even $m$ is selected if $m'$ is odd and vice versa. Therefore, we have $(-1)^m(-1)^{m'}=-1$. This causes term one and seven (red) to vanish and term four and ten (black) to collapse into one term.
+
+Therefore, the first two terms in the expansion (terms~\ref{eq:real_transport_expansion_unsimplified_term1_term2}), simplify to:
+\begin{align*}
+&-i\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, m'-1}}(\omega )\ud\omega}
++\left({-1}\right)^{m'}i\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'-1, -m'+1}}(\omega )\ud\omega}
+\\
+&=-\frac{2}{\sqrt{2}}i
+\alpha_c\partial_y
+L^{l'-1,-m'+1}\left (\vec{x}\right)
+\\
+&=-\frac{2}{\sqrt{2}}i
+\frac{i}{\sqrt{2}}\frac{1}{2}c^{{l'-1,m'-1}}
+\partial_y
+L^{l'-1,-m'+1}\left (\vec{x}\right)
+\\
+&=
+\frac{1}{2}c^{{l'-1,m'-1}}
+\partial_y
+L^{l'-1,-m'+1}\left (\vec{x}\right)
+\end{align*}
+
+The terms in equation~\ref{eq:real_transport_expansion_unsimplified_term3_term4} are derived in the same way with the difference, that the signs are reversed and that we have $l'+1$ instead of $l'-1$. However, this does not affect the simplification:
+\begin{align*}
+&i\alpha_d\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, m'-1}}(\omega )\ud\omega}
+-\left({-1}\right)^{m'}i\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)\int{Y_{\mathbb{R}}^{l,m}\overline{\SHBC^{l'+1, -m'+1}}(\omega )\ud\omega}
+\\
+&=-\frac{2}{\sqrt{2}}i
+\alpha_d\partial_y
+L^{l'-1,-m'+1}\left (\vec{x}\right)
+\\
+&=-\frac{2}{\sqrt{2}}i
+\frac{i}{\sqrt{2}}\frac{1}{2}d^{{l'+1,m'-1}}
+\partial_y
+L^{l'+1,-m'+1}\left (\vec{x}\right)
+\\
+&=
+\frac{1}{2}d^{{l'+1,m'-1}}
+\partial_y
+L^{l'+1,-m'+1}\left (\vec{x}\right)
+\end{align*}
+
+Carrying out the same simplifications for the remaining terms, results in the following real-valued $P_N$-equations for $m'<0$:
+\begin{align*}
+&-\frac{1}{2}c^{{l'-1,m'-1}}
+\partial_y
+L^{l'-1,-m'+1}
+%\\
++\frac{1}{2}d^{{l'+1,m'-1}}
+\partial_y
+L^{l'+1,-m'+1}
+%\\
+-\frac{1}{2}\beta^{m'}e^{{l'-1,m'+1}}
+\partial_y
+L^{l'-1,-m'-1}
+\\&
++\frac{1}{2}\beta^{m'}f^{{l'+1,m'+1}}
+\partial_y
+L^{l'+1,-m'-1}
+%\\
++\frac{1}{2}c^{{l'-1,m'-1}}
+\partial_x
+L^{l'-1,m'-1}
+\\&
+-\frac{1}{2}\delta_{\scaleto{m'\neq -1}{4pt}}e^{{l'-1,m'+1}}
+\partial_x
+L^{l'-1,m'+1}
+%\\
++\frac{1}{2}\delta_{\scaleto{m'\neq -1}{4pt}}f^{{l'+1,m'+1}}
+\partial_x
+L^{l'+1,m'+1}
+%\\
+-\frac{1}{2}d^{{l'+1,m'-1}}
+\partial_x
+L^{l'+1,m'-1}
+\\&
++a^{{l'-1,m'}}
+\partial_z
+L^{l'-1,m'}
+%\\
++b^{{l'+1,m'}}
+\partial_z
+L^{l'+1,m'}
+\end{align*}
+
+with
+\begin{align}
+\label{eq:real_sh_basis}
+\beta^{x}=
+\left\{
+\begin{array}{lr}
+\frac{2}{\sqrt{2}}, & \text{for } \vert x\vert = 1\\
+1, & \text{for } \vert x\vert \neq 1
+\end{array}
+\right.
+\end{align}
+
+We now carry out the same derivation for the assumption of $m'>0$. We multiply equation~\ref{sec:complex_transport_term} with the definition of the real-valued SH basis for $m'>0$ and get:
+\begin{align*}
+\int{\left(\frac{1}{\sqrt{2}}\overline{Y_{\mathbb{C}}^{l', -m'}}(\omega )+\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y_{\mathbb{C}}^{l', m'}}(\omega )\right)\left(\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\right)\mathbf{d}\omega}
+\end{align*}
+
+
+We expand the integrand and split the integral. Then we apply the recursive relation from equation~\ref{eq:recursive_relation} and get:
+\begin{align*}
+&
+\frac{1}{\sqrt{2}}\frac{1}{2}c^{{l'-1,-m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
+-\frac{1}{\sqrt{2}}\frac{1}{2}d^{{l'+1,-m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\frac{1}{2}e^{{l'-1,-m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
++\frac{1}{\sqrt{2}}\frac{1}{2}f^{{l'+1,-m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\frac{i}{2}c^{{l'-1,-m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
++\frac{1}{\sqrt{2}}\frac{i}{2}d^{{l'+1,-m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\frac{i}{2}e^{{l'-1,-m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
++\frac{1}{\sqrt{2}}\frac{i}{2}f^{{l'+1,-m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}a^{{l'-1,-m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'}}(\omega )\mathbf{d}\omega}
++\frac{1}{\sqrt{2}}b^{{l'+1,-m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}c^{{l'-1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}d^{{l'+1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}e^{{l'-1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{1}{2}f^{{l'+1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}c^{{l'-1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}d^{{l'+1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}e^{{l'-1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\frac{i}{2}f^{{l'+1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}a^{{l'-1,m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'}}(\omega )\mathbf{d}\omega}
++\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}b^{{l'+1,m'}}\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'}}(\omega )\mathbf{d}\omega}
+\end{align*}
+
+We simplify these using the identities from equation~\ref{eq:recursion_identities}: 
+\begin{align*}
+&
+\alpha_c\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}\alpha_c\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\alpha_d\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_d\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\alpha_e\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_e\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_f\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}\alpha_f\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-i \alpha_c\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}i \alpha_c\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++i \alpha_d\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}i \alpha_d\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-i \alpha_e\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}i \alpha_e\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++i \alpha_f\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}i \alpha_f\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_a\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, -m'}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_a\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_b\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, -m'}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_b\int{\partial_zL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'}}(\omega )\mathbf{d}\omega}
+\end{align*}
+
+with 
+\begin{align*}
+\alpha_c = \frac{1}{\sqrt{2}}\frac{1}{2}c^{{l'-1,-m'-1}}
+,\qquad
+%\\
+\alpha_e = \frac{1}{\sqrt{2}}\frac{1}{2}e^{{l'-1,-m'+1}}
+,\qquad
+%\\
+\alpha_d = \frac{1}{\sqrt{2}}\frac{1}{2}d^{{l'+1,-m'-1}}
+\\
+\alpha_f = \frac{1}{\sqrt{2}}\frac{1}{2}f^{{l'+1,-m'+1}}
+,\qquad
+%\\
+\alpha_a = \frac{1}{\sqrt{2}}a^{{l'-1,-m'}}
+,\qquad
+%\\
+\alpha_b = \frac{1}{\sqrt{2}}b^{{l'+1,-m'}}
+\end{align*}
+
+We substitute the radiance field function L with its spherical harmonics expansion and arrive
+at the following expression after further expansions and transformations:
+\begin{align*}
+&
+\alpha_c\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}\alpha_c\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\alpha_d\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_d\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\alpha_e\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_e\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_f\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}\alpha_f\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
+-i \alpha_c\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, -m'-1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}i \alpha_c\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++i \alpha_d\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, -m'-1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}i \alpha_d\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-i \alpha_e\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, -m'+1}}(\omega )\mathbf{d}\omega}
+-\left({-1}\right)^{m'}i \alpha_e\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++i \alpha_f\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, -m'+1}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}i \alpha_f\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_a\partial_z\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, -m'}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_a\partial_z\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'}}(\omega )\mathbf{d}\omega}
+\\&
++\alpha_b\partial_z\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, -m'}}(\omega )\mathbf{d}\omega}
++\left({-1}\right)^{m'}\alpha_b\partial_z\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'}}(\omega )\mathbf{d}\omega}
+\end{align*}
+
+Again we apply the identity given in equation~\ref{eq:real_orthogonality_property_with_complex}. For the first two terms we for example get:
+\begin{align*}
+&
+%-i &\alpha_c\partial_y\sum_{l,m}L^{l,m}\left (\vec{x}\right)
+%\int{Y_{\mathbb{R}}^{l,m}\overline{Y^{l'-1, m'-1}}(\omega )\ud\omega}
+\mathcolor{red}{}
+%&
+\mathcolor{red}{\alpha_c\partial_x
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{i}{\sqrt{2}}
+\delta_{\scaleto{m=-m'-1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}{
+-
+}
+%&
+\mathcolor{blue}{
+\alpha_c\partial_x
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{i}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=m'+1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{blue}
+{
++
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_x
+L^{l'-1,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{-m'=1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{black}
+{
++
+}
+%&
+\mathcolor{black}
+{
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m=m'+1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}
+{
++
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=-m'-1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{blue}
+{
+-\left({-1}\right)^{-m'}
+}
+%&
+\mathcolor{blue}{
+\alpha_c\partial_x
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{i}{\sqrt{2}}
+\delta_{\scaleto{m=m'+1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{red}
+{
++\left({-1}\right)^{-m'}
+}
+%&
+\mathcolor{red}
+{
+\alpha_c\partial_x
+\sum_{m=-l'+1}^{-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{i}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=-m'-1}{4pt}}
+}
+% -------------------------------------------------
+\\&
+\mathcolor{blue}
+{
+-
+\left({-1}\right)^{-m'}
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_x
+L^{l'-1,0}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{-m'=1}{4pt}}
+}
+%\\
+% -------------------------------------------------
+\mathcolor{blue}
+{
+-
+\left({-1}\right)^{-m'}
+}
+%&
+\mathcolor{blue}
+{
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m=-m'-1}{4pt}}
+}
+\\&
+% -------------------------------------------------
+\mathcolor{black}
+{
+-
+\left({-1}\right)^{-m'}
+}
+%&
+\mathcolor{black}
+{
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=m'+1}{4pt}}
+}
+\end{align*}
+
+As with the $m'<0$ case, the blue and red terms cancel each other out, leaving only the black terms. The first two terms of the real-valued $P_N$-equations for the transport term therefore are:
+\begin{align*}
+&
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\delta_{\scaleto{m=m'+1}{4pt}}
+-
+\left({-1}\right)^{-m'}
+\alpha_c\partial_x
+\sum_{m=1}^{l'-1}L^{l'-1,m}\left (\vec{x}\right)
+\frac{1}{\sqrt{2}}
+\left({-1}\right)^{m}
+\delta_{\scaleto{m=m'+1}{4pt}}
+\\&
+=
+\frac{2}{\sqrt{2}}
+\alpha_c\partial_x
+L^{l'-1,m'+1}\left (\vec{x}\right)
+=
+\frac{2}{\sqrt{2}}
+\left(\frac{1}{2\sqrt{2}}c^{l'-1, -m'-1}\right)\partial_x
+L^{l'-1,m'+1}\left (\vec{x}\right)
+\\&
+=
+\frac{1}{2}c^{l'-1,-m'-1}L^{l'-1,m'+1}\left (\vec{x}\right)
+\end{align*}
+
+Following this through for the remaining terms gives us the real-valued $P_N$-equations for $m'>0$:
+\begin{align}
+&
+\frac{1}{2}c^{l'-1,-m'-1}\partial_x L^{l'-1,m'+1}\left (\vec{x}\right)
+%\\&
+-\frac{1}{2}d^{l'+1,-m'-1}\partial_x L^{l'+1,m'+1}\left (\vec{x}\right)
+%\\&
+-\frac{1}{2}\beta^{m'}e^{l'-1,m'-1}\partial_x L^{l'-1,m'-1}\left (\vec{x}\right)
+\nonumber
+\\&
+\frac{1}{2}\beta^{m'}f^{l'+1,-m'+1}\partial_x L^{l'+1,m'-1}\left (\vec{x}\right)
+%\\&
+\frac{1}{2}c^{l'-1,-m'-1}\partial_y L^{l'-1,-m'-1}\left (\vec{x}\right)
+%\\&
+-\frac{1}{2}d^{l'+1,-m'-1}\partial_y L^{l'+1,-m'-1}\left (\vec{x}\right)
+\nonumber
+\\&
+\delta_{\scaleto{m'\neq 1}{4pt}}\frac{1}{2}e^{l'-1,-m'+1}\partial_y L^{l'-1,-m'+1}\left (\vec{x}\right)
+%\\&
+-\delta_{\scaleto{m'\neq 1}{4pt}}\frac{1}{2}f^{l'+1,-m'+1}\partial_y L^{l'+1,-m'+1}\left (\vec{x}\right)
+%\\&
+a^{l'-1,-m'}\partial_z L^{l'-1,m'}\left (\vec{x}\right)
+\nonumber
+\\&
+b^{l'+1,-m'}\partial_z L^{l'+1,m'}\left (\vec{x}\right)
+\nonumber
+\end{align}
+
+Finally the $m'=0$ case needs to be derived. The derivation starts very similar to the complex-valued $P_N$-equations as in this case, the real-valued SH basis function is identical to the complex-valued SH basis function. We multiply equation~\ref{sec:complex_transport_term} with the definition of the real-valued SH basis for $m'=0$ and get:
+\begin{align*}
+\int{\overline{Y_{\mathbb{C}}^{l', m'}}(\omega )\left(\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\right)\mathbf{d}\omega}
+\end{align*}
+
+Expanding the integrand and applying the recursion relation (equation~\ref{eq:recursion_identities}) produces the following set of terms:
+\begin{align*}
+&
+\frac{1}{2}c^{{l'-1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+-\frac{1}{2}e^{{l'-1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{2}d^{{l'+1,m'-1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
++\frac{1}{2}f^{{l'+1,m'+1}}\int{\partial_xL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{i}{2}c^{{l'-1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+-\frac{i}{2}e^{{l'-1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{i}{2}d^{{l'+1,m'-1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
++\frac{i}{2}f^{{l'+1,m'+1}}\int{\partial_yL\left (\vec{x} ,\omega \right )\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++a^{{l'-1,m'}}\int{\overline{Y_{\mathbb{C}}^{l'-1, m'}}(\omega )\partial_zL\left (\vec{x} ,\omega \right )\mathbf{d}\omega}
++b^{{l'+1,m'}}\int{\overline{Y_{\mathbb{C}}^{l'+1, m'}}(\omega )\partial_zL\left (\vec{x} ,\omega \right )\mathbf{d}\omega}
+\end{align*}
+
+Again we will replace the radiance field $L$ with its real-valued SH projection and get:
+\begin{align*}
+&
+\frac{1}{2}c^{{l'-1,m'-1}}\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+-\frac{1}{2}e^{{l'-1,m'+1}}\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{1}{2}d^{{l'+1,m'-1}}\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
++\frac{1}{2}f^{{l'+1,m'+1}}\partial_x\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
+-\frac{i}{2}c^{{l'-1,m'-1}}\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'-1}}(\omega )\mathbf{d}\omega}
+-\frac{i}{2}e^{{l'-1,m'+1}}\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'-1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++\frac{i}{2}d^{{l'+1,m'-1}}\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'-1}}(\omega )\mathbf{d}\omega}
++\frac{i}{2}f^{{l'+1,m'+1}}\partial_y\sum_{l,m}L^{l,m}\int{\SHBR^{l,m}\overline{Y_{\mathbb{C}}^{l'+1, m'+1}}(\omega )\mathbf{d}\omega}
+\\&
++a^{{l'-1,m'}}\partial_z\sum_{l,m}L^{l,m}\int{\overline{Y_{\mathbb{C}}^{l'-1, m'}}(\omega )\SHBR^{l,m}\mathbf{d}\omega}
++b^{{l'+1,m'}}\partial_z\sum_{l,m}L^{l,m}\int{\overline{Y_{\mathbb{C}}^{l'+1, m'}}(\omega )\SHBR^{l,m}\mathbf{d}\omega}
+\end{align*}
+
+These terms also have an intricate structure where many terms cancel out and simplify. This is seen once we apply the SH orthogonality property (equationequation~\ref{eq:real_orthogonality_property_with_complex}) and further consider that $m'=0$. We show this for the first two terms, which expand to:
+\begin{align*}
+&
+\mathcolor{red}
+{
+\frac{1}{2}c^{{l'-1,-1}}\frac{i}{\sqrt{2}}\partial_x\left(\sum_{m=-l'+1}^{-1}{L^{{l'-1,m}}\left (\vec{x} \right )\delta_{-1,m}}\right)
+}
+\\&
+\mathcolor{blue}
+{
+-\frac{1}{2}c^{{l'-1,-1}}\frac{i}{\sqrt{2}}\partial_x\left(\sum_{m=-l'+1}^{-1}{L^{{l'-1,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\delta_{-1,-m}}\right)
+}
+\\&
+\mathcolor{blue}
+{
+\frac{1}{2}c^{{l'-1,-1}}\partial_x\left(L^{{l'-1,0}}\left (\vec{x} \right )\delta_{-1,0}\right)
+}
+\\&
+\frac{1}{2}c^{{l'-1,-1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\delta_{-1,-m}}\right)
+\\&
+\mathcolor{blue}
+{
+\frac{1}{2}c^{{l'-1,-1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\delta_{-1,m}}\right)
+}
+\\&
+\mathcolor{blue}
+{
+-\frac{1}{2}e^{{l'-1,1}}\frac{i}{\sqrt{2}}\partial_x\left(\sum_{m=-l'+1}^{-1}{L^{{l'-1,m}}\left (\vec{x} \right )\delta_{1,m}}\right)
+}
+\\&
+\mathcolor{red}
+{
+\frac{1}{2}e^{{l'-1,1}}\frac{i}{\sqrt{2}}\partial_x\left(\sum_{m=-l'+1}^{-1}{L^{{l'-1,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\delta_{1,-m}}\right)
+}
+\\&
+\mathcolor{blue}
+{
+-\frac{1}{2}e^{{l'-1,1}}\partial_x\left(L^{{l'-1,0}}\left (\vec{x} \right )\delta_{1,0}\right)
+}
+\\&
+\mathcolor{blue}
+{
+-\frac{1}{2}e^{{l'-1,1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\delta_{1,-m}}\right)
+}
+\\&
+-\frac{1}{2}e^{{l'-1,1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\delta_{1,m}}\right)
+\end{align*}
+
+Again the blue terms vanish since the delta functions will never be non-zero under the sums. The red terms cancel each other out since $c^{l,-1}=e^{l,1}$ and $-1^m=-1$ for $m=-1$. The terms in black simplify to:
+\begin{align*}
+&
+\frac{1}{2}c^{{l'-1,-1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\delta_{-1,-m}}\right)
+-\frac{1}{2}e^{{l'-1,1}}\frac{1}{\sqrt{2}}\partial_x\left(\sum_{m=1}^{l'-1}{L^{{l'-1,m}}\left (\vec{x} \right )\left({-1}\right)^{m}\delta_{1,m}}\right)
+\\&
+=
+\frac{1}{2}c^{{l'-1,-1}}\frac{1}{\sqrt{2}}\partial_xL^{{l'-1,1}}\left (\vec{x} \right )
+-\frac{1}{2}c^{{l'-1,-1}}\frac{1}{\sqrt{2}}\partial_xL^{{l'-1,1}}\left (\vec{x} \right )\left({-1}\right)^{1}
+\\&
+=
+\frac{1}{\sqrt{2}}c^{{l'-1,-1}}\partial_xL^{{l'-1,1}}\left (\vec{x} \right )
+\end{align*}
+
+Similar simplifications apply to the remaining terms of the SH expansion of the transport term for $m=0$, resulting in the final expression:
+\begin{align*}
+&
+\frac{1}{\sqrt{2}}c^{{l'-1,-1}}\partial_x L^{{l'-1,1}}\left (\vec{x} \right )
+-\frac{1}{\sqrt{2}}d^{{l'+1,-1}}\partial_x L^{{l'+1,1}}\left (\vec{x} \right )
+\\&
+\frac{1}{\sqrt{2}}c^{{l'-1,-1}}\partial_y L^{{l'-1,-1}}\left (\vec{x} \right )
+-\frac{1}{\sqrt{2}}d^{{l'+1,-1}}\partial_y L^{{l'+1,-1}}\left (\vec{x} \right )
+\\&
+a^{{l'-1,0}}\partial_z L^{{l'-1,0}}\left (\vec{x} \right)
++b^{{l'+1,0}}\partial_z L^{{l'+1,0}}\left (\vec{x} \right)
+\end{align*}
+
+\subsection{Final equation}
+
+Putting all projected terms from previous subsections together, we get for $m<0$:
+\begin{align}
+&-\frac{1}{2}c^{\scaleto{l-1,m-1}{4pt}}
+\partial_y
+L^{\scaleto{l-1,-m+1}{4pt}}
+%\\
++\frac{1}{2}d^{\scaleto{l+1,m-1}{4pt}}
+\partial_y
+L^{\scaleto{l+1,-m+1}{4pt}}
+%\\
+-\frac{1}{2}\beta^{\scaleto{m}{4pt}}e^{\scaleto{l-1,m+1}{4pt}}
+\partial_y
+L^{\scaleto{l-1,-m-1}{4pt}}
+\nonumber
+\\&
++\frac{1}{2}\beta^{\scaleto{m}{4pt}}f^{\scaleto{l+1,m+1}{4pt}}
+\partial_y
+L^{\scaleto{l+1,-m-1}{4pt}}
+%\\
++\frac{1}{2}c^{\scaleto{l-1,m-1}{4pt}}
+\partial_x
+L^{\scaleto{l-1,m-1}{4pt}}
+\nonumber
+\\&
+-\frac{1}{2}\delta_{\scaleto{m\neq -1}{4pt}}e^{{l-1,m+1}}
+\partial_x
+L^{\scaleto{l-1,m+1}{4pt}}
+%\\
++\frac{1}{2}\delta_{\scaleto{m\neq -1}{4pt}}f^{\scaleto{l+1,m+1}{4pt}}
+\partial_x
+L^{\scaleto{l+1,m+1}{4pt}}
+%\\
+-\frac{1}{2}d^{\scaleto{l+1,m-1}{4pt}}
+\partial_x
+L^{\scaleto{l+1,m-1}{4pt}}
+\nonumber
+\\&
++a^{\scaleto{l-1,m}{4pt}}
+\partial_z
+L^{\scaleto{l-1,m}{4pt}}
+%\\
++b^{\scaleto{l+1,m}{4pt}}
+\partial_z
+L^{\scaleto{l+1,m}{4pt}}
+%\\
++\sigma_t L^{\scaleto{l,m}{4pt}}
+%\\
+-\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
+%\\
+= Q^{\scaleto{l,m}{4pt}}
+\end{align}
+
+for $m=0$:
+\begin{align}
+&
+\frac{1}{\sqrt{2}}c^{\scaleto{l-1,-1}{4pt}}\partial_x L^{\scaleto{l-1,1}{4pt}}
+-\frac{1}{\sqrt{2}}d^{\scaleto{l+1,-1}{4pt}}\partial_x L^{\scaleto{l+1,1}{4pt}}
+\frac{1}{\sqrt{2}}c^{\scaleto{l-1,-1}{4pt}}\partial_y L^{\scaleto{l-1,-1}{4pt}}
+\nonumber
+\\&
+-\frac{1}{\sqrt{2}}d^{\scaleto{l+1,-1}{4pt}}\partial_y L^{\scaleto{l+1,-1}{4pt}}
+%\\&
+a^{\scaleto{l-1,0}{4pt}}\partial_z L^{\scaleto{l-1,0}{4pt}}
++b^{\scaleto{l+1,0}{4pt}}\partial_z L^{\scaleto{l+1,0}{4pt}}
+\nonumber
+\\&
++\sigma_t L^{\scaleto{l,m}{4pt}}
+-\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
+= Q^{\scaleto{l,m}{4pt}}
+\end{align}
+
+
+and for $m>0$:
+\begin{align}
+&
+\frac{1}{2}c^{\scaleto{l-1,-m-1}{4pt}}\partial_x 
+%\\&
+-\frac{1}{2}d^{\scaleto{l+1,-m-1}{4pt}}\partial_x L^{\scaleto{l+1,m+1}{4pt}}
+%\\&
+-\frac{1}{2}\beta^{\scaleto{m}{4pt}}e^{\scaleto{l-1,m-1}{4pt}}\partial_x L^{\scaleto{l-1,m-1}{4pt}}
+\nonumber
+\\&
++\frac{1}{2}\beta^{\scaleto{m}{4pt}}f^{l+1,-m+1}\partial_x L^{\scaleto{l+1,m-1}{4pt}}
+%\\&
++\frac{1}{2}c^{\scaleto{l-1,-m-1}{4pt}}\partial_y L^{\scaleto{l-1,-m-1}{4pt}}
+\nonumber
+\\&
+-\frac{1}{2}d^{\scaleto{l+1,-m-1}{4pt}}\partial_y L^{\scaleto{l+1,-m-1}{4pt}}
+%\nonumber
+%\\&
++\delta_{\scaleto{m\neq 1}{4pt}}\frac{1}{2}e^{\scaleto{l-1,-m+1}{4pt}}\partial_y L^{\scaleto{l-1,-m+1}{4pt}}
+\nonumber
+\\&
+-\delta_{\scaleto{m\neq 1}{4pt}}\frac{1}{2}f^{\scaleto{l+1,-m+1}{4pt}}\partial_y L^{\scaleto{l+1,-m+1}{4pt}}
+%\\&
++a^{\scaleto{l-1,-m}{4pt}}\partial_z L^{\scaleto{l-1,m}{4pt}}
+%\nonumber
+%\\&
++b^{\scaleto{l+1,-m}{4pt}}\partial_z L^{\scaleto{l+1,m}{4pt}}
+\nonumber
+\\&
++\sigma_t L^{\scaleto{l,m}{4pt}}
+-\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
+= Q^{\scaleto{l,m}{4pt}}
+\end{align}
+
+
+
+with
+\begin{align*}
+\beta^{x}=
+\left\{
+\begin{array}{ll}
+\frac{2}{\sqrt{2}}, & \text{for } \vert x\vert = 1\\
+1, & \text{for } \vert x\vert \neq 1
+\end{array}
+\right.
+,\quad
+\delta_{x\neq y}=
+\left\{
+\begin{array}{ll}
+1, & \text{for } x \neq y\\
+0, & \text{for } x = y
+\end{array}
+\right.
+\end{align*}
+
+and
+\begin{align*}
+&
+a^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l-m+1\right)\left(l+m+1\right)}{\left(2l+1\right)\left(2l-1\right)}} \qquad
+b^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l-m\right)\left(l+m\right)}{\left(2l+1\right)\left(2l-1\right)}}
+\\&
+c^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l+m+1\right)\left(l+m+2\right)}{\left(2l+3\right)\left(2l+1\right)}} \qquad
+d^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l-m\right)\left(l-m-1\right)}{\left(2l+1\right)\left(2l-1\right)}}
+\\&
+e^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l-m+1\right)\left(l-m+2\right)}{\left(2l+3\right)\left(2l+1\right)}} \qquad
+f^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l+m\right)\left(l+m-1\right)}{\left(2l+1\right)\left(2l-1\right)}}
+\end{align*}
+\begin{align*}
+\lambda_l=\sqrt{\frac{4\pi}{2l+1}}
+\end{align*}
+
+The equations can be written in a more compact form by using $\pm$ and $\mp$ to write the equations for $m<0$ and $m>0$ as one. This is done in the paper.

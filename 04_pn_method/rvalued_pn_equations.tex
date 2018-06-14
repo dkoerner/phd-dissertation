@@ -1,10 +1,164 @@
 \section{Real-valued $P_N$-equations}
+\label{sec:pn_rvalued}
 
+Depending on the truncation value $N$, the complex-valued $P_N$-equations will induce a certain number of spherical harmonics coefficients for every discretized position within the domain. These will be complex and therefore produce two unknowns per coefficient. Moreover, the whole pipeline from solver to rendering integration will have to deal with complex numbers. This is an unnecessary burden, as we actually only have real-valued radiance fields and volumetric quantities in rendering.
 
+If the spherical harmonics projected function or operator is real-valued, then the resulting projection will have a redundant structure which allows cutting the number of coefficients in half. The real-valued spherical harmonics basis function (denoted $\SHBR$) can be defined by projecting these remaining coefficients onto their real and imaginary parts:
+% real valued SH ------------------
+\begin{align}
+\label{eq:real_sh_basis}
+\SHBR^{l,m}=
+\left\{
+\begin{array}{lr}
+\frac{\iu}{\sqrt{2}}\left(\SHBC^{l,m}-\left(-1\right)^m\SHBC^{l,-m}\right), & \text{for } m < 0\\
+\SHBC^{l,m}, & \text{for } m = 0\\
+\frac{1}{\sqrt{2}}\left(\SHBC^{l,-m}+\left(-1\right)^m\SHBC^{l,m}\right), & \text{for } m > 0
+\end{array}
+\right.
+\end{align}
+Therfore the number of spherical harmonics coefficients remains the same, but since those are now real only, the number of unknowns is cut in half.
 
+In this section, the real-valued $P_N$-equations are derived by using $\SHBR$ instead of $\SHBC$ for the derivation. This allows to get rid of complex numbers everywhere in the pipeline and reduces the amount of unknowns. The real-valued $P_N$-equations as such are not new. However, performing the derivation steps manually produces very large equations which are hard to work with and make it very difficult to see structures and opportunities for simplification. Therefore in the literature, the real-valued $P_N$-equations are usually specified in form of the complex-valued $P_N$-equations in matrix form with an additional transformation matrix, representing the projection to real-valued spherical harmonics from equation~\ref{eq:real_sh_basis} (see Seibold et al.~\cite{Seibold14}). An explicit form of the real-valued $P_N$-equation cannot be found in the literature. An attempt to derive such a form has been made by Frank et al.~\cite{Frank14} (appendix A), but their result still requires matrix notation with unwieldy coefficient matrices. 
 
+In this thesis a new explicit form of the real-valued $P_N$-equations is derived, which is very concise and compact. This derivation was made possible by using the computer algebra representation framework which has been developed as part of the solver (see section~\ref{sec:pn_car}). The derivation steps for the $P_N$-equations were carried out using this representation and simplification opportunities could be discovered much more easily, leading to the compact form presented at the end of this section.
 
-For $m=0$:
+Being real-valued implies that no complex-conjugate is needed for the inner product. The projection into real-valued spherical harmonics therefore is
+\begin{align}
+\label{eq:sh_projection}
+f^{l, m} = \left<f,\SHBR^{l, m}\right> = 
+\int_\Omega f\left(\omega\right)\SHBR^{l,m}\left(\omega\right)\ud\omega
+\ .
+\end{align}
+All properties of the complex-valued spherical harmonics basis functions, except the recursion relation in equation~\ref{eq:recursive_relation}, carry through to the real-valued basis functions. In particular, the orthognality property still holds:
+\begin{align}
+\label{eq:sh_orthogonality_real}
+\left<\SHBR^{l_1, m_1},\SHBR^{l_2, m_2}\right>=
+\int_{\Omega} \SHBR^{l_1m_1}\left(\omega\right) \SHBR^{l_2m_2}\left(\omega\right) \mathbf{d}\omega = \delta_{l_1m_1}\delta_{l_2m_2}
+\ .
+\end{align}
+
+% --------------------------------------------------------------
+\subsubsection*{Transport Term}
+
+Carrying out the derivation for the transport term of the radiative transfer equation produces very different terms compared to the complex-valued counterpart. The derivation is extensive and given in appendix~\ref{app:rpn}. As the spherical harmonics basis functions are different depending on the sign of $m$ (see equation~\ref{eq:real_sh_basis}), the projected transport term is also different accordingly. After carrying out the derivation steps we arrive for $m<0$ at:
+\begin{align*}
+&-\frac{1}{2}c^{{l-1,m-1}}
+\partial_y
+L^{l-1,-m+1}
+%\\
++\frac{1}{2}d^{{l+1,m-1}}
+\partial_y
+L^{l+1,-m+1}
+%\\
+-\frac{1}{2}\beta^{m}e^{{l-1,m+1}}
+\partial_y
+L^{l-1,-m-1}
+\\&
++\frac{1}{2}\beta^{m}f^{{l+1,m+1}}
+\partial_y
+L^{l+1,-m-1}
+%\\
++\frac{1}{2}c^{{l-1,m-1}}
+\partial_x
+L^{l-1,m-1}
+\\&
+-\frac{1}{2}\delta_{\scaleto{m\neq -1}{4pt}}e^{{l-1,m+1}}
+\partial_x
+L^{l-1,m+1}
+%\\
++\frac{1}{2}\delta_{\scaleto{m\neq -1}{4pt}}f^{{l+1,m+1}}
+\partial_x
+L^{l+1,m+1}
+%\\
+-\frac{1}{2}d^{{l+1,m-1}}
+\partial_x
+L^{l+1,m-1}
+\\&
++a^{{l-1,m}}
+\partial_z
+L^{l-1,m}
+%\\
++b^{{l+1,m}}
+\partial_z
+L^{l+1,m}
+\end{align*}
+with
+\begin{align}
+\label{eq:real_sh_basis}
+\beta^{x}=
+\left\{
+\begin{array}{lr}
+\frac{2}{\sqrt{2}}, & \text{for } \vert x\vert = 1\\
+1, & \text{for } \vert x\vert \neq 1
+\end{array}
+\right.
+\end{align}
+Following the derivation through for $m>0$ gives:
+\begin{align}
+&
+\frac{1}{2}c^{l-1,-m-1}\partial_x L^{l-1,m+1}
+%\\&
+-\frac{1}{2}d^{l+1,-m-1}\partial_x L^{l+1,m+1}
+%\\&
+-\frac{1}{2}\beta^{m}e^{l-1,m-1}\partial_x L^{l-1,m-1}
+\nonumber
+\\&
+\frac{1}{2}\beta^{m}f^{l+1,-m+1}\partial_x L^{l+1,m-1}
+%\\&
+\frac{1}{2}c^{l-1,-m-1}\partial_y L^{l-1,-m-1}
+%\\&
+-\frac{1}{2}d^{l+1,-m-1}\partial_y L^{l+1,-m-1}
+\nonumber
+\\&
+\delta_{\scaleto{m\neq 1}{4pt}}\frac{1}{2}e^{l-1,-m+1}\partial_y L^{l-1,-m+1}
+%\\&
+-\delta_{\scaleto{m\neq 1}{4pt}}\frac{1}{2}f^{l+1,-m+1}\partial_y L^{l+1,-m+1}
+%\\&
+a^{l-1,-m}\partial_z L^{l-1,m}
+\nonumber
+\\&
+b^{l+1,-m}\partial_z L^{l+1,m}
+\nonumber
+\end{align}
+Similar simplifications apply to the remaining terms of the spherical harmonics expansion of the transport term for $m=0$, resulting in the expression:
+\begin{align}
+\label{eq:pn_rvalued_transport_m0}
+&
+\frac{1}{\sqrt{2}}c^{{l-1,-1}}\partial_x L^{{l-1,1}}
+-\frac{1}{\sqrt{2}}d^{{l+1,-1}}\partial_x L^{{l+1,1}}
+\\&
+\frac{1}{\sqrt{2}}c^{{l-1,-1}}\partial_y L^{{l-1,-1}}
+-\frac{1}{\sqrt{2}}d^{{l+1,-1}}\partial_y L^{{l+1,-1}}
+\\&
+a^{{l-1,0}}\partial_z L^{{l-1,0}}
++b^{{l+1,0}}\partial_z L^{{l+1,0}}
+\end{align}
+
+% --------------------------------------------------------------
+\subsubsection*{Collision, Scattering and Emission}
+
+The remaining terms of the radiative transfer equation are derived in the same way, as their complex-valued counterpart. The collision term for $m < 0$, $m=0$ and $m > 0$ is
+\begin{align}
+\label{eq:pn_rvalued_transport_collision}
+-\sigma_t L^{l,m}
+\ .
+\end{align}
+We have for the scattering term
+\begin{align}
+\label{eq:pn_rvalued_transport_scattering}
+\sigma_s\lambda_{l}p^{l,0}\left(\vec{x}\right)L^{l,m}
+\end{align}
+and finally for the emission term
+\begin{align}
+\label{eq:pn_rvalued_transport_emission}
+Q^{l,m}
+\ .
+\end{align}
+
+% --------------------------------------------------------------
+\subsubsection*{Final Equation}
+
+By putting equation~\ref{eq:pn_rvalued_transport_m0}, equation~\ref{eq:pn_rvalued_transport_collision}, equation~\ref{eq:pn_rvalued_transport_scattering} and equation~\ref{eq:pn_rvalued_transport_emission} together we get for $m=0$:
 \begin{align}
 &
 \frac{1}{\sqrt{2}}c^{\scaleto{l-1,-1}{4pt}}\partial_x L^{\scaleto{l-1,1}{4pt}}
@@ -19,13 +173,13 @@ For $m=0$:
 +b^{\scaleto{l+1,0}{4pt}}\partial_z L^{\scaleto{l+1,0}{4pt}}
 \nonumber
 \\&
-+\sigma_t L^{\scaleto{l,m}{4pt}}
--\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
-= Q^{\scaleto{l,m}{4pt}}
+=
+-\sigma_t L^{\scaleto{l,m}{4pt}}
++\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
++ Q^{\scaleto{l,m}{4pt}}
 %\label{eq:rpn_m_=_z}
 \end{align}
-
-And for $m<0$ (upper sign) and $m>0$ (lower sign):
+We can compact the equations for $m<0$ and $m>0$ into a single expression by differentiating the signs using $\pm$. The  top sign is associated with $m<0$ and for $m>0$ we use the bottom sign. This results in the real-valued $P_N$-equation for $m<0$ and $m>0$:
 \begin{align}
 &
 \frac{1}{2}c^{\scaleto{l-1,\pm m-1}{4pt}}\partial_x L^{\scaleto{l-1,m\mp 1}{4pt}}
@@ -54,13 +208,13 @@ And for $m<0$ (upper sign) and $m>0$ (lower sign):
 +b^{\scaleto{l+1,\pm m}{4pt}}\partial_z L^{\scaleto{l+1,\mp m}{4pt}}
 \nonumber
 \\&
-+\sigma_t L^{\scaleto{l,m}{4pt}}
--\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
-= Q^{\scaleto{l,m}{4pt}}
+=
+-\sigma_t L^{\scaleto{l,m}{4pt}}
++\sigma_s\lambda_{\scaleto{l}{4pt}}p^{\scaleto{l,0}{4pt}}L^{\scaleto{l,m}{4pt}}
++Q^{\scaleto{l,m}{4pt}}
 %\nonumber
 %\label{eq:rpn_m_>_z}
 \end{align}
-
 with
 \begin{align*}
 %\label{eq:real_sh_basis}
@@ -82,7 +236,6 @@ with
 \end{array}
 \right.
 \end{align*}
-
 and
 \begin{align*}
 &
@@ -107,5 +260,3 @@ f^{\scaleto{l,m}{4pt}}= \sqrt{\frac{\left(l+m\right)\left(l+m-1\right)}{\left(2l
 
 
 
-
-\subsection{Real-valued $P_N$-equations in Two Dimensions}

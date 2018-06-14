@@ -25,12 +25,12 @@ N_j\left(\omega\right)
 \end{align}
 The index set $\{k_1, k_2, ..., k_{j-1}, k_j\}$ identifies specific tensor components, with each index running over all components of $\omega$ ($k_i \in \{x, y, z\}$).
 
-The tensors $y^{l,m}_j$ are found by expanding $\SHBC^{l,m}(\omega)$ into a sum of tensor components of $N_j$. The factors to these components can be easily extracted and constitute the components of $y^{l,m}_j$. The expansion can be done by using the following non-recursive definition of the Legendre-polynomial which is derived from the multiple-angle formula\footnote{\url{http://mathworld.wolfram.com/Multiple-AngleFormulas.html}}:
+The tensors $y^{l,m}_j$ are found by expanding $\SHBC^{l,m}(\omega)$ into a sum of tensor components of $N_j$. The factors to these components can be easily extracted and constitute the components of $y^{l,m}_j$. The expansion can be done by using the following non-recursive definition of the Legendre-polynomial which is derived using the multiple-angle formula\footnote{\url{http://mathworld.wolfram.com/Multiple-AngleFormulas.html}}:
 \begin{align}
 P^{lm}(\theta, \phi) = \operatorname{sin}^m(\phi)\sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\operatorname{cos}^{l-m-2j}(\theta)
 \qquad \text{for } m \ge 0
 \end{align}
-Inserting this into $\SHBC^{l,m}$ gives:
+Inserting this into the definition of the spherical harmonics basis function $\SHBC^{l,m}$ (see equation~\ref{eq:sh_definition_C}) gives:
 \begin{align}
 \SHBC^{l,m}(\theta, \phi) = C^{l,m}\left(e^{i\phi}\operatorname{sin}\left(\phi\right)\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\operatorname{cos}^{l-m-2j}(\theta)
 \qquad \text{for } m \ge 0
