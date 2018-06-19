@@ -8,18 +8,11 @@ The $P_N$-method is a deterministic method for computing light transport in a pa
 In this chapter, we will give a thorough derivation of the $P_N$-theory. The first section introduces the spherical harmonics expansion and important properties. Then the complex-valued $P_N$-equations are derived in section~\ref{sec:pn_cvalued}. The fact, that the radiance field is positive in every direction can be used to cut the number of unknowns in half. This is done by using the real-valued $P_N$-equations. In section~\ref{sec:pn_rvalued}, a very compact form of the real-valued $P_N$-equations is derived, which has not been given anywhere else in the literature before. After a short note on two-dimensional problems in section~\ref{sec:pn_2d}, The chapter continues by introducing a new method for solving the $P_N$-equations (section~\ref{sec:pn_solver}) and closes by discussing its integration into a rendering framework and giving results (section~\ref{sec:pn_results}).
 
 \input{04_pn_method/spherical_harmonics}
-
 \input{04_pn_method/cvalued_pn_equations}
-
 \input{04_pn_method/rvalued_pn_equations}
+\input{04_pn_method/2dproblems}
+\input{04_pn_method/pnsolver}
 
-\section{Two-dimensional problems}
-\label{sec:pn_2d}
-\section{$P_N$-Solver with Automated Stencil Generation}
-\label{sec:pn_solver}
-\subsection{Computer Algebra Representation}
-\label{sec:pn_car}
-\subsection{Stencil Generation}
-\subsection{System Matrix Construction and Solution}
+
 \section{Rendering Integration and Results}
 \label{sec:pn_results}

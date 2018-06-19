@@ -16,7 +16,7 @@ If the spherical harmonics projected function or operator is real-valued, then t
 \end{array}
 \right.
 \end{align}
-Therfore the number of spherical harmonics coefficients remains the same, but since those are now real only, the number of unknowns is cut in half.
+Therefore the number of spherical harmonics coefficients remains the same, but since those are now real only, the number of unknowns is cut in half.
 
 In this section, the real-valued $P_N$-equations are derived by using $\SHBR$ instead of $\SHBC$ for the derivation. This allows to get rid of complex numbers everywhere in the pipeline and reduces the amount of unknowns. The real-valued $P_N$-equations as such are not new. However, performing the derivation steps manually produces very large equations which are hard to work with and make it very difficult to see structures and opportunities for simplification. Therefore in the literature, the real-valued $P_N$-equations are usually specified in form of the complex-valued $P_N$-equations in matrix form with an additional transformation matrix, representing the projection to real-valued spherical harmonics from equation~\ref{eq:real_sh_basis} (see Seibold et al.~\cite{Seibold14}). An explicit form of the real-valued $P_N$-equation cannot be found in the literature. An attempt to derive such a form has been made by Frank et al.~\cite{Frank14} (appendix A), but their result still requires matrix notation with unwieldy coefficient matrices. 
 

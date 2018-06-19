@@ -12,18 +12,21 @@ C^{l,m}e^{im\phi}P^{l,m}\left(\operatorname{cos}\theta\right), & \text{for $m\ge
 \quad ,
 \end{align}
 where $P^{l,m}$ are the associated Legendre polynomials. While those can be defined in many different ways, the most numerically robust way to evaluate them is by using the following set of recurrence relations (see Press et al.~\cite{Press07}):
-\begin{align*}
+\begin{align}
 P^{0,0}\left(\operatorname{cos}\theta\right) &=
 1
 \  ,
+\nonumber
 \\
 P^{m,m}\left(\operatorname{cos}\theta\right) &=
 \left(2m-1\right)!!\left(1-\operatorname{cos}^2\theta\right)^\frac{m}{2}
 \  ,
+\nonumber
 \\
 P^{m+1,m}\left(\operatorname{cos}\theta\right) &=
 \operatorname{cos}\theta\left(2m+1\right)P^{m,m}\left(\operatorname{cos}\theta\right)
 \ 
+\nonumber
 \\
 P^{l,m}\left(\operatorname{cos}\theta\right) &=
 \frac{\operatorname{cos}\theta\left(2l-1\right)}{l-m}
@@ -32,7 +35,8 @@ P^{l-1,m}\left(\operatorname{cos}\theta\right)
 \frac{l+m-1}{l-m}
 P^{l-2,m}\left(\operatorname{cos}\theta\right)
 \  .
-\end{align*}
+\label{eq:sh_Plm}
+\end{align}
 The factor $C^{l,m}$ in equation~\ref{eq:sh_definition} is defined as
 \begin{align}
 \label{eq:sh_definition_C}

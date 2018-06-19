@@ -1,0 +1,213 @@
+\section{$P_N$-Solver with Automated Stencil Generation}
+\label{sec:pn_solver}
+
+In this section, a new method for solving the $P_N$-equations is being given. This method is based on the idea to automatically generate the linear system of equations directly from a computer algeba representation of the $P_N$-equations. First this section goes through the individual steps manually required to build such a system in general from partial differential equations, followed by the motivation for the automated approach taken in this thesis. In subsections~\ref{sec:pn_car}-~\ref{sec:pn_staggered}, the solver and the automation of the individual system-building steps are explained in detail, including the developed software framework and important numerical aspects, such as handling boundary conditions and staggered grids.
+
+There are two reasons why the solver has been designed with the idea of automating the system building as much as possible. The first reason simply is that the number of equations for the system depends on the user parameter $N$ (the spherical harmonics truncation order) and is therefore not known in advance during solver implementation. In addition, the number of equations increases exponentially with truncation order $N$, which makes building the system increasingly laborious, time consuming and prone to errors, if done manually. The second reason is that there exists a rich variety of variations of the $P_N$-method in other fields, dealing with different aspects, such as reduction of ringing artefacts and improvement of convergence. The idea behind our system is to be able to generate the system of linear equations directly from the specification of a general coupled set of partial differential equations. This would allow easy implementation and cross-comparisons of these alternate theories from the literature.
+\TD{give references for these variations}
+
+The $P_N$-equations have been derived in previous sections by discretizing the continuous angular variable in the radiative transfer equation. This led to a discrete set of coupled partial differential equations which still depend on the continuous spatial variable~$\vec{x}$. Therefore, the next step is to discretize this spatial variable on a particular domain with input fields for the various radiative quantities, such as extinction or the phase function. Finally, using this discretization, a system of linear equations can be build by assembling a coefficient matrix $A$ and a right hand side vector~$\vec{b}$.
+
+As mentioned in section~\ref{sec:discretization}, a discrete representation of the geometry that is involved in the problem is required in order to discretize the spatial variable. Throughout this thesis, a regular cartesian grid is used, which in this thesis will be referred to as finite difference grid. This type of grid is very simple and commonly used in graphics. In the future it might be worth exploring other more complex meshes, such as tetrahedral irregular grids, which are often used in finite element analysis. 
+
+The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by its resolution $res=(I,J,K)$ or gridspacing $h=(h_x, h_y, h_z)$ in each dimension. The local space of that grid is referred to as voxelspace.
+
+Using finite difference grids, the discretization consists of replacing the quantities which depend on the continuous variable~$\vec{x}$ with their counterpart which depend on~$x_{ijk}$, where $ijk$ is a coordinate in voxelspace. Note that this coordinate is still continuous. For example $x_{i+\frac{1}{2}jk}$ is a valid coordinate. Quantities around grid point locations are found by interpolation. Troughout this thesis we use trilinear interpolation for three-dimensional grids and bilinear interpolation for two-dimensional grids. Higher order interpolation would be possible and an avenue for future exploration.
+\TD{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
+
+\subsubsection*{Spatial Discretization}
+The first step with discretization is to do the replacement $\vec{x}\rightarrow x_{ijk}$. Using the two-dimensional laplace equation $\nabla^2\phi(\vec{x})=u(\vec{x})$ as example, this would give:
+\begin{align*}
+\nabla^2\phi\left(\vec{x}\right)=u\left(\vec{x}\right)
+\xrightarrow{\makebox[1cm]{}}
+\partial_x^2\phi_{ij}+
+\partial_y^2\phi_{ij}
+=
+u_{ij}
+\end{align*}
+The spatial derivatives are approximated using central differences:
+\begin{align}
+\partial_x\phi_{ijk} = \frac{\phi_{i+\frac{1}{2}jk} - \phi_{i-\frac{1}{2}jk}}{h}
+\label{eq:pn_solver_central_difference}
+\end{align}
+Continuing with the Laplace example, these substitutions are carried out next. Note how nested derivatives affect the indices accordingly:
+\begin{align*}
+&
+\xrightarrow{\makebox[1cm]{}}
+\left(
+\frac
+{
+\partial_x
+\phi_{i+\frac{1}{2}j}
+-
+\partial_x
+\phi_{i-\frac{1}{2}j}
+}
+{h_x}
+\right)
+-
+\left(
+\frac
+{
+\partial_y
+\phi_{ij+\frac{1}{2}}
+-
+\partial_y
+\phi_{ij-\frac{1}{2}}
+}
+{h_y}
+\right)
+=
+u_{ij}
+\\
+&
+\xrightarrow{\makebox[1cm]{}}
+\frac
+{
+\frac{\phi_{i+1j} - \phi_{ij}}{h_x}
+-
+\frac{\phi_{ij} - \phi_{i-1j}}{h_x}
+}
+{h_x}
+-
+\frac
+{
+\frac{\phi_{ij+1} - \phi_{ij}}{h_y}
+-
+\frac{\phi_{ij} - \phi_{ij-1}}{h_y}
+}
+{h_y}
+=
+u_{ij}
+\end{align*}
+
+\subsubsection*{Canonical Form}
+After application of the discretization steps, the resulting equation is brought into canonical form, which means that the expression is factorized according to the unknowns $\phi_{ij}$:
+\begin{align*}
+\xrightarrow{\makebox[1cm]{}}
+\frac{1}{h_x^2}\phi_{i+1j}
++\frac{1}{h_x^2}\phi_{i-1j}
++\frac{1}{h_y^2}\phi_{ij+1}
++\frac{1}{h_y^2}\phi_{ij-1}
+-2\left(\frac{1}{h_x^2}+\frac{1}{h_y^2}\right)\phi_{ij}
+=
+u_{ij}
+\end{align*}
+\subsubsection*{Stencil Code Crafting}
+In the next step, the canonical form is used to program the stencil code. This is done by interpreting the equation as a product between a row in the coefficient matrix $A$ and the vector of unknowns (the solution vector), resulting in the right hand side $u_{ij}$. The regular structure of the discretization reveals a pattern which is the same for every row and just changes the indicees per row. This is why it is called stencil code.
+\TD{insert source code figure for simple stencil code}
+The purpose of the stencil code is to be executed repeatedly in order to populate the system matrix $A$ and right hand side $\vec{b}$. Note that this requires a mapping of two-dimensional indices $ij$ to linear indices into columns of $A$. Also functions for accessing discretized input fields ($u$) and parameters, such as the voxelsize $h$, will be needed.
+
+\subsubsection*{System Matrix Population and Solve}
+The stencil code is compiled and executed for each row in $A$ to populate the system. Depending on the matrix-properties of $A$, different methods for solving the linear system $A\vec{x}=\vec{b}$ can be applied to find the solution $\vec{x}$, the discretized radiance field. This can then be used in a rendering application.
+\TD{image overview of the numerical pipeline}
+
+In the following subsections, the new solver will be introduced as as a general framwork for automization of the steps given above. The next section discusses how a computer algebra representation is used to represent the equation to be solved. Section~\ref{sec:pn_stencil_gen} shows how the spatial discretization and stencil code generation are executed using that representation. Section~\ref{sec:pn_bc} explains the aspects of the system which are related to boundary conditions, followed by section~\ref{sec:pn_system_matrix} which discusses how the generated system of linear equations is solved. Finally, section~\ref{sec:pn_staggered} is dedicated to staggered grids, which are necessary for the solver to produce useful results.
+
+\subsection{Computer Algebra Representation}
+\label{sec:pn_car}
+
+At the core of our solver is a computer algebra representation of the equations which the system is trying to solve on a given domain. This representation is an expression tree. Each node within that tree can have any number of children and represents a constant, mathematical symbol or a mathematical operation, such as integration, derivation, power, addition or multiplication. Representations of complex equations are constructed by nesting nodes into a larger tree, where child nodes are considered arguments of the operation which is represented by the parent node.
+
+There exists a rich number of computer algebra systems, such as SymPy~\cite{Meurer17}, which allow to generate and manipulate computer algebra representations like this. However, for this thesis a small lightweight computer algebra representation containing the required subset had been developed. Figure~\ref{fig:pn_math_expression_tree_generation} demonstrates how this system is used to build the expression trees for the examples above.
+\begin{figure}[h]
+\centering
+\missingfigure{code listing showing how the expression tree is build}
+\caption{Some caption}
+\label{fig:pn_math_expression_tree_generation}
+\end{figure}
+
+Figure~\ref{fig:pn_math_expression_tree} shows the expression tree for a squared binom and the Laplace equation example used throughout this section.
+\begin{figure}[h]
+\centering
+\missingfigure{image of a computer algebra representation of the laplace equation and binomial}
+\caption{Some caption}
+\label{fig:pn_math_expression_tree}
+\end{figure}
+
+Manipulations of mathematical expressions, such as expansions, the application of identities, substitution, factorization or rearranging of terms can be expressed as operations on the expression tree. Section~\ref{sec:pn_stencil_gen} will discuss how the spatial discretization is carried out as a manipulation of the expression tree (see figure~\ref{fig:pn_math_expression_tree_manipulation}).
+\begin{figure}[h]
+\centering
+\missingfigure{image of representing binomial expansion as operation on expression tree}
+\caption{Some caption}
+\label{fig:pn_math_expression_tree_manipulation}
+\end{figure}
+
+Finally, after creation and manipulation, the final expression tree can be turned into another representation, such as latex expressions or source code. This is done by different rendering frontends which parse the expression tree and generate the appropriate output.
+\begin{figure}[h]
+\centering
+\missingfigure{image showing rendering frontends for source code and latex}
+\caption{Some caption}
+\label{fig:pn_math_expression_tree_rendering}
+\end{figure}
+
+\subsection{Discretization and Stencil Generation}
+\label{sec:pn_stencil_gen}
+
+After expressing the $P_N$-equations in the computer algebra representation, the spatial discretization is carried out as a manipulation step on the mathematical expression tree. This is done by by parsing the tree from the root. The equation is supposed to be discretized at position $\vec{x}$, which initially coincides with the location $x_{ijk}$ in the discretized domain. This location is kept on a stack by the parser.
+
+When a differential operator is encountered during tree parsing, the subtree representing the expression to be derived is instantiated twice according to the finite difference expression in equation~\ref{eq:pn_solver_central_difference} with appropriate weighting factors. The current position on the stack is adjusted and pushed on the stack again when decending down in the tree on each side of the central difference expression. This will produce higher order stencils as expected for nested differential operators.
+\begin{figure}[h]
+\centering
+\missingfigure{image showing math expression tree for how the differential operator is being replaced with central difference. also mark the position on the stack.}
+\caption{Some caption}
+\label{fig:pn_discretization_differential}
+\end{figure}
+
+Once the parser arrives at the symbol $\vec{x}$ in the tree, it is replaced by its discrete counterpart. The top of the discrete position stack indicates where the unknown is expected to be evaluated relative to position $ijk$, at which the whole equation is being evaluated. If the position on top of the stack is the same, then just the unknown at $ijk$ is used to replace $\vec{x}$ in the expression. If the unknown is expected to be evaluated at a different location than $ijk$ (due to central differences), then $\vec{x}$ is being substituted by an expression which expresses the interpolation of the unknowns from the gridpoints (at which they are defined) to the position on top of the stack (see figure~\ref{fig:pn_discretization_interpolation}). This also makes sure, that our final expression only contains unknowns for which an element in the solution vector exists.
+\begin{figure}[h]
+\centering
+\missingfigure{image showing interpolation.}
+\caption{Some caption}
+\label{fig:pn_discretization_interpolation}
+\end{figure}
+
+After applying the discretization to the expression tree, the equation is being factorized according to the unknowns ($\phi$ in the Laplace example). The factorization is applied as a sequence of manipulation operations to the expression tree, including application of the distributive law. A seperate step iterates over all resulting terms and merges coefficients from multiple instances of the same unknown, so that each unknown appears only once. 
+
+After the discretized equation has been brought into canonical form, a seperate pass renders the expression tree into the stencil code. Then each term is analyzed and turned into source code.
+
+If a term contains an unknown, then its factor expression subtree is rendered into a source code string. The symbols for voxelsize and other radiative quantities are replaced by function calls into an API which is being provided by the framework. Finally, the voxelspace coordinate associated with the unknown is used to find a discrete index into the finite difference grid, relative to the original coordinate $ijk$ at which the equation is being evaluated. This discrete index is being used to compute the column in $A$. With that, the assignment expression in the stencil code can be put together.
+\begin{figure}[h]
+\centering
+\missingfigure{image showing code generation from expression tree in canonical form.}
+\caption{Some caption}
+\label{fig:pn_discretization_codegen}
+\end{figure}
+If the term does not contain an unknown, then the whole term is rendered into a single expression which is being assigned to the current row of the right hand side vector $\vec{b}$.
+
+The stencil code is generated with the assumption of certain function calls being available. These are integrated into a single API which is being provided by the solver framework. This API allows the stencil to query the current row in the system for which it is being executed, voxelsize as well as functions for accessing discrete radiative transfer properties.
+\begin{figure}[h]
+\centering
+\missingfigure{image showing the stencil API}
+\caption{Some caption}
+\label{fig:pn_discretization_codegen_stencilAPI}
+\end{figure}
+
+
+\subsection{Boundary Conditions}
+\label{sec:pn_bc}
+\TD{explain dirichlet. neumann BC}
+\TD{explain the idea of coefficient index bending and how it is implemented}
+
+\subsection{System Matrix Generation and Solution}
+\label{sec:pn_system_matrix}
+\TD{solver framework. classes, framework, inputs etc.}
+\TD{describe properties of the global system matrix}
+\TD{touch on eigen solver etc.}
+\TD{introduce idea of normal form and how it relates to least squares rte. mention effect on stability}
+
+
+\subsection{Staggered Grids}
+\label{sec:pn_staggered}
+% the idea is to motivate staggered grids and go over the whole pipeline again and introduce additional points related to staggered grids
+\TD{show results from using colocated grids}
+\TD{motivate staggered grids. show image explaining the problem with oscillating artefacts}
+\TD{how to determine staggered grid locations}
+\TD{staggered grids and stencil generation. mention the location stack and interpolation expressions.}
+\TD{mention staggered grid locations effects in the code and archetecture of the solver. staggering coefficients will only affect interpolation expressions. therefore the code does not need to know? where does it need to know? unstaggering? boundary conditions?}
+\TD{explain effect on boundary conditions and that it is important to have active coefficients in boundary voxels}
+\TD{show correct result after using staggered grids}
+
+
+
+
