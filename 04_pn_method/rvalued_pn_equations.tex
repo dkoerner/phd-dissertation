@@ -29,7 +29,20 @@ f^{l, m} = \left<f,\SHBR^{l, m}\right> =
 \int_\Omega f\left(\omega\right)\SHBR^{l,m}\left(\omega\right)\ud\omega
 \ .
 \end{align}
-All properties of the complex-valued spherical harmonics basis functions, except the recursion relation in equation~\ref{eq:recursive_relation}, carry through to the real-valued basis functions. In particular, the orthognality property still holds:
+Similarly the reconstruction is done by using the real-valued spherical harmonics basis function
+\begin{align}
+f\left(\omega\right) = 
+\sum_{l=0}^{N}
+{
+\sum_{m=-l}^{l}
+{
+f^{l,m}\left(\vec{x}\right)\SHBR^{l,m}\left(\omega\right)
+}
+}
+\ .
+\label{eq:sh_real_reconstruction}
+\end{align}
+All properties of the complex-valued spherical harmonics basis functions, except the recursion relation in equation~\ref{eq:recursive_relation}, carry through to the real-valued basis functions. In particular, the orthogonality property still holds:
 \begin{align}
 \label{eq:sh_orthogonality_real}
 \left<\SHBR^{l_1, m_1},\SHBR^{l_2, m_2}\right>=

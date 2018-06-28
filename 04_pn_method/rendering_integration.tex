@@ -1,0 +1,26 @@
+\section{Rendering Integration}
+\label{sec:pn_rendering_integration}
+
+This section will explain in more detail how the solver and its result can be integrated into a standard rendering framework.
+
+The whole solver framework is encapsulated with the PNSolver class. The $P_N$-solver is integrated by making this class part of the rendering framework. As outlined in section~\ref{sec:pn_framework}, references to a Stencil class and the PNVolume class are needed to create a PNSolution instance.
+
+The truncation order $N$ is a user parameter which is decided at runtime. However, the stencil code will always be the same for a given truncation order $N$, since it has been generated independently of grid resolution, boundary conditions and radiative transfer parameters. Therfore it suggests itself to precompute and precompile the stencil code for all possible options for $N$. The rendering framework is compiled once with all possible stencil codes. As soon as the user decided which truncation order $N$ to use, a Stencil class is generated using the function pointers of the respective compiled stencil code functions.
+
+The PNVolume class is also created by the rendering framework. It will be populated with references to Field classes for the radiative transfer quantities extinction, albedo, emission and phase function. The Field classes serve as adapter pattern according to Gamma et al.~\cite{Gamma95} and can be used to feed any representation as input to the solver framework.
+
+After solving for the solution vector $\vec{u}$ and bringing it into collocated form using the \emph{unstaggering} function described in section~\ref{sec:pn_staggered}, a rendering system can use it for image generation. 
+
+However, before solving the system and producing the solution vector, it first has to be generated from the given problem.
+
+The solution vector provided by the solver contains a set of spherical harmonics coefficients for every voxel of the computational grid. This set of coefficients describes the spherical radiance function at the voxelcenter. The framework which has been developed as part of this thesis provides a PNSolution class which is essentially a voxelgrid of $K$-dimensional vectors. The number of vector elements $K$ is the number of spherical harmonics coefficients which is driven by the truncation order of the $P_N$-equations. The radiance field is reconstructed by first interpolating all coefficients at the given worldspace position from the coefficients at surrounding voxels, followed by computing the spherical harmonics reconstruction in equation~\ref{eq:sh_real_reconstruction}.
+
+In this thesis, images will be rendered from the solution directly. An alternative route for exploration could be to use the solution in combination with one of the variance reduction techniques outlined in section~\ref{sec:variance_reduction_techniques}.
+
+\TD{describe the idea of radiance field seperation. maybe reference quantized diffusion.}
+
+\TD{discuss synthesis. using only the first moment to get the approximation. show how integrating over sh will give the first moment. show that actually only the first moment is needed for rendering the direct approximation}
+
+\TD{show how the data could be used for variance reduction...future work}
+
+\TD{show high level picture of a rendering system. input data. precomputation. rasterization. synthesis of first order scattering and higher order scattering}
