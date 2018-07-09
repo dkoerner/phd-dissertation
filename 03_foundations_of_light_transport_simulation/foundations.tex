@@ -12,10 +12,27 @@
 % ============================================================
 \section{The Radiative Transfer Equation}
 
+Our method derives from the radiative transfer equation (RTE), which expresses the change of the radiance field $L$, with respect to an infinitesimal change of position in direction $\omega$ at point $\vec{x}$:
 \begin{align}
+\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+=&
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L\left(\vec{x}, \omega' \right)\ud\omega'
+}
 \label{eq:rte}
-X
+\\
+&
++Q_e\left(\vec{x}, \omega\right)
+\nonumber
+\  .
 \end{align}
+
+$Q_e$ is the radiance contribution from emission (light sources, self emission, etc.).
+
+
 
 \todo[inline]{Derive the radiative transfer equation terms}
 \todo[inline]{Advection}

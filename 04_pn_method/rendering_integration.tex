@@ -1,15 +1,89 @@
 \section{Rendering Integration}
 \label{sec:pn_rendering_integration}
 
-This section will explain in more detail how the solver and its result can be integrated into a standard rendering framework.
+This section will explain in more detail how the solver and its result can be integrated and used in a standard rendering framework.
 
-The whole solver framework is encapsulated with the PNSolver class. The $P_N$-solver is integrated by making this class part of the rendering framework. As outlined in section~\ref{sec:pn_framework}, references to a Stencil class and the PNVolume class are needed to create a PNSolution instance.
+The whole solver framework is encapsulated using the PNSolver class and therefore can be easily integrated into any rendering framework by making this class part of it. As outlined in section~\ref{sec:pn_framework}, references to a Stencil class and the PNVolume class are needed to create a PNSolver instance.
 
 The truncation order $N$ is a user parameter which is decided at runtime. However, the stencil code will always be the same for a given truncation order $N$, since it has been generated independently of grid resolution, boundary conditions and radiative transfer parameters. Therfore it suggests itself to precompute and precompile the stencil code for all possible options for $N$. The rendering framework is compiled once with all possible stencil codes. As soon as the user decided which truncation order $N$ to use, a Stencil class is generated using the function pointers of the respective compiled stencil code functions.
 
-The PNVolume class is also created by the rendering framework. It will be populated with references to Field classes for the radiative transfer quantities extinction, albedo, emission and phase function. The Field classes serve as adapter pattern according to Gamma et al.~\cite{Gamma95} and can be used to feed any representation as input to the solver framework.
+The PNVolume class is also created by the rendering framework. It will be populated with references to Field classes for the radiative transfer quantities, such as extinction, albedo, emission and phase function. The Field classes serve as adapter pattern according to Gamma et al.~\cite{Gamma95} and can be used to feed arbitrary representations of spatially varying scalar fields as input to the solver framework.
 
-After solving for the solution vector $\vec{u}$ and bringing it into collocated form using the \emph{unstaggering} function described in section~\ref{sec:pn_staggered}, a rendering system can use it for image generation. 
+An important aspect of providing inputs to the solver is the emission term, which describes the illumination within the problem domain. Light sources which illuminate the volume from outside will have to be expressed as emission on the boundary interface and light sources inside the problem domain, such as point- or area lights need to be rasterized into the emission field. Expressing outside illumination at the boundaries potentially conflicts with zero-valued Dirichlet boundary conditions. Rasterizing light sources inside the domain will challenge the solver if strong directionality is present. The spherical harmonics approximation has difficulties representing delta or strongly directional functions in angular domain due to truncation of higher moments. This will cause the solution to suffer in accuracy.
+
+To alleviate the challenges of light sources with strong directionality, the rendering system developed as part of this thesis implements an idea which is inspired by Grosjean’s analytical approximation to exact transport of a point light source within a homogeneous medium (see Grosjean~\cite{Grosjean56}). Instead of providing an approximation to the full light transport caused by the point light, the approximation seperates the unscattered light from the scattered light. The solution for the unscattered contribution is exact and an approximation is needed only for the scattered light. This approach is reasonable as the light contribution from scattered light has more energy in the lower frequencies due to the phase function which acts as a convolution filter on the radiance function in angular domain.
+
+Following this idea by Grosjean, the radiance field $L$ is seperated into unscattered light $L_{u}$ and multiple scattered light $L_m$:
+\begin{align}
+L\left(\vec{x}, \omega\right) = 
+L_u\left(\vec{x}, \omega\right)
++L_m\left(\vec{x}, \omega\right)
+\end{align}
+
+The unscattered light---as the name suggests---is the contribution of the radiance field which did not undergo any scattering events. Therefore it satisfies the following restricted radiative transfer equation with a vanished scattering term:
+\begin{align}
+\left(\nabla\cdot\omega\right)L_u\left(\vec{x}, \omega \right)
+=
+-\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \omega \right)
+\label{eq:restricted_rte}
+\end{align}
+
+
+We replace the radiance field $L$ with the decomposition above in the radiative transfer equation (equation~\ref{eq:rte}) and get
+\begin{align}
+\left(\nabla\cdot\omega\right)L_u\left(\vec{x}, \omega \right)
++\left(\nabla\cdot\omega\right)L_m\left(\vec{x}, \omega \right)
+=&
+-\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \omega \right)
+\nonumber\\
+&
+-\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \omega \right)\nonumber\\
+&
+\underbrace
+{
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+}
+}_{L_s}
+\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber
+\\
+&
++Q_e\left(\vec{x}, \omega\right)
+\nonumber
+\  .
+\end{align}
+
+By using equation~\ref{eq:restricted_rte}, the extinction terms for the unscattered light can be cancelled out, producing the medium radiative transfer equation:
+\begin{align}
+\left(\nabla\cdot\omega\right)L_m\left(\vec{x}, \omega \right)
+=&
+-\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \omega \right)\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber
+\\
+&
+\underbrace
+{
++L_s\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \omega\right)
+}_{Q}
+\nonumber
+\  .
+\end{align}
+The quantity $L_s$ is the single scattered light which is folded together with the volume emission $Q_e$ into the general emission term $Q$.
+
+Using the emission term $Q$, the medium radiative transfer equation is solved using the $P_N$-method previously described. The solution vector $\vec{u}$ is brought into collocated form using the \emph{unstaggering} function described in section~\ref{sec:pn_staggered}, a rendering system can use it for image generation. 
 
 However, before solving the system and producing the solution vector, it first has to be generated from the given problem.
 
@@ -17,10 +91,91 @@ The solution vector provided by the solver contains a set of spherical harmonics
 
 In this thesis, images will be rendered from the solution directly. An alternative route for exploration could be to use the solution in combination with one of the variance reduction techniques outlined in section~\ref{sec:variance_reduction_techniques}.
 
-\TD{describe the idea of radiance field seperation. maybe reference quantized diffusion.}
+In order to integrate the solution of the medium radiative transfer equation with a renderer, the inscattering term in the radiative transfer equation has to be split and the medium radiance $L_m$ is replaced by its truncated spherical harmonics reconstruction $\widehat{L}_m$:
+\begin{align}
+\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+=&
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)\left(L_u\left(\vec{x}, \omega' \right)+\widehat{L}_m\left(\vec{x}, \omega' \right)\right)\ud\omega'
+}
+\nonumber
+\\
+&
++Q_e\left(\vec{x}, \omega\right)
+\nonumber
+\\
+=&
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
+\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber\\
+&
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber\\
+&
++Q_e\left(\vec{x}, \omega\right)
+\label{eq:pn_rendering_integration1}
+\end{align}
 
-\TD{discuss synthesis. using only the first moment to get the approximation. show how integrating over sh will give the first moment. show that actually only the first moment is needed for rendering the direct approximation}
+When seperating the radiance field and using the single scattered light as emission term for the $P_N$-method, this equation is what needs to be solved to fully account for the radiance field. Any Monte-Carlo method would need to integrate the single scattered light (e.g. by doing next event estimation). The indirect or multiple scattered light is accounted for by integrating over the angular dependent $P_N$-solution and weighting it by the phase function and scattering term to account for the inscattering of indirect illumination.
+
+If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integration1} further simplifies to
+\begin{align}
+\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+=&
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber\\
+&
++
+\frac{1}{4\pi}
+\sigma_s\left(\vec{x}\right)
+\int_{\Omega}
+{
+\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
+}
++Q_e\left(\vec{x}, \omega\right)
+\nonumber\\
+=&
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
++\sigma_s\left(\vec{x}\right) \int_{\Omega}
+{
+p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+}
+\nonumber\\
+&
++
+\frac{1}{4\pi}
+\sigma_s\left(\vec{x}\right)
+L_m^{0,0}\left(\vec{x}\right)
++Q_e\left(\vec{x}, \omega\right)
+\ ,
+\end{align}
+due to zero moment property of the radiance field $\int_{\Omega}\widehat{L}_m\ud\omega'=L_m^{0,0}$.
+
+Figure~\ref{fig:pn_rendering_integration_overview} gives a schematic overview over the rendering integration. First the single scattered light is precomputed and projected into the emission term for the $P_N$-solver. Together with the other discretized radiative transfer parameters the $P_N$-solution is optained. The final image is generated by path tracing to the first bounce into the volume and computing the inscattered uncollided light (either by using Monte Carlo integration or by using the precomputed single scattered light which was used as emission term for the $P_N$-solver). Instead of continuing tracing the path to account for indirect illumination, a seperate inscattering integral is computed over the multiple scattered light from the $P_N$-solution.
+
+\begin{figure}[h]
+\centering
+\missingfigure{show high level picture of a rendering system. input data. precomputation. rasterization. synthesis of first order scattering and higher order scattering}
+\caption{Some caption}
+\label{fig:pn_rendering_integration_overview}
+\end{figure}
 
 \TD{show how the data could be used for variance reduction...future work}
 
-\TD{show high level picture of a rendering system. input data. precomputation. rasterization. synthesis of first order scattering and higher order scattering}
+
+After having outlined how the $P_N$-Method and its solution can be integrated into a rendering application in this section, some concrete results will be shown and discussed in the following section.
