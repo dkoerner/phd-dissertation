@@ -1,4 +1,4 @@
-\section{Isotropic Moment Closure}
+\section{Moment Closure Problem and Isotropic Closure}
 \label{sec:moment_closure}
 
 The diffusion approximation theories are derived from truncating the moment expansion of the RTE after its first moment and eliminating the unknown $\vec{E}$ by inserting the first moment equations into the zero moment equation to arrive at a single partial differential equation, which contains the zero moment $\phi$ and the second moment $P$ of the radiance field as unknowns. In order to be able to solve this partial differential equation for $\phi$, it has to be closed by eliminating the second moment $P$ as an unknown. Finding or making an educated guess for the closure $P$ is called the moment closure problem. In this section, we will outline the closure for the classical diffusion approximation and revise it in chapter~\ref{sec:fld} to introduce more sophisticated closures.
@@ -78,5 +78,4 @@ with the classic linear diffusion coefficient
 \begin{align}
 D=-\frac{1}{3\sigma_t'\left(\vec{x}\right)}
 \end{align}
-
-
+Solving the diffusion equation is very straightforward and in the next section as very efficient solver is introduced based on the multigrid method.

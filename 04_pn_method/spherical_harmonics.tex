@@ -1,5 +1,6 @@
 % ============================================================
 \section{Spherical Harmonics}
+\label{sec:sh}
 
 Spherical harmonics are the Fourier series for the sphere and therefore as equally popular for spherical problems. They are often derived as eigensolutions to the surface Laplacian, which would be like developing the Fourier series as eigensolutions of the operator $(d/dx)^2$ on a finite line with the boundary conditions that $y$ and $dy/dx$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$ which are defined as
 \begin{align}
@@ -87,6 +88,7 @@ f^{l, m} = \left<f,\SHBC^{l, m}\right> =
 \end{align}
 Given these coefficients, $f$ can be fully reconstructed by summing up the weighted contributions from the spherical harmonics basis functions
 \begin{align}
+\label{eq:sh_reconstruction}
 f\left(\omega\right) = 
 \sum_{l=0}^{N}
 {
