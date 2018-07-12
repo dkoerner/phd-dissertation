@@ -94,7 +94,9 @@ After application of the discretization steps, the resulting equation is brought
 q_{ij}
 \label{eq:pn_laplace_canonical_form}
 \end{align}
+
 \subsubsection*{Stencil Code Crafting}
+
 In the next step, the canonical form is used to derive the stencil code. This is done by interpreting the equation as a product between a row in the coefficient matrix $A$ and the vector of unknowns (the solution vector $\vec{u}$), resulting in the right hand side $q_{ij}$. The regular structure of the discretization reveals a pattern which is the same for every row and just changes the indicees per row. This is why it is called stencil code.
 \TD{insert source code figure for simple stencil code}
 The purpose of the stencil code is to be executed repeatedly in order to populate the system matrix $A$ and right hand side $\vec{b}$. Note that this requires a mapping of multi-dimensional indices $ijk$ to linear indices which reference columns of $A$. We refer to this mapping as \emph{index} function. Components of the solution vector $\vec{u}$ are associated with unknowns at specific grid locations $ijk$ through that mapping. In case of the Laplace example this would be written as:
@@ -253,6 +255,8 @@ Note how the choice and implementation of the boundary condition has an effect o
 \subsection{Solver Framework}
 \label{sec:pn_framework}
 
+\TD{use emph for class names}
+
 The stencil code is the result of the automated discretization steps carried out on the computer algebra representation and rendered into source code. Then it is compiled and linked with a solver framework, which uses the compiled stencil code to propagate the system matrix $A$ and right hand side vector $\vec{b}$. By rendering the tree to a different representation and assuming a different API used by the stencil code, a different solver framework can be easily supported.
 Therefore, the details about the surrounding framework are not really important for our method. In this section however, we will give an outline of the framework which was implemented as part of this thesis.
 \begin{figure}[h]
@@ -408,7 +412,16 @@ This differential equation imposes a constraint on the derivative of the solutio
 
 One solution to this problem is to specify additional boundary conditions. However, for problems of simple complexity, this would already amount to finding a solution to the problem in the first place.
 
-A simple alternative to which we fall back in this thesis is minimum thresholding. A minimum threshold value $\lfloor\sigma_t\rfloor$ is specified. That threshold is returned for any value below that threshold during evaluation of the variable for system building. This amounts to adding an ambient extinction medium by which vacuum regions are avoided completely and the system will never become singular.
+A simple alternative to which we fall back in this thesis is minimum thresholding. A minimum threshold value $\sigma_{min}$ is specified by the user. That threshold value is returned for any extinction value which falls below that threshold. This amounts to adding an ambient extinction medium by which vacuum regions are avoided completely and which causes the system to never become singular. Let $\sigma_{ot}$ be the original extinction coefficient coming from the input dataset. Unless stated otherwise, throughout this thesis the extinction coefficient is defined to be
+\begin{align}
+\label{eq:pn_solver_minimum_threshold}
+\sigma_t\left(\vec{x}\right) =
+\begin{cases}
+\sigma_{ot}\left(\vec{x}\right), & \text{for $\sigma_{ot}\ge\sigma_{min}$}
+\\
+\sigma_{min}, & \text{otherwise}
+\end{cases}
+\end{align}
 
 This concludes the section on the $P_N$-solver and its system components. In the next section it will be discussed how the solver and the solution vector $\vec{u}$ can be integrated into a complete rendering system.
 

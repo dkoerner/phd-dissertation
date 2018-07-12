@@ -1,9 +1,9 @@
 \chapter{Flux-limited Diffusion for Multiple Scattering in Participating Media}
 \label{sec:fld}
 
-We have seen in the previous chapter, that the first order truncation of the $P_N$-equations can be collapsed into a simple diffusion equation, which has a low memory footprint and can be solved very efficiently using a Multigrid solver. The diffusion approximation therefore offers significant advantages over the $P_N$-method in terms of required computational resources. At the same time, it gives only a poor approximation to the ground truth result, due to the very coarse angular discretization.
+We have seen in the previous chapter, that the first order truncation of the $P_N$-equations can be collapsed into a simple diffusion equation, which has a low memory footprint and can be solved very efficiently using a Multigrid solver. The diffusion approximation therefore offers significant advantages over the $P_N$-method in terms of required computational resources. At the same time, it gives only a poor approximation to the ground truth result.
 
-In this chapter, flux-limited diffusion is introduced to the problem of rendering participating media in computer graphics. The theory has been invented in the astrophysics domain and is primarily attributed to Levermore et al.~\cite{Levermore81}. Their work introduces the theory and discusses its properties for certain canonical problems, such as a single point source within a homogeneous participating medium. In this chapter, a novel numerical method is deviced, based on flux-limited diffusion theory. It allows to solve for the fluence on a finite difference grid with higher accuracy than the diffusion approximation, at a significantly lower cost. The results have been published in~\cite{Koerner14}.
+In this chapter, flux-limited diffusion is introduced to the problem of rendering participating media in computer graphics. The theory has been invented in the astrophysics domain and is primarily attributed to Levermore et al.~\cite{Levermore81}. Their work introduces the theory and discusses its properties for certain canonical problems, such as a single point source within a homogeneous participating medium. In this chapter, a novel numerical method is devised, based on flux-limited diffusion theory. It allows to solve for the fluence on a finite difference grid with higher accuracy than the diffusion approximation, at a significantly lower cost. The results have been published in~\cite{Koerner14}.
 
 This chapter continues with revisiting the moment closure problem from section~\ref{sec:moment_closure} and introduces the flux-limit constraint, which is violated by diffusion and causes energy loss. The streaming transport regime is introduced, for which an advection equation is derived in section~\ref{sec:fld_streaming_limit_approximation}. Flux-limited diffusion is derived as a means to blend between the two extreme modes of transport using local information. This blending is driven by the variable Eddington factor, which is introduced in section~\ref{sec:fld_vef}. Various concrete realizations of the eddington factor are given and compared in section~\ref{sec:fld_vef_factors}. Finally, an iterative solver is presented in section~\ref{sec:fld_solver}. The chapter concludes with results in section~\ref{sec:fld_results}.
 
@@ -12,14 +12,9 @@ This chapter continues with revisiting the moment closure problem from section~\
 \input{06_fld/delta_distribution}
 \input{06_fld/vef}
 \input{06_fld/flux_limiters}
+\input{06_fld/solver}
+\input{06_fld/results}
 
 
 
-\section{Non-Linear Gauss-Seidel Solver with Successive Overrelaxation}
-\label{sec:fld_solver}
 
-\section{Results}
-\label{sec:fld_results}
-
-\TD{mention publication}
-\TD{mention application in elementacular}

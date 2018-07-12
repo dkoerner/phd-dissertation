@@ -1,0 +1,42 @@
+\section{Results}
+\label{sec:da_results}
+
+We run the multigrid solver outlined in the previous section on the same example problems which were used to evaluate the $P_N$-method in section~\ref{sec:pn_results}.
+
+In terms of the rendering integration it is important to note that the diffusion approximation only gives the solution to the zero moment $L^{0,0}$, which is the same as the fluence $\phi$. Higher moments are not needed if the phase function is isotropic, as discussed in section~\ref{sec:pn_rendering_integration} and shown in equation~\ref{eq:pn_rendering_integration2}. However, in case of an anisotropic phase function, equation~\ref{eq:pn_rendering_integration2} applies which requires evaluation of $\widehat{L}_m$, the full reconstruction of the truncated spherical harmonics expansion of the radiance field. For the diffusion approximation this was derived in section~\ref{sec:da_moment_expansion_L} and resulted in equation~\ref{eq:moment_expansion_L}. While the first term is straightforward to evaluate using the zero moment from the diffusion solve, the second term requires the flux vector. This needs first to be computed using the definition which had been derived using the isotropic moment closure in section~\ref{sec:moment_closure}, equation~\ref{eq:diffusion_ficks_law}. Using this definition, the first moment can be reconstructed from the gradient of the zero moment and then be used to evaluate $\widehat{L}_m$.
+
+\subsection{Point Source Problem}
+\label{sec:da_results_pointsource}
+
+The solver is first run on the point source problem described in section~\ref{sec:pn_results_pointsource} and compared against the results from the $P_N$-method.
+\begin{figure}[h]
+\centering
+\missingfigure{pointsource plots DA}
+\caption{Some caption}
+\label{fig:da_results_pointsource_1}
+\end{figure}
+
+As expected the accuracy of the $P_N$-result is better than for the diffusion approximation as soon as the truncation order of the $P_N$-method is increased. However, for truncation order of $N=1$ we see that the results are identical. This is explained by the fact that the diffusion approximation is derived by collapsing the $P_1$ equations using substitution. Therefore the diffusion equation is mathematically equivalent to the $P_1$-equations and consequently is satisfied by the exact same solution. This result further validates that the $P_N$-solver has been implemented correctly.
+
+\subsection{Checkerboard Problem}
+\label{sec:da_results_checkerboard}
+
+\subsection{Procedural Cloud}
+\label{sec:da_results_clouds}
+
+Finally we run the multigrid solver for diffusion on the procedural cloud problem from section~\ref{sec:pn_results_clouds}. The presence of vacuum regions in the dataset caused the $P_N$-method to not convergence but it was still possible to run iterations which would reduce the residual error albeit very slowly. However, for the diffusion approximation, the presence of vacuum regions causes the method to break down completely, as the diffusion coefficient (see equation~\ref{eq:da_D}) requires division by the extinction coefficient and therefore produces a division by zero. This aspect is easily confused when reading the neutron transport literature. Papers such as Hansen et al.~\cite{Hansen14} state that the normal form of the $P_N$-equations can deal with voids. This is true in the sense that it does not produce a division by zero directly. However, it still is not convergent.
+
+\begin{figure}[h]
+\centering
+\missingfigure{procedural cloud plots DA P1 P5}
+\caption{Some caption}
+\label{fig:da_results_nebulae_1}
+\end{figure}
+
+As with the point source problem, we see that the $P_1$-results match the diffusion results while higher truncation order produces more accurate results for the $P_N$-method. In particular, the diffusion approximation (or $P_1$) fail to reproduce the illumination of the indirectly illuminated region at the bottom of the dataset.
+\begin{figure}[h]
+\centering
+\missingfigure{procedural cloud convergence plots DA P1 P5}
+\caption{Some caption}
+\label{fig:da_results_nebulae_2}
+\end{figure}
