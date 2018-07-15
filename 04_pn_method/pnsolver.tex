@@ -3,19 +3,28 @@
 
 In this section, a new method for solving the $P_N$-equations is being given. This method is based on the idea to automatically generate the linear system of equations directly from a computer algeba representation of the $P_N$-equations. First this section goes through the manual steps required to build such a system from general partial differential equations, followed by the motivation for the automated approach taken in this thesis. In subsections~\ref{sec:pn_car}-~\ref{sec:pn_staggered}, the solver and the automation of the individual system-building steps are explained in detail, including the developed software framework and important numerical aspects, such as handling boundary conditions and staggered grids.
 
-There are three reasons why the solver has been designed with the idea of automating the system building as much as possible. The first reason simply is that the number of equations for the system depends on the user parameter $N$ (the spherical harmonics truncation order) and is therefore not known in advance during solver implementation. Secondly, the number of equations increases exponentially with truncation order $N$, which makes building the system increasingly laborious, time consuming and prone to errors, if done manually. The third reason is that there exists a rich variety of variations of the $P_N$-method in other fields, dealing with different aspects, such as reduction of ringing artefacts and improvement of convergence. The idea behind our system is to be able to generate the system of linear equations directly from the specification of a general coupled set of partial differential equations. This would allow easy implementation and cross-comparisons of these alternate theories from the literature.
-\TD{give references for these variations}
+There are three reasons why the solver has been designed around the idea of automatic system building. The first reason simply is that the number of equations for the system depends on the user parameter $N$ (the spherical harmonics truncation order) and is therefore not known in advance during solver implementation. Secondly, the number of equations increases quadratically with truncation order $N$, which makes building the system increasingly laborious, time consuming and prone to errors, if done manually.
+
+The third reason is that there exists a rich variety of variations of the $P_N$-method in other fields which deal with different aspects of $P_N$-theory, such as reduction of ringing artefacts and improvement of convergence. Such variations include Simplified-$P_N$ ($SP_N$)~\cite{Ryan10}, Filtered-$P_N$ ($FP_N$)~\cite{Radice13}, Diffusion-Correction-$P_N$ ($DP_N$)~\cite{Schaefer11} and Least-Squares-$P_N$ ($LSP_N$)~\cite{Hansen14}. Common to all these variations is that they boil down to a set of coupled partial differential equations. The idea behind the design of our solver is to be able to generate the coefficient matrix and right hand side vector directly from the specification of such a coupled system of equations. This would allow easy implementation and cross-comparisons of these alternate theories from the literature.
 
 The $P_N$-equations have been derived in previous sections by discretizing the continuous angular variable in the radiative transfer equation. This led to a discrete set of coupled partial differential equations which still depend on the continuous spatial variable~$\vec{x}$. Therefore, the next step is to discretize this spatial variable on a particular domain with input fields for the various radiative quantities, such as extinction or the phase function. Finally, using this discretization, a system of linear equations can be build by assembling a coefficient matrix $A$ and a right hand side vector~$\vec{b}$.
 
-As mentioned in section~\ref{sec:discretization}, a discrete representation of the geometry that covers the problem domain is required in order to discretize the spatial variable. Throughout this thesis, a regular cartesian grid is used, which in this thesis will be referred to as finite difference grid. This type of grid is very simple and commonly used in graphics. In the future it might be worth exploring other more complex meshes, such as tetrahedral irregular grids, which are often used in finite element analysis. 
-
-The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by its resolution $res=(I,J,K)$ or gridspacing $h=(h_x, h_y, h_z)$ in each dimension. The local space of that grid is referred to as voxelspace.
-
-Using finite difference grids, the discretization consists of replacing the quantities which depend on the continuous variable~$\vec{x}$ with their counterpart which depend on~$x_{ijk}$, where $ijk$ is a coordinate in voxelspace. Note that this coordinate is still continuous. For example $x_{i+\frac{1}{2}jk}$ is a valid coordinate. Quantities around grid point locations are found by interpolation. Troughout this thesis we use trilinear interpolation for three-dimensional grids and bilinear interpolation for two-dimensional grids. Higher order interpolation would be possible and an avenue for future exploration.
-\TD{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
+In the following, the typical steps for building a linear system from a given partial difference equation will be summarized (using the two-dimensional laplace equation as example). The next subsections then will revisit each single step and discuss how it has been automated as part of our solver.
 
 \subsubsection*{Spatial Discretization}
+
+As mentioned in section~\ref{sec:discretization}, a discrete representation of the geometry that covers the problem domain is required in order to discretize the spatial variable. Throughout this thesis, a regular cartesian grid is used, which in this thesis will be referred to as finite difference grid. This type of grid is very simple and commonly used in graphics. In the future it might be worth exploring other more complex meshes, such as tetrahedral irregular grids, which are often used in finite element analysis. 
+
+The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by a worldspace bounding box and a resolution $res=(I,J,K)$ or gridspacing $h=(h_x, h_y, h_z)$ in each dimension. The local space of the grid is referred to as voxelspace.
+
+Using finite difference grids, the discretization consists of replacing the quantities which depend on the continuous variable~$\vec{x}$ with its discrete counterpart $x_{ijk}$, where $ijk$ is a coordinate in voxelspace. Note that this coordinate is still continuous. For example $x_{i+\frac{1}{2}jk}$ is a valid coordinate. Quantities around grid point locations are found by interpolation. Troughout this thesis we use trilinear interpolation for three-dimensional grids and bilinear interpolation for two-dimensional grids. Higher order interpolation would be possible and an avenue for future exploration.
+\begin{figure}[h]
+\centering
+\missingfigure{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
+\caption{Some caption}
+\label{fig:pn_solver_finite_difference_grid}
+\end{figure}
+
 The first step during discretization is to do the replacement $\vec{x}\rightarrow x_{ijk}$. Using the two-dimensional laplace equation $\nabla^2\phi(\vec{x})=q(\vec{x})$ as example, this would give:
 \begin{align*}
 \nabla^2\phi\left(\vec{x}\right)=q\left(\vec{x}\right)
@@ -25,12 +34,12 @@ The first step during discretization is to do the replacement $\vec{x}\rightarro
 =
 q_{ij}
 \end{align*}
-The spatial derivatives are approximated using central differences:
+For notational convenience we define $\phi_{ijk} = \phi\left(x_{ijk}\right)$ The spatial derivatives are approximated using central differences:
 \begin{align}
 \partial_x\phi_{ijk} = \frac{\phi_{i+\frac{1}{2}jk} - \phi_{i-\frac{1}{2}jk}}{h_x}
 \label{eq:pn_solver_central_difference}
 \end{align}
-Continuing with the Laplace example, these substitutions are carried out next. Note how nested derivatives affect the indices accordingly:
+Continuing with the Laplace example, the substitutions of spatial derivatives are carried out next. Note how nested derivatives affect the indices accordingly:
 \begin{align*}
 &
 \xrightarrow{\makebox[1cm]{}}
@@ -97,26 +106,37 @@ q_{ij}
 
 \subsubsection*{Stencil Code Crafting}
 
-In the next step, the canonical form is used to derive the stencil code. This is done by interpreting the equation as a product between a row in the coefficient matrix $A$ and the vector of unknowns (the solution vector $\vec{u}$), resulting in the right hand side $q_{ij}$. The regular structure of the discretization reveals a pattern which is the same for every row and just changes the indicees per row. This is why it is called stencil code.
-\TD{insert source code figure for simple stencil code}
-The purpose of the stencil code is to be executed repeatedly in order to populate the system matrix $A$ and right hand side $\vec{b}$. Note that this requires a mapping of multi-dimensional indices $ijk$ to linear indices which reference columns of $A$. We refer to this mapping as \emph{index} function. Components of the solution vector $\vec{u}$ are associated with unknowns at specific grid locations $ijk$ through that mapping. In case of the Laplace example this would be written as:
+In the next step, the canonical form is used to derive the stencil code. This is done by interpreting the equation as a product between a row in the coefficient matrix $A$ and the vector of unknowns (the solution vector $\vec{u}$), resulting in the right hand side $q_{ij}$. The regular structure of the discretization reveals a pattern which is the same for every row. This is why it is called stencil code.
+\begin{figure}[h]
+\centering
+\missingfigure{source code figure for simple stencil code}
+\caption{Some caption}
+\label{fig:pn_solver_stencil_code}
+\end{figure}
+
+The purpose of the stencil code is to be executed repeatedly in order to populate the system matrix $A$ and right hand side $\vec{b}$. Note that this requires a mapping of multi-dimensional indices $ijk$ to linear indices into rows of $\vec{u}$ (and columns of $A$). We refer to this mapping as \emph{index} function. Through that mapping components of the solution vector $\vec{u}$ are associated with unknowns at specific grid locations $ijk$. In case of the Laplace example this would be written as:
 \begin{align}
 u_{\operatorname{index}\left(ijk\right)} = \phi_{ijk}\quad\text{ with }\quad \operatorname{index}: \mathbb{Z}^3\mapsto\mathbb{Z}
 \label{eq:pn_index_mapping}
 \end{align}
 
-Also functions for accessing discretized input fields (such as $q$ in the Laplace example) and parameters, such as the voxelsize $h$, will be needed.
+Also functions for accessing discretized input fields (such as $q$ in the Laplace example) and parameters, such as the voxelsize $h$, will be called by the stencil code to retrieve required values.
 
 \subsubsection*{System Matrix Population and Solve}
-The stencil code is compiled and executed for each row in $A$ to populate the system. Depending on the matrix-properties of $A$, different methods for solving the linear system $A\vec{u}=\vec{b}$ can be applied to find the solution $\vec{u}$, the discretized radiance field. This can then be used in a rendering application.
-\TD{image overview of the numerical pipeline}
+The stencil code is compiled and executed for each row in $A$ to populate the system. Depending on the matrix-properties of $A$, different standard methods for solving the linear system $A\vec{u}=\vec{b}$ can be applied to find the solution $\vec{u}$, the discretized radiance field. This solution can then be used in a rendering application.
+\begin{figure}[h]
+\centering
+\missingfigure{image overview of the numerical pipeline}
+\caption{Some caption}
+\label{fig:pn_solver_stencil_overview}
+\end{figure}
 
-In the following subsections, the new solver will be introduced as as a general framwork for automization of the steps given above. The next section discusses how a computer algebra representation is used to represent the equation to be solved. Section~\ref{sec:pn_stencil_gen} shows how the spatial discretization and stencil code generation are modeled as operations on that representation. Section~\ref{sec:pn_bc} explains the aspects of the system which are related to boundary conditions, followed by section~\ref{sec:pn_framework} which discusses the surrounding framework and how the generated stencil is used within that framework. Section~\ref{sec:pn_staggered} discusses the extension of the solver to staggered grids, which is necessary for the solver to produce useful results. Finally, section~\ref{sec:pn_system_matrix} is dedicated to properties of the coefficient matrix $A$ and methods for solving the linear system.
+In the following subsections, the new solver will be introduced as as a general framwork for automization of the steps given above. The first subsection discusses how a computer algebra representation is used to represent the equation to be solved. Subsection~\ref{sec:pn_stencil_gen} shows how the spatial discretization and stencil code generation are modeled as operations on that representation. Subsection~\ref{sec:pn_bc} explains the aspects of the system which are related to boundary conditions, followed by subsection~\ref{sec:pn_framework} which discusses the surrounding framework and how the generated stencil is used within that framework. Subsection~\ref{sec:pn_staggered} discusses the extension of the solver to staggered grids, which is necessary for the solver to produce useful results. Finally, subsection~\ref{sec:pn_system_matrix} is dedicated to properties of the coefficient matrix $A$ and methods for solving the linear system.
 
 \subsection{Computer Algebra Representation}
 \label{sec:pn_car}
 
-At the core of our solver is a computer algebra representation of the equations which the system is trying to solve on a given domain. This representation is an expression tree. Each node within that tree can have any number of children and represents a constant, mathematical symbol or a mathematical operation, such as integration, derivation, power, addition or multiplication. Representations of complex equations are constructed by nesting nodes into a larger tree, where child nodes are considered arguments of the operation represented by the parent node.
+At the core of our solver is a computer algebra representation of the equations which the system is trying to solve on a given domain. This representation is a mathematical expression tree (see Preiss~\cite{Preiss00}). Each node within that tree can have any number of children and represents a constant, mathematical symbol or a mathematical operation, such as integration, derivation, power, addition or multiplication. Representations of complex equations are constructed by nesting nodes into a larger tree, where child nodes are considered arguments of the operation represented by the parent node.
 
 There exists a rich number of computer algebra systems, such as SymPy~\cite{Meurer17}, which allow to generate and manipulate computer algebra representations like this. However, for this thesis a small lightweight computer algebra representation containing the required subset had been developed. Figure~\ref{fig:pn_math_expression_tree_generation} demonstrates how this system is used to build the expression trees for the examples above.
 \begin{figure}[h]
@@ -182,9 +202,10 @@ If a term contains an unknown, then its factor expression subtree is rendered in
 \caption{Some caption}
 \label{fig:pn_discretization_codegen}
 \end{figure}
+
 If the term does not contain an unknown, then the whole term is rendered into a single expression which is being assigned to the current row of the right hand side vector $\vec{b}$.
 
-The stencil code is generated with the assumption of certain function calls being available. These are integrated into a single API which is being provided by the solver framework. This API allows the stencil to query the current row in the system for which it is being executed, the voxelsize as well as functions for accessing discrete radiative transfer properties.
+The stencil code is generated with the assumption of certain function calls being available. These are integrated into a single API which is being provided by the solver framework (see figure~\ref{fig:pn_discretization_codegen_stencilAPI}). This API allows the stencil to query the current row in the system for which it is being executed, the voxelsize as well as functions for accessing discrete radiative transfer properties.
 \begin{figure}[h]
 \centering
 \missingfigure{image showing the stencil API}
@@ -196,9 +217,9 @@ The stencil code is generated with the assumption of certain function calls bein
 \subsection{Boundary Conditions}
 \label{sec:pn_bc}
 
-Central difference discretization will introduce references to spherical harmonics coefficients which live outside of the computational domain. Those references will be part of the stencil code which has been generated without the notion of boundaries and boundary conditions. These are handled indirectly by the solver framework.
+Central difference discretization will introduce references to spherical harmonics coefficients which live outside of the computational domain. Those references will be part of the stencil code which has been generated without the notion of boundaries and boundary conditions. These are handled transparently by the solver framework.
 
-Boundary conditions (BC) define how the problem behaves directly on the boundary interface of the domain and are an important aspect of setting up the system of linear equations. The most basic way of specifying boundary conditions are Dirichlet boundary conditions and Neumann boundary conditions, which are both supported by the system introduced in this chapter.
+Boundary conditions define how the problem behaves directly on the boundary interface of the domain and are an important aspect of setting up the system of linear equations. The most basic way of specifying boundary conditions are Dirichlet boundary conditions and Neumann boundary conditions, which are both supported by the system introduced in this chapter.
 
 If $D\in\mathbb{R}^3$ defines the volume of the computational domain across which to find a solution to a partial differential equation, then let $\partial D\in\mathbb{R}^3$ be the set of points which lie directly on the boundary of that domain. With Dirichlet boundary conditions, the value of the unknown is specified at the interface $\partial D$ directly. With Neumann boundary conditions, the behaviour of the solution at the boundary is specified by giving the normal derivative of the solution. Using the Laplace example from above, this would be:
 \begin{align*}
@@ -235,11 +256,12 @@ With Neumann boundary conditions, the derivative is specified at the boundary. S
 \frac{\phi_{i+1,j}-\phi_{i,j}}{h_x} = 0
 \implies
 \phi_{i+1,j}=\phi_{i,j}
-\ ,
+\ .
 \end{align*}
-moreover in this case, a coefficient $b$ assigned to the boundary $\phi_{i+1,j}$ can be assigned to the adjacent unknown inside the domain instead:
+In the case of adjacent coefficients being equal across the boundary interface, a coefficient $b$ assigned to the boundary $\phi_{i+1,j}$ can be assigned to the adjacent unknown inside the domain instead:
 \begin{align}
 a\phi_{i,j} + b\phi_{i+1,j} = \left(a+b\right)\phi_{i,j}
+\quad \text{with}\quad \phi_{i+1,j}=\phi_{i,j}
 \end{align}
 
 In the solver framework, this is implemented by index bending. If the target coefficient of the assignment belongs to a boundary voxel and Neumann boundary conditions are enabled, then the index function returns the index of the adjacent voxel inside the domain.
@@ -255,9 +277,7 @@ Note how the choice and implementation of the boundary condition has an effect o
 \subsection{Solver Framework}
 \label{sec:pn_framework}
 
-\TD{use emph for class names}
-
-The stencil code is the result of the automated discretization steps carried out on the computer algebra representation and rendered into source code. Then it is compiled and linked with a solver framework, which uses the compiled stencil code to propagate the system matrix $A$ and right hand side vector $\vec{b}$. By rendering the tree to a different representation and assuming a different API used by the stencil code, a different solver framework can be easily supported.
+The stencil code is the result of the automated discretization step which is carried out on the computer algebra representation and rendered into source code. The resulting stencil code is compiled and linked with a solver framework, which runs it to propagate the system matrix $A$ and right hand side vector $\vec{b}$. By rendering the tree to a different representation and assuming a different API used by the stencil code, different solver frameworks can be easily supported.
 Therefore, the details about the surrounding framework are not really important for our method. In this section however, we will give an outline of the framework which was implemented as part of this thesis.
 \begin{figure}[h]
 \centering
@@ -266,17 +286,17 @@ Therefore, the details about the surrounding framework are not really important 
 \label{fig:pn_classes}
 \end{figure}
 
-The stencil class is the key structure around which the system is designed and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The stencil class therefore also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important later when staggered grids are introduced. The stencil also specifies the highest order of any derivative operator which was found during discretization. This will have an effect on the number of layers of boundary voxels around the computational domain. Finally, the stencil class has an apply function, which takes the reference to a StencilAPI object as an input and contains the generated stencil code which uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
+The \emph{Stencil} class is the key structure around which the system is designed and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The \emph{Stencil} class therefore also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important later when staggered grids are introduced. The stencil also specifies the highest order of any derivative operator which was found during discretization. This will have an effect on the number of layers of boundary voxels around the computational domain. Finally, the \emph{Stencil} class has an apply function, which takes the reference to a \emph{StencilAPI} object as an input and contains the generated stencil code which uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
 
-The StencilAPI class serves as the single interface between the generated stencil code and the surrounding parts of the framework. Figure~\ref{fig:pn_discretization_codegen_stencilAPI} gives an overview over the different query functions offered by the API. Essential are functions for mapping between coordinate spaces, such as worldspace, voxelspace, discrete grid coordinates $ijk$ and linear indices into the solution vector. Also important are functions for querying radiative transfer quantities, such as extinction coefficient or phase function spherical harmonics coefficients at world space positions. Both groups of functions will make use of a reference to a VoxelManager and a Problem class respectively.
+The \emph{StencilAPI} class serves as the single interface between the generated stencil code and the surrounding parts of the framework. Figure~\ref{fig:pn_discretization_codegen_stencilAPI} gives an overview over the different query functions offered by the API. Essential are functions for mapping between coordinate spaces, such as worldspace, voxelspace, discrete grid coordinates $ijk$ and linear indices into the solution vector. Also important are functions for querying radiative transfer quantities, such as extinction coefficient or phase function spherical harmonics coefficients at world space positions. Both groups of functions will make use of a reference to a \emph{VoxelManager} and a \emph{Scene} class respectively.
 
-The Problem class contains everything required to specify the problem to be solved. A Domain object describes the extend of the computational domain in worldspace, as well as the resolution of the finite difference grid. Further attached are references to abstract Field interfaces, which allow querying scalar or vector fields at arbitrary worldspace positions for extinction coefficient, albedo and the spherical harmonics coefficients of phase function and emission field. This is the place where the problem description is provided as input to the system. Different implementations of these abstract interfaces can be used, such as constant fields or voxelgrid fields. This follows closely the idea of resolution independent volumes introduced by Tessendorf et al.~\cite{Tessendorf11} and we refer to this reference for more details.
+The \emph{Scene} class contains all inputs required to specify the problem to be solved. A \emph{Domain} object describes the extend of the computational domain in worldspace, as well as the resolution of the finite difference grid. Further attached are references to abstract \emph{Field} interfaces, which allow querying scalar or vector fields at arbitrary worldspace positions for extinction coefficient, albedo and the spherical harmonics coefficients of phase function and emission field. This is the place where the problem description is provided as input to the system. Different implementations of these abstract interfaces can be used, such as \emph{Constant} fields or \emph{VoxelGrid} fields. This follows closely the idea of resolution independent volumes introduced by Tessendorf et al.~\cite{Tessendorf11} and we refer to this reference for more details.
 
-The resolution of the finite difference grid provided by the Domain class and the number of spherical harmonics coefficients provided by the Stencil class impose the layout of the voxelgrid on the system. The Stencil also gives the highest order of the derivation operator found during discretization and with that drives the number of layers of boundary voxels. The final system of linear equations has to be a single column solution vector with a coefficient matrix of compatible dimensions. Since the computational domain is discretized using grid coordinates $ijk$, a mapping from three-dimensional coordinates $ijk$ and spherical harmonics coefficient index $c$ to a linear global index needs to be provided. This task becomes even more involved, when staggered grid are introduced later. This bookkeeping of interior and boundary voxels and their containing spherical harmonics coefficients is done by the VoxelManager class. This class is being initialized with the information about the grid resolution by the Domain, the number of boundary voxel layers, number of coefficients and the position of each coefficient on the grid by the Stencil. It manages the memory and mapping from multidimensional gridindices to linear indices within the global system.
+The resolution of the finite difference grid provided by the \emph{Domain} class and the number of spherical harmonics coefficients provided by the \emph{Stencil} class impose the layout of the voxelgrid on the system. The \emph{Stencil} class also gives the highest order of the derivation operator found during discretization and with that drives the number of layers of boundary voxels. The final system of linear equations has to be a single column solution vector with a coefficient matrix of compatible dimensions. Since the computational domain is discretized using grid coordinates $ijk$, a mapping from three-dimensional coordinates $ijk$ and spherical harmonics coefficient index $c$ to a linear global index needs to be provided. This task becomes even more involved, when staggered grid are introduced later. This bookkeeping of interior and boundary voxels and their containing spherical harmonics coefficients is done by the \emph{VoxelManager} class. This class is being initialized with the information about the grid resolution by the \emph{Domain}, the number of boundary voxel layers, number of coefficients and the position of each coefficient on the grid by the \emph{Stencil} class. It manages the memory and mapping from multidimensional gridindices to linear indices within the global system.
 
-Finally, the PNSolver class is the structure which brings the different parts together. It is initialized wit the Problem class and the Stencil class. Both are provided by the client code and are used during initialization to setup the VoxelManager, which provides the layout and setup for the solution vector $\vec{u}$, right hand side vector $\vec{b}$ and system matrix $A$. The purpose of the PNSolver class is to build the system matrix $A$ and right hand side vector $\vec{b}$ and return both to client code. This is done by calling the build function on the object.
+Finally, the \emph{PNSystemBuilder} class is the structure which brings the different parts together. It is initialized wit the \emph{Scene} class and the \emph{Stencil} class. Both are provided by the client code and are used during initialization to setup the \emph{VoxelManager}, which provides the layout and setup for the solution vector $\vec{u}$, right hand side vector $\vec{b}$ and system matrix $A$. The purpose of the \emph{PNSystemBuilder} class is to build the system matrix $A$ and right hand side vector $\vec{b}$ and return both to client code. This is done by calling the \emph{build} function on the object.
 
-The build function iterates over all voxels. For each voxel, the StencilAPI object is set up with the correct indices and data pointers and passed as an argument to a call of the Stencil's stencil function. As explained in section~\ref{sec:pn_stencil_gen}, the stencil code will make appropriate calls to the StencilAPI which will propagate the system matrix $A$ and right hand side vector $\vec{b}$ with the correct values for the row corresponding to the current voxel in the cycle of the build function. The system is fully propagated after the stencil has been executed for every voxel. Seperate functions of the PNSystem class allow querying the system martix $A$ and right hand side vector $\vec{b}$ after those have been build.
+The \emph{build} function iterates over all voxels. For each voxel, the \emph{StencilAPI} object is set up with the correct indices and data pointers and passed as an argument to a call of the \emph{stencil} function of the \emph{Stencil} class. As explained in section~\ref{sec:pn_stencil_gen}, the stencil code will make appropriate calls to the \emph{StencilAPI} object which will propagate the system matrix $A$ and right hand side vector $\vec{b}$ with the correct values for the row corresponding to the current voxel in the cycle of the \emph{build} function. The system is fully propagated after the stencil has been executed for every voxel. Seperate functions of the \emph{PNSystemBuilder} class allow querying the system martix $A$ and right hand side vector $\vec{b}$ after those have been build.
 
 \subsection{Staggered Grids}
 \label{sec:pn_staggered}
@@ -305,7 +325,7 @@ In figure~\ref{fig:pn_staggered_grid_problems}\subref{fig:pn_collocated_grid_art
 
 The solution to this problem is to offset the coefficients $\alpha$ and $\beta$ from each other spatially. This configuration is called staggered grids. As visualized in figure~\ref{fig:pn_staggered_grid_problems}\subref{fig:pn_staggered_grid_idea} at the bottom, setting up the coefficients like this, prevents decoupling and results in a single coherent solution throughout the grid. A similar staggering of the interdependent variables is required for the $P_N$-solver to produce usable results.
 
-The staggered grid locations are found by subdividing the original grid into a finer grid of double resolution. The locations are at the grid points of that finer grid. In terms of the original grid, these are located at the voxel centers, the center of the voxel faces between adjacent voxels and at the gridline intersections or voxel corners. This is shown in figure~\ref{fig:staggered_grid}.
+The staggered grid locations are found by subdividing the original grid into a finer grid of double resolution. The locations are at the grid points of that finer grid. In terms of the original grid, these are located at the voxel centers, the center of the voxel faces between adjacent voxels, the center of voxel edges and at voxel corners. This is shown in figure~\ref{fig:staggered_grid}.
 \begin{figure}[h]
 \centering
 \missingfigure{simple staggered grid}
@@ -371,7 +391,7 @@ The solution to this problem is to introduce additional unknowns to the system f
 \label{fig:pn_staggered_grid_handled_bc}
 \end{figure}
 
-The handling of boundary conditions is done by the solver framework. In order to support staggered grids, the stencil code will be generated with a new function which specifies the grid location of each coefficient. This function is used by the VoxelManager to work out which additional unknowns are required. Note that this makes managing the indices of unknowns more complex, as a simple indexing function is not sufficient anymore. However, this complexity is transparently handled by the VoxelManager.
+The handling of boundary conditions is done by the solver framework. In order to support staggered grids, the stencil code will be generated with an additional function which specifies the grid location of each coefficient. This function is used by the \emph{VoxelManager} to work out which additional unknowns are required. Note that this makes managing the indices of unknowns more complex, as a simple indexing function is not sufficient anymore. Transparently handling this complexity is the purpose of the \emph{VoxelManager} class.
 
 For client code applications, it is desirable to have all coefficients defined at the centers of voxels covering the problem domain. Therefore the solver framework offers a \emph{unstagger} function for staggered grids, which interpolates all coefficients at the voxel centers of the problem domain from the surrounding coefficient locations. Further the additional unknowns which have been introduced to get correct boundary conditions, will be removed. This function therfore converts a staggered grid solution vector to a collocated grid solution vector.
 
@@ -386,7 +406,7 @@ As shown in figure~\ref{fig:pn_staggered_grid_noartefacts}, using the collocated
 \subsection{System Matrix and Solution}
 \label{sec:pn_system_matrix}
 
-After initializing the PNSystem matrix with the stencil and problem, the system matrix $A$ and right hand side vector $\vec{b}$ are build and made available to the client code which will use it to solve for the solution vector $\vec{u}$. The solver developed as part of this thesis uses Eigen~\cite{Eigen}, but any other linear algebra package with standard methods available is applicable. 
+After initializing the \emph{PNSystemBuilder} object matrix with the \emph{Stencil} and \emph{Scene}, the system matrix $A$ and right hand side vector $\vec{b}$ are build and made available to the client code which will use it to solve for the solution vector $\vec{u}$. The solver developed as part of this thesis uses Eigen~\cite{Eigen}, but any other linear algebra package with standard methods available is applicable. 
 
 However, the system matrix $A$, when having been generated from the $P_N$-equations, has properties which restrict application of certain methods for solving the system. The number of rows and columns of $A$ is determined by the total number of voxels in the computational domain, multiplied by the number of spherical harmonics coefficients per voxel. The matrix is squared and extremely sparse due to the local structure of the discretization and coupling. Unfortunately, the system matrix $A$ is non-symmetric (due to the transport term) and not diagonal dominant, which together rules out many iterative methods for solving linear systems.
 \begin{figure}[h]
@@ -396,9 +416,9 @@ However, the system matrix $A$, when having been generated from the $P_N$-equati
 \label{fig:pn_matrix_layout}
 \end{figure}
 
-Some standard methods, such as LU-decomposition, QR-decomposition or Singular-value decomposition allow solving systems of linear equations with non-symmetric coefficient matrices $A$ and are applicable for the system generated by the $P_N$-solver. 
+Some standard methods, such as LU-decomposition, QR-decomposition or Singular-value decomposition allow solving systems of linear equations with non-symmetric coefficient matrices $A$ and are applicable to solving the system generated by the $P_N$-solver. 
 
-Iterative methods are useful, as they allow balancing accuracy against performance by tweaking the convergence threshold. These methods can be applied by solving the normal form
+Due to the asymmetry in $A$, iterative methods can not be applied directly. However, iterative methods can be applied by solving the normal form
 \begin{align}
 A^TA\vec{u} = A^T\vec{b}
 \end{align}
@@ -424,4 +444,3 @@ A simple alternative to which we fall back in this thesis is minimum thresholdin
 \end{align}
 
 This concludes the section on the $P_N$-solver and its system components. In the next section it will be discussed how the solver and the solution vector $\vec{u}$ can be integrated into a complete rendering system.
-

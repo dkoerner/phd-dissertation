@@ -40,11 +40,12 @@ As a next step we express $\SHBC^{l,m}$ in terms of unit direction vector $\omeg
 \begin{align}
 \SHBC^{l,m}(\omega) &=  C^{l,m}\left( \omega_x + i\omega_y\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\omega_z^{l-m-2j}
 &\qquad \text{for } m \ge 0
+\label{eq:da_moment_expansion_L_shbasis2}
 \\
 &= \left(-1\right)^m\overline{\SHBC^{l,\abs{m}}}
 &\qquad \text{for } m < 0
 \end{align}
-Expanding the expression above for concrete values of $l$ and $m$ will give a sequence of terms, which involve components of $N_j$, multiplied with some factors. By seeing the expanded formula as a tensor contraction, the components of $y^{l,m}_j$ can be easily extracted. For $l=0$ and $m=0$, we get:
+Expanding the expression above for concrete values of $l$ and $m$ will give a sequence of terms, which involve components of $N_j$, multiplied with some factors. By seeing the expanded formula as a tensor contraction, the components of $y^{l,m}_j$ can be easily extracted. For $l=0$ and $m=0$ equation~\ref{eq:da_moment_expansion_L_shbasis2} results in:
 \begin{align}
 \SHBC^{0,0}(\omega) = C^{{0,0}}a^{{0,0,0}} = \frac{1}{\sqrt{4\pi}}N_0\quad,
 \end{align}
@@ -206,4 +207,4 @@ The tensor $f_0$ is expressed in terms of the fluence $\phi$ and the tensor $f_1
 \mu_i\left[L\right] = L_i = \int_\Omega{L\left(\omega\right)N_i\left(\omega\right)\ud\omega}
 \end{align}
 An important quantity for deriving flux-limited diffusion is the second moment of the radiance field, the radiative pressure tensor $L_2$. Its intuition is very similar to that of the stress tensor in continuum mechanics.
-\TD{introduce radiative pressure tensor properly}
+

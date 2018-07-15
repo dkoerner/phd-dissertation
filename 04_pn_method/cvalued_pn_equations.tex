@@ -1,8 +1,7 @@
 \section{Complex-valued $P_N$-equations}
 \label{sec:pn_cvalued}
 
-Equipped with key properties of the spherical harmonics expansion, the complex-valued $P_N$-equations are derived in this section. The derivation follows two basic steps, which are executed separately on each term of the radiative transfer equation. The first step is to substitute each angular dependent radiative transfer quantity, such as the radiance field $L$, by its spherical harmonics projection (equation~\ref{eq:sh_projection_operator}). The second step is to apply the spherical harmonics projection to each term. This results in terms which will depend on the spherical harmonics indices $l,m$ and therefore form a system of equations. The size of this system is driven by the truncation order $N$. The higher the value $N$, the higher frequencies in angular domain are taken into account for approximation of the radiative transport and its quantities.
-
+Equipped with key properties of the spherical harmonics expansion, the complex-valued $P_N$-equations are derived in this section. The derivation follows two basic steps, which are executed separately on each term of the radiative transfer equation. The first step is to substitute each angular dependent radiative transfer quantity, such as the radiance field $L$, by its (truncated) spherical harmonics projection (equation~\ref{eq:sh_projection}). The second step is to apply the spherical harmonics projection to each term of the radiative transfer equation. This results in terms which will depend on the spherical harmonics indices $l,m$ and therefore form a system of equations. The size of this system is driven by the truncation order $N$. The higher the value $N$, the higher frequencies in angular domain are taken into account for approximation of the radiative transport.
 % --------------------------------------------------------------
 \subsubsection*{Transport Term}
 The transport term of the RTE is given as
@@ -133,7 +132,7 @@ The phase function used in isotropic scattering medium only depends on the angle
 \end{align*}
 where $\rho$ is the rotation operator, which can be implemented by applying the inverse rotation $R(\omega)^{-1}$ to the arguments of $p$. With this rotated phase function, we now can express the integral of the scattering operator as a convolution:
 \begin{align}
-\int_{\Omega}p(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\int_{\Omega'}p(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
 &=
 \int_{\Omega'}{\rho_{R(\omega)}(p)(\operatorname{cos}\theta')L(\vec{x}, \omega')\ud\omega'}
 \nonumber\\
@@ -143,7 +142,6 @@ where $\rho$ is the rotation operator, which can be implemented by applying the 
 As we evaluate the inner product integral of the convolution, the phase function rotates along with the argument $\omega$.
 
 We now use the spherical harmonics expansions of $L$ and $p$ (equation~(\ref{eq:sh_exp_phase})) in the definition for the inner product of our convolution (equation~(\ref{eq:complex_scatt_conv})):
-\TD{clean up and make coherent}
 \begin{align*}
 \langle L,  \rho_{R(\omega)}(p)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\omega)}\left ( \sum_{l}{p^{l0}\SHBC^{l0}} \right )\right>
 \end{align*}
@@ -192,8 +190,7 @@ p^{l0}L^{l,m}(\vec{x})
 \right>
 }
 \end{align*}
-What remains to be resolved is the inner product. We use the fact, that the spherical harmonics basis functions $ \SHBC^{l,m}$ are eigenfunctions of the inner product integral operator in the equation above:
-\TD{derive that or give reference to this in the sh section somewhere}
+What remains to be resolved is the inner product. We use the fact, that the spherical harmonics basis functions $ \SHBC^{l,m}$ are eigenfunctions of the inner product integral operator in the equation above (see Dai~\cite{Dai13}):
 \begin{align*}
 \left<
 \SHBC^{l,m}, \rho_{R(\omega)}\left ( \SHBC^{l0} \right )\right> = \lambda_l \SHBC^{l,m}

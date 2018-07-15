@@ -1,7 +1,7 @@
 \section{Moment Closure Problem Revisited}
 \label{sec:moment_problem_revisited}
 
-In section~\ref{sec:moment_closure}, it was established that a choice for the second moment of the radiance distribution was required to close the system of equations, which was found by collapsing the moment expansion of the radiative transfer equation, truncated after the first moment. The classical diffusion approximation was derived by assuming an isotropic radiance distribution for the second moment. In this section, we will take a closer look at the moments and carve out an important feature, which explains the bad accuracy of classical diffusion approximation in certain scenarios.
+In section~\ref{sec:moment_closure}, it was established that a choice for the second moment of the radiance distribution was required to close the system of equations, which was found by collapsing the moment expansion of the radiative transfer equation, truncated after the first moment. The classical diffusion approximation was derived by assuming an isotropic radiance distribution for the second moment. In this section, a closer look is taken at the moments and an important feature is carve out, which explains the bad accuracy of classical diffusion approximation in certain scenarios.
 
 The distribution of power $\phi$ over solid angle was given by the normalized radiance $\widehat{L}$. Since it is a probability distribution, it has to integrate to one, which is easily verified
 \begin{align*}
@@ -52,8 +52,7 @@ which can be rearranged into
 \phi\left(\vec{x}\right)
 &\ge \norm{\vec{E}\left(\vec{x}\right)}
 \end{align*}
-This constraint states, that the total power at position $\vec{x}$ must never exceed the length of the flux-vector.
-\TD{intuition behind flux-limit}
+This constraint states, that the total power at position $\vec{x}$ must never exceed the length of the flux-vector. This becomes intuitively clear by considering that the flux-vector is found by integrating the radiance field over solid angle multiplied by a weighting factor between $\left[-1, 1\right]$ (the direction vector component). This must never be larger than the fluence, which is the integral over the radiance field itsself.
 
 A very similar constraint can be derived for the normalized radiance $\widehat{L}$, by following the same steps above. This results in
 \begin{align}
@@ -75,14 +74,12 @@ In the case of the classical diffusion approximation, we have $\vec{E}\approx-D\
 \end{align}
 Here it can be seen clearly, that with the classical diffusion approximation, this constraint can be violated when the extinction coeffient $\sigma_t$ becomes very small, meaning in the presence of very thin medium. It breaks down completely in case of vacuum $\sigma_t=0$. The constraint can also be violated if the the fluence gradient becomes very large in relation to $\sigma_t\phi$. This happens very close to point light sources and near strong density gradients in the medium.
 
-\todo[inline]{give intuition how the assumption of isotropic radiance distribution for the 2nd order tensor of the radiance field is violated strongly near boundaries or transitions from low to high density medium}
-
-Violation of the constraint above means, that for the classical diffusion approximation, the flux vector is much larger than what is physically possible. Since the flux vector governs light transport, the literature often referres to classical diffusion as suffering from unphysical fluxes or unphysical light transport.
+Violation of the constraint above means, that for the classical diffusion approximation, the flux vector is much larger than what is physically possible. Since the flux vector governs light transport with diffusion, the literature often referres to classical diffusion as suffering from unphysical fluxes or unphysical light transport.
 
 
 \subsubsection*{A Transport Regime Measure}
 
-The right hand side of equation~\ref{eq:fld_flux_limit} is an important measure, which allows us to detect at every point within the domain, where and to what extend the diffusion approximation fails. And for this, only local information about the moments and extinction coefficient is needed. It is an important building block for the technique presented in this chapter, which seeks to improve the accuracy of the diffusion approximation.
+The right hand side of equation~\ref{eq:fld_flux_limit} is an important measure, which allows to detect at every point within the domain, where and to what extend the diffusion approximation fails. And for this only local information about the moments and extinction coefficient is needed. It is an important building block for the technique presented in this chapter, which seeks to improve the accuracy of the diffusion approximation.
 
 The flux-limit in equation~\ref{eq:fld_flux_limit} can be factorized to make its intuition more clear:
 \begin{align}

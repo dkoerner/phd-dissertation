@@ -3,7 +3,7 @@
 
 %In the previous section, we learned about the moment expansion of the radiance field $L$, which is closely related to the spherical harmonics expansion. It differs in that it uses coordinate free tensor notation, instead of spherical harmonics basis functions. It is much better for notation and therefore useful for the discussion and presentation of the theory. This is particularily true when working with lower order moments. 
 
-Like with the radiance field, the radiative transfer equation can be developed into its moments. The result is a very concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion first replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the only difference, that we apply the moment expansion (equation~\ref{eq:moment_expansion_mu}) to the RTE terms (equation~\ref{eq:rte}) first.
+As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a very concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion first replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the only difference, that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the replacement is done as a second step.
 
 The $n$-th moment of the RTE is found by applying the moment projection operator $\mu_n$ to all the terms of the RTE:
 \begin{align*}
@@ -92,7 +92,7 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
 \end{align*}
-Here we used that $\mu_1[1] = 0$ and that the phase function is normalized, which gives:
+Here we used that $\mu_1[1] = 0$ and that the phase function is normalized, which results in:
 \begin{align*}
 \mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right] = \mu_0\left[1\right] = 4\pi
 \end{align*}
@@ -165,7 +165,7 @@ With that we have the two term expansion of the radiative transfer equation
 \nabla P\left(\vec{x}\right) &= -\sigma_t'(\vec{x})\vec{E}\left(\vec{x}\right)
 +Q_1\left(\vec{x}\right)
 \end{align}
-These equations are the direct counterpart to the $P_1$-equations in moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same step can be carried out for the $P_1$-equations. However, the notation of the moment expansion is much more expressive, which is why this form is much more popular in the literature.
+These equations are the direct counterpart to the $P_1$-equations in moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same step can be carried out for the $P_1$-equations (using spherical harmonics coefficients). However, the notation of the moment expansion is much more expressive, which is why this form is much more popular in the literature.
 
 We start by resolving equation~\ref{eq:me_first} for $\vec{E}$:
 \begin{align}
@@ -202,7 +202,7 @@ which we can further rearrange into
 +Q_0\left(\vec{x}\right)
 +\nabla Q_1\left(\vec{x}\right)
 \end{align}
-The result comes very close to the popular diffusion approximation equation. A single unknown remains, the second moment of the radiance field $P$, called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
+The result comes very close to the popular diffusion approximation equation. A single unknown remains: the second moment of the radiance field $P$, which is called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
 
 
 

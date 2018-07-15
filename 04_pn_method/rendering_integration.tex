@@ -3,13 +3,13 @@
 
 This section will explain in more detail how the solver and its result can be integrated and used in a standard rendering framework.
 
-The whole solver framework is encapsulated using the PNSolver class and therefore can be easily integrated into any rendering framework by making this class part of it. As outlined in section~\ref{sec:pn_framework}, references to a Stencil class and the PNVolume class are needed to create a PNSolver instance.
+The whole solver framework is encapsulated using the \emph{PNSystemBuilder} class and therefore can be easily migrated from a standalone application into any rendering framework. As outlined in section~\ref{sec:pn_framework}, references to a \emph{Stencil} class and the \emph{Scene} class are needed to create a \emph{PNSystemBuilder} instance.
 
-The truncation order $N$ is a user parameter which is decided at runtime. However, the stencil code will always be the same for a given truncation order $N$, since it has been generated independently of grid resolution, boundary conditions and radiative transfer parameters. Therfore it suggests itself to precompute and precompile the stencil code for all possible options for $N$. The rendering framework is compiled once with all possible stencil codes. As soon as the user decided which truncation order $N$ to use, a Stencil class is generated using the function pointers of the respective compiled stencil code functions.
+The truncation order $N$ is a user parameter which ideally is decided at runtime. However, the stencil code will always be the same for a given truncation order $N$, since it has been generated independently of grid resolution, boundary conditions and radiative transfer parameters. Therfore it suggests itself to precompute and precompile the stencil code for all possible options for $N$. The rendering framework is compiled once with all possible stencil codes. As soon as the user decided which truncation order $N$ to use, a \emph{Stencil} class is generated using the function pointers of the respective compiled stencil code functions.
 
-The PNVolume class is also created by the rendering framework. It will be populated with references to Field classes for the radiative transfer quantities, such as extinction, albedo, emission and phase function. The Field classes serve as adapter pattern according to Gamma et al.~\cite{Gamma95} and can be used to feed arbitrary representations of spatially varying scalar fields as input to the solver framework.
+The \emph{Scene} class is also created by the rendering framework. It will be populated with references to \emph{Field} classes for radiative transfer quantities, such as extinction, albedo, emission and phase function. The \emph{Field} classes serve as adapter pattern according to Gamma et al.~\cite{Gamma95} and can be used to feed arbitrary representations of spatially varying scalar fields as input to the solver framework.
 
-An important aspect of providing inputs to the solver is the emission term, which describes the illumination within the problem domain. Light sources which illuminate the volume from outside will have to be expressed as emission on the boundary interface and light sources inside the problem domain, such as point- or area lights need to be rasterized into the emission field. Expressing outside illumination at the boundaries potentially conflicts with zero-valued Dirichlet boundary conditions. Rasterizing light sources inside the domain will challenge the solver if strong directionality is present. The spherical harmonics approximation has difficulties representing delta or strongly directional functions in angular domain due to truncation of higher moments. This will cause the solution to suffer in accuracy.
+An important aspect of providing inputs to the solver is the emission term, which describes the illumination within the problem domain. Light sources which illuminate the volume from outside will have to be expressed as emission on the boundary interface and light sources inside the problem domain, such as point- or area lights need to be rasterized into the emission field. Expressing outside illumination at the boundaries potentially conflicts with the boundary conditions which cause the solution near the boundary to be much less accurate. Rasterizing light sources inside the domain will be challenging for the solver if strong directionality is present. This is because the spherical harmonics approximation has difficulties representing delta or strongly directional functions in angular domain due to truncation of higher frequency moments.
 
 To alleviate the challenges of light sources with strong directionality, the rendering system developed as part of this thesis implements an idea which is inspired by Grosjean’s analytical approximation to exact transport of a point light source within a homogeneous medium (see Grosjean~\cite{Grosjean56}). Instead of providing an approximation to the full light transport caused by the point light, the approximation seperates the unscattered light from the scattered light. The solution for the unscattered contribution is exact and an approximation is needed only for the scattered light. This approach is reasonable as the light contribution from scattered light has more energy in the lower frequencies due to the phase function which acts as a convolution filter on the radiance function in angular domain.
 
@@ -20,7 +20,7 @@ L_u\left(\vec{x}, \omega\right)
 +L_m\left(\vec{x}, \omega\right)
 \end{align}
 
-The unscattered light---as the name suggests---is the contribution of the radiance field which did not undergo any scattering events. Therefore it satisfies the following restricted radiative transfer equation with a vanished scattering term:
+The unscattered light---as the name suggests---is the contribution of the radiance field which did not undergo any scattering events. Therefore it satisfies the following restricted radiative transfer equation where the scattering term vanished:
 \begin{align}
 \left(\nabla\cdot\omega\right)L_u\left(\vec{x}, \omega \right)
 =
@@ -83,15 +83,13 @@ p\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
 \end{align}
 The quantity $L_s$ is the single scattered light which is folded together with the volume emission $Q_e$ into the general emission term $Q$.
 
-Using the emission term $Q$, the medium radiative transfer equation is solved using the $P_N$-method previously described. The solution vector $\vec{u}$ is brought into collocated form using the \emph{unstaggering} function described in section~\ref{sec:pn_staggered}, a rendering system can use it for image generation. 
+Using the emission term $Q$, the medium radiative transfer equation is solved using the $P_N$-method previously described. The solution vector $\vec{u}$ is brought into collocated form using the \emph{unstaggering} function described in section~\ref{sec:pn_staggered}. This allows straightforward subsequent use in a rendering system for image generation. 
 
-However, before solving the system and producing the solution vector, it first has to be generated from the given problem.
-
-The solution vector provided by the solver contains a set of spherical harmonics coefficients for every voxel of the computational grid. This set of coefficients describes the spherical radiance function at the voxelcenter. The framework which has been developed as part of this thesis provides a PNSolution class which is essentially a voxelgrid of $K$-dimensional vectors. The number of vector elements $K$ is the number of spherical harmonics coefficients which is driven by the truncation order of the $P_N$-equations. The radiance field is reconstructed by first interpolating all coefficients at the given worldspace position from the coefficients at surrounding voxels, followed by computing the spherical harmonics reconstruction in equation~\ref{eq:sh_real_reconstruction}.
+The solution vector provided by the solver contains a set of spherical harmonics coefficients for every voxel of the computational grid. This set of coefficients describes the spherical radiance function at the voxelcenter. The framework which has been developed as part of this thesis provides a \emph{PNSolution} class which is essentially a voxelgrid of $K$-dimensional vectors. The number of vector elements $K$ is the number of spherical harmonics coefficients which is driven by the truncation order of the $P_N$-equations. The radiance field is reconstructed by first interpolating all coefficients at the given worldspace position from the coefficients at surrounding voxels, followed by computing the spherical harmonics reconstruction in equation~\ref{eq:sh_real_reconstruction}.
 
 In this thesis, images will be rendered from the solution directly. An alternative route for exploration could be to use the solution in combination with one of the variance reduction techniques outlined in section~\ref{sec:variance_reduction_techniques}.
 
-In order to integrate the solution of the medium radiative transfer equation with a renderer, the inscattering term in the radiative transfer equation has to be split and the medium radiance $L_m$ is replaced by its truncated spherical harmonics reconstruction $\widehat{L}_m$:
+Any rendering framework is concerned with solving the radiative transfer equation~\ref{eq:rte}. In order to integrate the solution of the medium radiative transfer equation, the inscattering term in the radiative transfer equation has to be split and the medium radiance $L_m$ is replaced by its truncated spherical harmonics reconstruction $\widehat{L}_m$:
 \begin{align}
 \left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
 =&
@@ -126,7 +124,6 @@ p\left(\omega'\cdot\omega\right)\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\o
 +Q_e\left(\vec{x}, \omega\right)
 \label{eq:pn_rendering_integration1}
 \end{align}
-
 When seperating the radiance field and using the single scattered light as emission term for the $P_N$-method, this equation is what needs to be solved to fully account for the radiance field. Any Monte-Carlo method would need to integrate the single scattered light (e.g. by doing next event estimation). The indirect or multiple scattered light is accounted for by integrating over the angular dependent $P_N$-solution and weighting it by the phase function and scattering term to account for the inscattering of indirect illumination.
 
 If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integration1} further simplifies to
@@ -175,8 +172,5 @@ Figure~\ref{fig:pn_rendering_integration_overview} gives a schematic overview ov
 \caption{Some caption}
 \label{fig:pn_rendering_integration_overview}
 \end{figure}
-
-\TD{show how the data could be used for variance reduction...future work}
-
 
 After having outlined how the $P_N$-Method and its solution can be integrated into a rendering application in this section, some concrete results will be shown and discussed in the following section.

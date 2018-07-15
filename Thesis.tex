@@ -18,14 +18,14 @@
 }
 
 \usepackage{epsfig}
-%%FONTS - if using Winedt then standard fo nt is good
-%\usepackage{pslatex} %provides times font for roman and maths and helvet for sansserif (ie same as mathptmx + helvet)
-%\usepackage{mathptmx, helvet} % equivalent to (but not as good as) pslatex
-%\usepackage{txfonts} % supposed to be a good times package
+%%FONTS - if using Winedt then standard font is good
+%%%%\usepackage{pslatex} %provides times font for roman and maths and helvet for sansserif (ie same as mathptmx + helvet)
+%%%%\usepackage{mathptmx, helvet} % equivalent to (but not as good as) pslatex
+%%%%\usepackage{txfonts} % supposed to be a good times package
 \usepackage{times} % redundant use mathptmx and helvet together or pslatex
 \usepackage{amssymb, amsmath, amsbsy} % needed for AMSLatex maths fonts, amsbsy needed for \boldsymbol
 \usepackage{exscale, relsize} % allows relative sizes (\larger \smaller[2] \mathlarger etc) -needs exscale package
-%\usepackage{bbm} % needed for mathbbm - used for \IR & \IP (see MyCommands.sty)
+
 
 \usepackage{multirow} % jan: For spanning of cells in Tables
 
@@ -158,11 +158,11 @@
 \setcounter{tocdepth}{3} % Set septh to include in TOC
 
 \usepackage[utf8]{inputenc} %% For ü ö
-\usepackage[charter]{mathdesign}
+\usepackage[charter,cal=cmcal]{mathdesign}
 %\usepackage{titlesec} 
 %\renewcommand*{\sfdefault}{phv}
 
-\author{Jan Froehlich}
+\author{David Koerner}
 \date{\today}
 
 %% Jan useful commands

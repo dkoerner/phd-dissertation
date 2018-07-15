@@ -1,11 +1,11 @@
 \section{Multigrid solver}
 \label{sec:da_solver}
 
-In this section a multigrid solver for the diffusion approximation is developed. Multigrid schemes are the most efficient iterative methods for solving diffusion-type equations. The core idea is to propagate the error on a coarse grid during each iteration and take that propagated error into account when doing an iteration step on the original high resolution grid. Particularly useful is the fact that the multigrid method can be employed on any system of linear equations as long as a so called restriction and interpolation operator is being provided. 
+In this section a multigrid solver for the diffusion approximation is developed. Multigrid schemes are the most efficient iterative methods for solving diffusion-type equations. The core idea is to propagate the error on a coarse grid during each iteration and take that propagated error into account when doing an iteration step on the original high resolution grid. Particularly useful is the fact that the multigrid method can be employed on any system of linear equations as long as so called restriction and interpolation operator are being provided. 
 
-The automatic discretization machinery which was developed as part of the $P_N$-solver in section~\ref{sec:pn_solver} takes arbitrary systems of potentially coupled, linear partial differencial equations as input. The diffusion equation which has been derived in the previous section is a linear scalar partial differencial equation and therefore can be fed into the $P_N$-solver from section~\ref{sec:pn_solver} to produce valid stencil code (independent of mesh resolution).
+The automatic discretization machinery which was developed as part of the $P_N$-solver in section~\ref{sec:pn_solver} takes arbitrary systems of potentially coupled, linear partial differencial equations as input. The diffusion equation which has been derived in the previous section is such a linear scalar partial differential equation and therefore can be fed into the automated stencil code generation from section~\ref{sec:pn_solver} to produce valid stencil code (independent of mesh resolution).
 
-The idea behind the multigrid method is to accelerate the convergence by using a coarse grid on which information propagates much faster throughout the spatial domain. The coarse solution is then used for updating the original grid with finer resolution in each iteration.
+The idea behind the multigrid method is to accelerate the convergence by using a coarse grid on which information propagates much faster throughout the spatial domain. The coarse solution is then used for updating the original grid.
 \begin{figure}[h]
 \centering
 \missingfigure{multigrid mesh setup}
@@ -18,7 +18,7 @@ Quantities on the original fine mesh are denoted with the subscript $F$. We ther
 \nonumber
 A_F\vec{u}_F = \vec{b}_F
 \end{align}
-The multigrid method is an iterative method. This is expressed with a superscript index $i$ which denotes the current multigrid iteration. The first step in the multigrid cycle is to partially converge the solution by applying a number of iterations of an iterative method, such as Conjugate-Gradient or Gauss-Seidel. The partially converged solution ín the first multigrid cycle is denoted $\vec{u}_F^i$. Then the residual is computed on the fine mesh:
+The multigrid method is an iterative method. This is expressed with a superscript index $i$ which denotes the current multigrid iteration. The first step in the multigrid cycle is to partially converge the solution by applying a number of iterations of an iterative method, such as Conjugate-Gradient or Gauss-Seidel. The partially converged solution in the first multigrid cycle is denoted $\vec{u}_F^i$. Then the residual is computed on the fine mesh:
 \begin{align}
 \nonumber
 \vec{r}_F^i = \vec{b}_F-A_F\vec{u}_F^i
@@ -59,7 +59,7 @@ Using the upsampled error we can apply a correction step to the solution on the 
 \vec{e}_F^i &= \vec{u}_F - \vec{u}_F^i
 \nonumber
 \\
-\vec{u}_F^{i+1} &=  \vec{e}_F^i + \vec{u}_F^i
+\vec{u}_F^{i+1} &= \vec{u}_F = \vec{e}_F^i + \vec{u}_F^i
 \nonumber
 \end{align}
 This process is then repeated by starting a new multigrid iteration with the corrected approximation $\vec{u}_F^{i+1}$. In summary a single multigrid iteration consists of the following steps:
@@ -78,7 +78,7 @@ What has been outlined here is a two-level multigrid step which could be extende
 \label{fig:da_solver_multigrid_vcycles}
 \end{figure}
 
-Building the upsampling and downsampling matrices $M_{C\rightarrow F}$ and $M_{F\rightarrow C}$ is very similar to the problem of interpolating discretized variables at specific staggered grid locations for the automatic discretization in section~\ref{sec:pn_stencil_gen} (see figure~\ref{fig:pn_discretization_interpolation}). In fact, the \emph{PNSystem} class presented in section~\ref{sec:pn_framework} has been extended to facilitate the automatic generation of the upsampling and downsampling operator matrices from a given discretization and a given vector of coefficients with their respective staggered grid locations. In order for the interpolation weights to not vary per voxel, the fine grid has to be exactly of double resolution. Further the number of multigrid levels defines the number of subdivisions required and imposes additional constraints on the resolution. The resolution has to be of power of two in order support the maximum number of multigrid levels possible.
+Building the upsampling and downsampling matrices $M_{C\rightarrow F}$ and $M_{F\rightarrow C}$ is very similar to the problem of interpolating discretized variables at specific staggered grid locations for the automatic discretization in section~\ref{sec:pn_stencil_gen} (see figure~\ref{fig:pn_discretization_interpolation}). In fact, the \emph{PNSystemBuilder} class presented in section~\ref{sec:pn_framework} has been extended to facilitate the automatic generation of the upsampling and downsampling operator matrices from a given discretization and a given vector of coefficients with their respective staggered grid locations. In order for the interpolation weights to not vary per voxel, the fine grid has to be exactly of double resolution. Further the number of multigrid levels defines the number of subdivisions required and imposes additional constraints on the resolution. In order to support the maximum number of multigrid levels possible, the resolution has to be of power of two.
 \begin{figure}[h]
 \centering
 \missingfigure{interpolation matrix M, matrix layout, interpolation, throwing away coefficients}

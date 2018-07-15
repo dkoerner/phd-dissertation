@@ -1,18 +1,18 @@
 \section{Discussion}
 \label{sec:da_discussion}
 
-In this chapter the diffusion approximation was revised. It has a long standing history as a deterministic method in computer graphics and was first introduced to the field by Stam~\cite{Stam95}. The contribution of this chapter to this thesis is primarily the derivation of the moment expansion form of the radiance field and the radiative transfer equation and to show directly how it relates to the spherical harmonics expansion from the previous chapter.
+In this chapter the diffusion approximation was revised. It has a long standing history as a deterministic method in computer graphics and was first introduced to the field by Stam~\cite{Stam95}. The contribution of this chapter to this thesis is primarily to show directly how the moment expansion form of the radiance field and the radiative transfer equation relates to the spherical harmonics expansion from the previous chapter and lay the theoretical foundation for flux-limited diffusion introduced in the next chapter.
 
 Stam~\cite{Stam95} in his work likewise used a multigrid solver for solving the diffusion equation, but didn't give much detail on how it is implemented. Filling this gap is a minor ancillary use of this chapter. Moreover it was shown how parts of the framework developed in the previous chapter can be used to automatically generate important components of a multigrid solver, such as resolution independent stencil code and upsampling and downsampling operator matrices.
 
-Finally, by comparing the results of the multigrid solver for diffusion with the $P_1$-results and validating that they perfectly match reassures that the implementation of both are correct. More importantly it has been shown that the multigrid solver has significantly better performance characteristics than the $P_N$-solver introduced in the previous chapter. However, the accuracy is limited as the truncation order can not be increased for the diffusion approximation.
+Finally, by comparing the results of the multigrid solver for diffusion with the $P_1$-results and validating that they perfectly match reassures that the implementation for both are correct. More importantly it has been shown that the multigrid solver has significantly better performance characteristics than the $P_N$-solver introduced in the previous chapter. However, the accuracy is limited as the truncation order can not be increased for the diffusion approximation.
 
-\TD{discuss why multigrid does not work well for PN. mention diffusive component required in A. this will be important for the defense so prepare well.}
-\begin{figure}[h]
-\centering
-\missingfigure{intuition why multigrid does not work well with PN}
-\caption{Some caption}
-\label{fig:da_results_multigrid_for_pn}
-\end{figure}
+%\TD{discuss why multigrid does not work well for PN. mention diffusive component required in A. this will be important for the defense so prepare well.}
+%\begin{figure}[h]
+%\centering
+%\missingfigure{intuition why multigrid does not work well with PN}
+%\caption{Some caption}
+%\label{fig:da_results_multigrid_for_pn}
+%\end{figure}
 
 The limited accuracy of the diffusion approximation becomes particularly prominent with datasets where regions of high densities are embedded in regions of very low densities or vacuum, such as the procedural cloud from the previous section. Intuitively it becomes clear that pure diffusive transport does not work well or produces a large error in regions with strong light transport (indicated by high fluence) and very low density, because in this case there is a lot of energy but not enough material to carry or diffuse it around. The next chapter formalizes this observation and devises a method which recovers some of the accuracy lost by classical diffusion through the introduction of advective transport in these critical regions.

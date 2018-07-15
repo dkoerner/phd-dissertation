@@ -3,12 +3,12 @@
 
 The diffusion approximation theories are derived from truncating the moment expansion of the RTE after its first moment and eliminating the unknown $\vec{E}$ by inserting the first moment equations into the zero moment equation to arrive at a single partial differential equation, which contains the zero moment $\phi$ and the second moment $P$ of the radiance field as unknowns. In order to be able to solve this partial differential equation for $\phi$, it has to be closed by eliminating the second moment $P$ as an unknown. Finding or making an educated guess for the closure $P$ is called the moment closure problem. In this section, we will outline the closure for the classical diffusion approximation and revise it in chapter~\ref{sec:fld} to introduce more sophisticated closures.
 
-When trying to make an educated guess for $P$, there is actually some information available we could use: the lower moments. The zero moment $\phi$ expresses the power at $\vec{x}$. That is, the total amount of energy arriving from all directions. With that, the radiance field can be factorized into the total power $\phi$, and its distribution over solid angle $\hat{L}$:
+When trying to make an educated guess for $P$, there is actually some information available which could be used: the lower moments. The zero moment $\phi$ expresses the power at $\vec{x}$. That is, the total amount of energy arriving from all directions. With that, the radiance field can be factorized into the total power $\phi$, and its distribution over solid angle $\hat{L}$:
 \begin{align*}
 L(\vec{x}, \omega) = \hat{L}(\vec{x}, \omega)\phi(\vec{x})
 \end{align*}
 
-The total power $\phi$ is an unknown, which we don not seek to eliminate. Therefore, we more specifically are looking to find an educated guess for how this power is distributed over solid angle. This is given by the normalized radiance field $\hat{L}$. It is a probability distribution and its first moment is called the normalized flux $\widehat{\vec{E}}$ and will become important later with more advanced diffusion theories:
+The total power $\phi$ is an unknown, which we do not seek to eliminate. Therefore, we more specifically are looking to find an educated guess for how this power is distributed over solid angle. This is given by the normalized radiance field $\hat{L}$. It is a probability distribution and its first moment is called the normalized flux $\widehat{\vec{E}}$ and will become important later with more advanced diffusion theories:
 \begin{align*}
 \widehat{\vec{E}}(\vec{x}) = \hat{L}_1(\vec{x}) = \int_{\Omega}\frac{L(\vec{x}, \omega)}{\phi(\vec{x})}\omega\ud\omega = \frac{1}{\phi(\vec{x})}\int_{\Omega}L(\vec{x}, \omega)\omega\ud\omega = \frac{\vec{E}(\vec{x})}{\phi(\vec{x})}
 \end{align*}
@@ -31,7 +31,11 @@ The Eddington tensor is used to distribute the known power $\phi$ over angle and
 T(\vec{x})\phi(\vec{x}) \approx 
 P(\vec{x})
 \end{align*}
-The simple key assumption behind the classical diffusion approximation is, that the radiance field $L$ is constant and does not change for different angles $\omega$. This assumption allows finding an estimate $T$ for the second moment of the radiance distribution. We start by assuming unit power $\phi = 1$:
+The simple key assumption behind the classical diffusion approximation is, that the radiance field $L$ is constant and does not change for different angles $\omega$:
+\begin{align*}
+L(\vec{x}, \omega) = L(\vec{x})
+\end{align*}
+This assumption allows finding an estimate $T$ for the second moment of the radiance distribution. We start by assuming unit power $\phi = 1$:
 \begin{align*}
 1 = \phi\left(\vec{x}\right) = \int_\Omega{L\left(\vec{x}, \omega\right)\ud\omega}
 \end{align*}
@@ -79,12 +83,16 @@ with the classic linear diffusion coefficient
 D=-\frac{1}{3\sigma_t'\left(\vec{x}\right)}
 \label{eq:da_D}
 \end{align}
-Solving the diffusion equation is very straightforward and in the next section as very efficient solver is introduced based on the multigrid method.
-
-
-\todo[inline]{Explain/Visualize the idea behind diffusion approximation: to approximate global transport by using a local gradient of the fluence. mention ficks law of diffusion}
+Inserting the isotropic second moment into the first moment expansion of the radiative transfer equation (equation~\ref{eq:me_first_resolved_E}) gives us an expression for the flux-vector as defined by the diffusion approximation theory:
 \begin{align}
 \label{eq:diffusion_ficks_law}
 \vec{E}\left(\vec{x}\right) \approx -D\left(\vec{x}\right)\nabla\phi\left(\vec{x}\right)
 \end{align}
-\todo[inline]{Discuss how the assumption of isotropy is valid in highly scattering participating media}
+This gives some intuition about the diffusion approximation. Instead of depending on the global radiance field $L$, the flux-vector depends on the local gradient of the fluence to determine the transport of radiative energy at position $\vec{x}$.
+\begin{figure}[h]
+\centering
+\missingfigure{Visualize the idea behind diffusion approximation: to approximate global transport by using a local gradient of the fluence. mention ficks law of diffusion}
+\caption{Some caption}
+\label{fig:da_moment_problem_flux_as_fluence_gradient}
+\end{figure}
+Solving the diffusion equation is very straightforward and in the next section a very efficient solver is introduced based on the multigrid method.
