@@ -1,17 +1,92 @@
 \chapter{Foundations of Light Transport Simulation}
 \label{sec:foundations}
 
+This chapter gives a high level overview on light transport simulation in the context of rendering in computer graphics and shows where deterministic methods and spherical harmonics based methods in particular fit in. After introducing the physical background and explaining important terminology in the next section, a brief overview over the landscape of methods for solving light transport problems is given. This is divided into three sections according to the way these methods are categorized: analytical methods (section~\ref{sec:foundations_analytical}), non-deterministic methods (section~\ref{sec:foundations_mc}) and deterministic methods (section~\ref{sec:foundations_deterministic}).
+
+The field of computer graphics is primarily concerned with the generation of images from virtual scenes as seen by a virtual camera. This requires to reproduce the emission of light and its interaction with the scene and the sensor. The study of the behaviour of light is subject to optics, a seperate branch of physics. Due to the intricate nature of light, there exists a series of increasingly complex models which can account for its various properties. Fundamental to light is its particle-wave duality which states that light can be described both in terms of individual particles (photons) or waves. Challenging to the subject is, that not all properties of light can be described by just the particle nor the wave perspective. To account for all properties, both have to be taken into account and this requires quantum mechanics. The field of wave optics is a simpler model which still can account for optical effects caused by the wave property, such as interference and diffraction. The most simplest model is given by geometric optics which models light in terms of particle trajectories or rays. This is why this field is also referred to as ray optics. This model works well when the wavelength is small compared to the scene in which the light propagates. 
+
+Because a virtual (and real) camera is supposed to capture the image as closely as possible to human perception the wavelength of light which is being simulated is limited to the wavelength which is visible to humans (390 to 700 nanometers). Because this is very small compared to distances we encounter in real world scenes, wave effects are of less importance and geometric optics are sufficient most of the time. It is the basis for light transport simulation in graphics. In particular, this thesis is exclusively concerned with light transport in participating media, such as clouds, smoke, fire water etc. 
+
 
 % ============================================================
 \section{The Radiative Transfer Equation}
 
-\TD{radiance}
-\TD{radiance field}
-\TD{fluence}
-\TD{flux}
+With geometric optics light is described in terms of particles which travel through the scene along straight lines between single interactions. At each interaction the particle may change its course and continue to travel along another straight segment. When interacting with a medium, such as a cloud, each particle undergoes numerous interactions and creates complex overall trajectories based on medium properties.
+
+To derive a model which can explain this complex system of many particles interacting with the scene, a statistical approach is taken. Since photons carry energy, a collection of photons can be described by their collective energy. Because we want to express the propagation of photons time is required to be taken into account. This is captured by the quantity flux $\psi$: It gives the amount of energy from all photons going through a surface within a time interval and changes with position and direction in space. It is given in Watts which is specified in Joule (Energy) per second:
+\begin{align*}
+\psi\left(\vec{x}, \omega\right)
+\quad
+\left[\si{\watt} = \frac{\si{\joule}}{\si{\second}}\right]
+\end{align*}
+
+The requirement to be able to find the flux for arbitrary surfaces (such as the camera sensor) and directions (such as the viewing direction of an observer) gives rise to the radiance field $L$. It captures the amount of light going through an infinitesmial small area and coming from an infinitesimal small opening angle around a given direction $\omega$. More precisely, it specifies the change of flux according to a change in direction $\omega$ and a change in surface area projected onto a plane perpendicular to direction $\omega$:
+\begin{align*}
+L\left(\vec{x}, \omega\right) = \frac{\partial\partial\psi\left(\vec{x}, \omega\right)}{\partial\omega\partial A^\perp\left(\vec{x}\right)}
+\quad
+\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]
+\end{align*}
+The radiance field allows to find the amount of energy going through arbitrary surfaces and arbitrary angles by integration. This yields additional derivative quantities such as the fluence $\phi$, which integrates the radiance field over solid angle of the unit sphere at position $\vec{x}$:
+\begin{align*}
+\phi\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \omega\right) \ud\omega
+\quad
+\left[\frac{\si{\watt}}{\si{\meter}^2}\right]
+\end{align*}
+It gives the total power of radiant energy arriving at position $\vec{x}$ from all directions. Integrating the radiance field like this after projecting it onto the planes of the cartesian coordinate system gives rise to the flux vector $\vec{E}$:
+\begin{align*}
+\vec{E}\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \omega\right)\omega \ud\omega
+\end{align*}
+The direction of that vector specfifies the direction of bulk or dominant energy flow and its magnitude the net flux through an infinitesimal small surface which is aligned with that direction.
+
+The radiance field $L$ fully describes the distribution of photon densities in our scene and can easily be used to generate images by integrating it over the sensor surface of a virtual camera sensor and over all directions from which photons can arrive on that sensor. This results in the energy the sensor receives over a certain time (flux $\psi$).
+
+However, we need the model to describe how the radiance field $L$ changes with respect to the properties of the virtual scene. This is done using the directional derivative $\left(\omega\cdot\nabla\right)L$. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\omega$.
+\begin{figure}[h]
+\centering
+\missingfigure{directional derivative of L}
+\caption{TODO}
+\label{fig:rte_change_of_L}
+\end{figure}
+
+The radiance field $L$ changes along direction $\omega$ due to different optical phenomena, such as absorption, scattering and emission. Absorption models the effect of radiative energy being transformed into heat or kinetic energy. The amount of absorption depends on the medium and and is controlled by the absorption coefficient $\sigma_a$. This value combines the number of absorbing particles in the medium as well as the collective surface area of their intersection with a hypothetical plane oriented into the direction of change. The particles are assumed to be spherical or to have a completely random distribution of orientation. The coefficient then controls how much energy is lost due to absorption when making an infintesmial step into direction $\omega$:
+\begin{align}
+\left(\omega\cdot\nabla_{a}\right)L = -\sigma_a L\left(\vec{x}, \omega \right)
+\end{align}
+
+\begin{figure}[t]
+\centering
+\missingfigure{visualization of inscattering, outscattering and absorption.}
+\caption{TODO}
+\label{fig:rte_change_L_all}
+\end{figure}
 
 
-Our method derives from the radiative transfer equation (RTE), which expresses the change of the radiance field $L$, with respect to an infinitesimal change of position in direction $\omega$ at point $\vec{x}$:
+Scattering is the effect when photons collide with medium particles. They are not absorbed but changed in their direction. This is controlled similarly to absorption by the scattering coefficient $\sigma_s$. Scattering has an effect on $L$ in two ways. First most of the scattering photons will change their direction away from the direction along which we measure the rate of change of $L$, this is called outscattering:
+\begin{align}
+\left(\omega\cdot\nabla_{s-}\right)L = -\sigma_s L\left(\vec{x}, \omega \right)
+\end{align}
+
+The second way scattering affects how the radiance field changes along $\omega$ is that photons arriving from all directions will collide with the volume and scatter into the direction $\omega$. This is called inscattering:
+\begin{align}
+\left(\omega\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}p\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\end{align}
+The quantity $p$ is the phase function, a medium parameter which determines how light is redistributed from an incident direction $\omega'$ to the outgoing direction $\omega$. Since medium particles are assumed to either be spherical or randomly oriented, this function does not change as both vectors $\omega_i$ and $\omega$ are rotated and therefore the cosine of the angle between the two vectors is sufficient as a parameter.
+
+%\todo[inline]{phase function}
+%\todo[inline]{isotropic phase function}
+%\todo[inline]{anisotropic phase function}
+%\todo[inline]{mean cosine}
+%\begin{align}
+%\label{eq:foundations_mean_cosine}
+%X
+%\end{align}
+
+Finally the radiance field changes along direction $\omega$ due to the medium emitting photons itsself into direction $\omega$. This is simply modelled by a source term $Q_e$:
+\begin{align}
+\left(\omega\cdot\nabla_{e}\right)L = Q_e\left(\vec{x}, \omega\right)
+\end{align}
+
+Combining all the terms produces the radiative transfer equation (RTE), which expresses the change of the radiance field $L$, with respect to an infinitesimal change of position in direction $\omega$ at point $\vec{x}$ due to absorption, scattering and emission:
 \begin{align}
 \left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
 =&
@@ -28,88 +103,179 @@ p\left(\omega'\cdot\omega\right)L\left(\vec{x}, \omega' \right)\ud\omega'
 \nonumber
 \  .
 \end{align}
+with $\sigma_t=\sigma_a+\sigma_s$ being the extinction coefficient which combines absorption and outscattering.
 
-$Q_e$ is the radiance contribution from emission (light sources, self emission, etc.).
+The radiative transfer equation as presented here brings with it some important key assumptions about the modelled light transport (see D'Eon~\cite{DEon14}):
+\begin{itemize}
+\item Linear transport: The levels of heat created by the absorption events don't measurably change the properties of the medium itsself. Further photons do not collide with each other and therefore the transport equations remain linear.
+\item Steady-state: We are not interested in knowing how light propagates through the scene over time. The typical exposure times of cameras or the human visual system is in a regime where it is safe to assume that sinks and sources are constant in time and have balanced out in an equilibrium state such that the radiance field $L$ does not change over time.
+\item Monoenergetic: Often referred to as gray problems. Light is assumed to have a single frequency and color is introduced by solving the single frequency problem multiple times for color space primaries.
+\item Energy-conserving media: The medium will never scatter more energy at any point than it receives at that point.
+\item Scalar radiative transfer: Polarization of light is not considered.
+\item Uncorrelated interaction events: Particles have no memory. The probability distribution of an interaction event does not depend on the previous interaction in any way (see Moon et al.~\cite{Moon07}).
+\item Isotropic medium: As mentioned above, the medium is assumed isotropic, which means that absorption and scattering coefficients are not direction dependent and the phase function only depends on the cosine of the angle between incident and outgoing direction (see Jakob et al.~\cite{Jakob10}).
+\end{itemize}
 
-
-
-\todo[inline]{Derive the radiative transfer equation terms}
-\todo[inline]{Advection}
-\todo[inline]{absorption}
-\todo[inline]{scattering (outscattering)}
-\todo[inline]{scattering (inscattering)}
-\todo[inline]{phase function}
-\todo[inline]{isotropic phase function}
-\todo[inline]{mean cosine}
+For notational convenience and for developing the theory for deterministic methods, we express the radiative transfer equation in operator notation where transport, collision, and scattering are expressed as operators $\mathcal{T}$, $\mathcal{C}$ and $\mathcal{S}$ being applied to the radiance field $L$:
 \begin{align}
-\label{eq:foundations_mean_cosine}
-X
+\mathcal{T}\left(L\right) = -\mathcal{C}\left(L\right) + \mathcal{S}\left(L\right) + Q_e
 \end{align}
-\todo[inline]{anisotropic phase function}
 
-\missingfigure{visualization of inscattering, outscattering and absorption.}
+Light transport simulation is the process for finding the solutions to $L$. Either for specific values of $\vec{x}$ and $\omega$ or globally. In the following section we will give a high level overview over the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subjet of this thesis. The next section briefly covers analytical solutions which have been used to great effect and enjoy immense popularity. Section~\ref{sec:foundations_mc} covers non-deterministic methods, such as Monte-Carlo. These will be introduced to motivate the need for deterministic methods as a potential means to boost convergence of non-deterministic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
 
-\todo[inline]{Discuss wavelength dependence}
+% ============================================================
+\section{Analytical Solutions}
+\label{sec:foundations_analytical}
 
-\todo[inline]{Discuss time dependence and steady state}
+Analytical solutions to the radiative transfer equation exist for some very basic canonical problems, of which the point source problem is the most popular. It assumes an homogeneous medium (spatially constant $\sigma_t$) with infinite extent. For this problem the correct analytical solution exists (see D'Eon et al.~\cite{dEon11}). D'Eon also introduced a very accurate approximation by Grosjean~\cite{Grosjean56} which is simpler to evaluate and always convergent. We use this analytical solution to verify the various methods developed as part of this thesis.
 
-\todo[inline]{discuss isotropic medium, anisotropic medium}
+Pegoraro et al.~\cite{Pegoraro11} introduced a method base on the analytical solution to the point source problem for application in realtime rendering of single scattered light in participating media (termed airlight integral).
 
-\todo[inline]{operator notation}
+Jensen et al.~\cite{Jensen01} introduced diffusion theory and in particular the analytical solution to the diffusion approximation for the point source problem (see the theoretical treatment in chapter~\ref{sec:diffusion_approximation}). In addition they introduced the method of images which yielded an analytical solution to the half space problem. This problem consists of two different homogeneous media which are seperated by a plane of infinite extend (creating a half space). Solution to the half space problem allowed to locally approximate light transport at the surface of a bounded participating media using a dipole configuration(termed subsurface scattering). Dipole based analytical models gained incredible popularity in academia and industry and represented a rich and heavily researched branch within rendering. Further seminal work on this subject after Jensen was provided by D'Eon et al.~\cite{dEon11} and Habel et al.~\cite{Habel13}.
+
+The main drawback of analytical models is their restriction to simple problems and homogeneous media in particular. In addition they introduce in some cases significant error when the canonical problem is used as an approximation to real case geometry. Further dipole methods are based on diffusion theory which has poor directional resolution and issues with energy conservation (see section~\ref{sec:moment_problem_revisited}).
 
 % ============================================================
 \section{Non-deterministic Methods}
-\subsection{Path-integral Formulation}
-\subsection{Monte-Carlo Method}
-\label{sec:pathtracing}
-\todo[inline]{explain incremental path construction}
-\todo[inline]{explain the concept of variance}
-\todo[inline]{explain the concept of bias}
-\subsection{Variance Reduction Techniques}
-\label{sec:variance_reduction_techniques}
-\todo[inline]{Explain, that a great variety of Monte Carlo methods exist because there are many ways information and assumptions can be combined with the basic variance reduction techniques available for monte carlo integration}
-\todo[inline]{Local variance reduction technique}
-\todo[inline]{semi-global reduction technique}
-\todo[inline]{global reduction technique}
-\subsubsection{Importance Sampling}
-\todo[inline]{explain importance sampling basics}
-\todo[inline]{multiple importance sampling}
-\todo[inline]{explain JIS as a semi-global technique}
-\todo[inline]{explain SNEE as a semi-global technique}
-\subsubsection{Control Variates}
-\todo[inline]{explain control variates}
-\todo[inline]{multi-level monte carlo}
-\todo[inline]{residual ratio tracking (precomputing the maximum volume height for volume bricks as semi-global))}
-\subsubsection{Russian Roulette and Splitting}
-\todo[inline]{Point out, }
-\todo[inline]{Point out, that the different variance reduction techniques all }
-\subsubsection{Analytical Solutions}
-\TD{mention dipole and the whole research field and how it seperates from this thesis}
+\label{sec:foundations_mc}
 
+For most practical applications analytical solutions do not exist and numerical integration is required. The key challenge with solving the radiative transfer equation using numerical integration is the global nature of $L$. Changing a scene parameter in one place will affect all other parts in the scene. This gobal dependency is introduced by the integral over the radiance field in the scattering term. 
+
+Integrating the scattering term using common quadrature rules based on interpolation functions leads to distributed raytracing (see Cook et al.~\cite{Cook84}). These techniques become prohibitive already with one or two recursion levels as the function evaluations grow exponentially with the number of recursions. This is known as the \emph{curse of dimensionality}.
+
+An alternative way to interpolation based quadrature is Monte-Carlo integration based on random samples which is the core principle behind all non-deterministic methods. The growth in compute power and the never ending need for more realistic imagery played into the fact that Monte-Carlo methods much better deal with higher dimensions and can produce unbiased result. This made these methods become the gold standard for light transport simulation in computer graphics. 
+
+Monte-Carlo methods can be broadly categorized into three groups: Standard Monte-Carlo, Markov-Chain-Monte-Carlo and Hamiltonian Monte-Carlo. In this thesis only standard Monte-Carlo is being used and the reader is referred to the work by Veach~\cite{VeachThesis97} and Cline et al.~\cite{Cline05, Cline05apractical} as a starting point into Markov-Chain-Monte-Carlo and the work by Li et al.~\cite{Li15} for Hamiltonian Monte-Carlo.
+
+In the following section a very brief overview over standard Monte-Carlo methods is given for various reasons. First it helps to differentiate deterministic methods which are introduced later. Secondly it explains how the ground truth images used in the result sections of chapter~\ref{sec:pnmethod}, chapter~\ref{sec:diffusion_approximation} and chapter~\ref{sec:fld} were generated. Further the introduced methods in this thesis require computation of the single scattered light contribution for which non-deterministic methods presented in this section are used. Lastly this section also is meant to inspire research in combining non-deterministic methods with deterministic methods into hybrid approaches which combine the benefits of both worlds and by this motivates research into deterministic methods in general.
+
+%why this section ?
+%-traits compared to deterministic methods
+%-show how groundtruth is computed
+%-show how to rendering single scattered light
+%-motivate how deterministic methods could be used to boost %non-deterministic methods through variance reduction techniques
+
+%\subsection{Standard Monte-Carlo}
+\label{sec:pathtracing}
+
+Standard Monte-Carlo methods became fully established with the work by Veach~\cite{VeachThesis97} and Pharr et al.~\cite{Pharr10}. They are based on the idea to turn the argument $x$ of a function $f(x)$ into a random variable. This is what makes the method non-deterministic (or rather pseudo-non-deterministic when using computers). The key principle is then to express the integral of $f(x)$ over the domain $\mu(x)$ as the expected value of $f$:
+\begin{align}
+E[f] = \int_{\mu\left(x\right)} f\left(x\right)p\left(x\right)\ud\mu\left(x\right)
+\end{align}
+The probability of sampling $x$ is implicitly given by the function $p$ which in turn is driven by the sampling method chosen. Since the sample $x$ represents an infinitely small point in the continous space $\mu\left(x\right)$ a probability can not be assigned directly the same way mass can not be assigned to an infinitely small particle (the particle will always be smaller than any mass value assigned to it). This is why $p(x)$ returns a probability density for a specific sample $x$. Probabities can be found by integrating probability density $p$ over elements in subsets of $\mu\left(x\right)$.
+
+Mapping this concept to light transport simulation yields the path integral formulation of radiative transfer. Remember that the aim of light transport simulation is to find a solution for $L$:
+\begin{align}
+L\left(\vec{x},\omega\right) = E[f] = \int_{\mu\left(\bar{\mathrm{x}}\right)} f\left(\bar{\mathrm{x}}\right)p\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right)
+\end{align}
+The quantity $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photon trajectories which arrive at $\vec{x}$ from direction $\omega$ and start at any photon emitting light source in the scene. The quantity $\bar{\mathrm{x}}$ is a single specific sample---a path---from that set which was chosen according to a sampling method. The function $f$ is called the contribution function and returns the amount of radiant energy (in radiance) which is carried through the specific path represented by $\bar{\mathrm{x}}$. The function $p(\bar{\mathrm{x}})$ returns the probabiliy density for sampling the particular path $\bar{\mathrm{x}}$ and is driven by the sampling method.
+\begin{figure}[t]
+\centering
+\missingfigure{path sample and contribution factors}
+\caption{TODO}
+\label{fig:mc_path_sample_contributions}
+\end{figure}
+
+The contribution function $f$ accounts for all the terms in the radiative transfer equation~\ref{eq:rte}. The initial energy emitted from the light source $L_e$ is reduced as it travels along the path $\bar{\mathrm{x}}$ which consists of $N$ vertices $\vec{x}_i$ at which scattering events occur. Energy is reduced for each segment $\vec{x}_i \vec{x}_{i+1}$ by the geometry term $G$ which results from radiance being defined in terms of the change in projected area, the transmittance term $T$ which accounts for absorption and outscattering and the visibility term $V$ which accounts for geometry obstructing the path alltogether. At each interior path vertex $\vec{x}_i$ scattering is accounted for by multiplying with $p(\vec{x}_i)$. Finally an importance weight $W_e$ accounts for sensor sensitivity.
+\begin{align}
+f\left(\bar{\mathrm{x}}\right) =
+L_e\left(\vec{x}_0\right)
+\prod_{i=0}^{i=N-1}
+G\left(\vec{x}_i, \vec{x}_{i+1}\right)
+T\left(\vec{x}_i, \vec{x}_{i+1}\right)
+V\left(\vec{x}_i, \vec{x}_{i+1}\right)
+\prod_{i=1}^{i=N-1}
+p\left(\vec{x}_i\right)
+W_e\left(\vec{x}_N\right)
+\end{align}
+The transmittance is defined as
+\begin{align}
+T\left(\vec{x}_i, \vec{x}_{i+1}\right) =
+\operatorname{exp}^
+{
+    -\int_{\vec{x}_i}^{\vec{x}_{i+1}}\sigma_t\left(\vec{x}\right)\ud\vec{x}
+}
+\end{align}
+and the geometry term is defined as
+\begin{align}
+G\left(\vec{x}_i, \vec{x}_{i+1}\right) =
+\frac{D\left(\vec{x}_{i}, \vec{x}_{i+1}\right)D\left(\vec{x}_{i+1}, \vec{x}_{i}\right)}{\norm{\vec{x}_{i+1}-\vec{x}_{i}}^2}
+\end{align}
+with
+\begin{align}
+D\left(\vec{a}, \vec{b}\right) =
+\begin{cases}
+\abs{\vec{n}_a\cdot\omega_{ab}}, & \text{for $\vec{a}$ being a surface vertex}
+\\
+1, & \text{for $\vec{a}$ being a volume vertex}
+\end{cases}
+\end{align}
+Here $\vec{n}_a$ is the normal at the surface vertex $\vec{a}$ and $\omega_{ab}$ is the normalized direction vector pointing from vertex $\vec{a}$ to vertex $\vec{b}$.
+
+Lastly the scattering term $p(\vec{x}_i)$ is defined in terms of the phase function $p$ and the function $p_s$ which is accounting for surface scattering.
+\begin{align}
+p\left(\vec{x}_i\right) =
+\begin{cases}
+p_s\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}, \vec{n}_i\right), & \text{for $\vec{x}_i$ being a surface vertex}
+\\
+p\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}\right), & \text{for $\vec{x}_i$ being a volume vertex}
+\end{cases}
+\end{align}
+This thesis exclusively deals with participating media and therefore surface scattering is of no concern.
+
+Choosing random samples $\bar{\mathrm{x}}$ is a vast research branch in its own right within Monte-Carlo based rendering methods as it has a significant effect on convergence and computational demands. The simplest form is incremental path construction which starts with an inital vertex either on the light source (light path sampling) or the sensor (eye path sampling) and incrementally samples additional points from which additional path segments are constructed. The probability density function is constructed by chaining the conditional probabilities for each decision made along the path.
+
+\TD{TODO}
+%\todo[inline]{explain the concept of variance}
+%\todo[inline]{explain the concept of bias}
+%\subsection{Variance Reduction Techniques}
+%\label{sec:variance_reduction_techniques}
+%\todo[inline]{Explain, that a great variety of Monte Carlo methods exist because there are many ways information and assumptions can be combined with the basic variance reduction techniques available for monte carlo integration}
+%\todo[inline]{Local variance reduction technique}
+%\todo[inline]{semi-global reduction technique}
+%\todo[inline]{global reduction technique}
+%\subsubsection{Importance Sampling}
+%\todo[inline]{explain importance sampling basics}
+%\todo[inline]{multiple importance sampling}
+%\todo[inline]{explain JIS as a semi-global technique}
+%\todo[inline]{explain SNEE as a semi-global technique}
+%\subsubsection{Control Variates}
+%\todo[inline]{explain control variates}
+%\todo[inline]{multi-level monte carlo}
+%\todo[inline]{residual ratio tracking (precomputing the maximum volume height for volume bricks as semi-global))}
+%\subsubsection{Russian Roulette and Splitting}
+%\todo[inline]{Point out, }
+%\todo[inline]{Point out, that the different variance reduction techniques all }
 
 % ============================================================
 \section{Deterministic Methods}
+\label{sec:foundations_deterministic}
 
-\subsection{Discretization}
-\label{sec:discretization}
+\TD{TODO}
+
+%\subsection{Discretization}
+%\label{sec:discretization}
 %https://en.wikipedia.org/wiki/Types_of_mesh
-\TD{talk about discretization and meshing}
+%\TD{talk about discretization and meshing}
 
-\subsection{Ad-hoc and Heuristical Methods}
-\todo[inline]{What constitutes a heuristic method? Not directly connected to theory.}
-\todo[inline]{Light Propagation Volumes}
-\todo[inline]{Anton Bouthours stuff}
-\todo[inline]{Wavefront stuff from Dreamworks}
+%\subsection{Ad-hoc and Heuristical Methods}
+%\todo[inline]{What constitutes a heuristic method? Not directly connected to theory.}
+%\todo[inline]{Light Propagation Volumes}
+%\todo[inline]{Anton Bouthours stuff}
+%\todo[inline]{Wavefront stuff from Dreamworks}
 
-\subsection{Discretized Radiative Transfer}
-\todo[inline]{Point out difference to ad-hoc methods (that it is grounded to theory)}
-\todo[inline]{mention isotropic medium, anisotropic medium}
-\todo[inline]{Spatial Discretization}
-\todo[inline]{Finite differences}
-\todo[inline]{Finite elements}
-\todo[inline]{Angular Discretization}
-\todo[inline]{Lattice Boltzmann, Discrete Ordinates, Spherical Harmonics/DiffusionApproximation}
-\missingfigure{overview of all angular discretization methods.}
+%\subsection{Discretized Radiative Transfer}
+%\todo[inline]{Point out difference to ad-hoc methods (that it is grounded to theory)}
+%\todo[inline]{mention isotropic medium, anisotropic medium}
+%\todo[inline]{Spatial Discretization}
+%\todo[inline]{Finite differences}
+%\todo[inline]{Finite elements}
+%\todo[inline]{Angular Discretization}
+%\todo[inline]{Lattice Boltzmann, Discrete Ordinates, Spherical Harmonics/DiffusionApproximation}
+%\missingfigure{overview of all angular discretization methods.}
 
-\todo[inline]{reiterate, that in this thesis we are concerned with methods using SH based discretization of angular variable.}
+%\TD{benefits and drawbacks}
+
+%\todo[inline]{reiterate, that in this thesis we are concerned with methods using SH based discretization of angular variable.}
 

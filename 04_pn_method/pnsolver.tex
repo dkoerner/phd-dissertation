@@ -21,7 +21,7 @@ Using finite difference grids, the discretization consists of replacing the quan
 \begin{figure}[h]
 \centering
 \missingfigure{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_solver_finite_difference_grid}
 \end{figure}
 
@@ -110,7 +110,7 @@ In the next step, the canonical form is used to derive the stencil code. This is
 \begin{figure}[h]
 \centering
 \missingfigure{source code figure for simple stencil code}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_solver_stencil_code}
 \end{figure}
 
@@ -127,7 +127,7 @@ The stencil code is compiled and executed for each row in $A$ to populate the sy
 \begin{figure}[h]
 \centering
 \missingfigure{image overview of the numerical pipeline}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_solver_stencil_overview}
 \end{figure}
 
@@ -142,7 +142,7 @@ There exists a rich number of computer algebra systems, such as SymPy~\cite{Meur
 \begin{figure}[h]
 \centering
 \missingfigure{code listing showing how the expression tree is build}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_math_expression_tree_generation}
 \end{figure}
 
@@ -150,7 +150,7 @@ Figure~\ref{fig:pn_math_expression_tree} shows the expression tree for a squared
 \begin{figure}[h]
 \centering
 \missingfigure{image of a computer algebra representation of the laplace equation and binomial}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_math_expression_tree}
 \end{figure}
 
@@ -158,7 +158,7 @@ Manipulations of mathematical expressions, such as expansions, the application o
 \begin{figure}[h]
 \centering
 \missingfigure{image of representing binomial expansion as operation on expression tree}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_math_expression_tree_manipulation}
 \end{figure}
 
@@ -166,7 +166,7 @@ Finally, after creation and manipulation, the final expression tree can be turne
 \begin{figure}[h]
 \centering
 \missingfigure{image showing rendering frontends for source code and latex}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_math_expression_tree_rendering}
 \end{figure}
 
@@ -179,7 +179,7 @@ When a differential operator is encountered during tree parsing, the subtree rep
 \begin{figure}[h]
 \centering
 \missingfigure{image showing math expression tree for how the differential operator is being replaced with central difference. also mark the position on the stack.}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_discretization_differential}
 \end{figure}
 
@@ -187,7 +187,7 @@ Once the parser arrives at the symbol $\vec{x}$ in the tree, it is replaced by i
 \begin{figure}[h]
 \centering
 \missingfigure{image showing interpolation.}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_discretization_interpolation}
 \end{figure}
 
@@ -199,7 +199,7 @@ If a term contains an unknown, then its factor expression subtree is rendered in
 \begin{figure}[h]
 \centering
 \missingfigure{image showing code generation from expression tree in canonical form.}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_discretization_codegen}
 \end{figure}
 
@@ -209,7 +209,7 @@ The stencil code is generated with the assumption of certain function calls bein
 \begin{figure}[h]
 \centering
 \missingfigure{image showing the stencil API}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_discretization_codegen_stencilAPI}
 \end{figure}
 
@@ -245,7 +245,7 @@ In the solver framework, this is implemented by overloading the assignment opera
 \begin{figure}[h]
 \centering
 \missingfigure{image: boundary voxels and dirichlet boundary condition. location of the boundary interface.maybe an arrow indicating the access of the stencil.show assignment and arrow to boundary voxel coefficient. then arrow to nil.also visualize the boundary surface.}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_bc_dirichlet}
 \end{figure}
 
@@ -268,7 +268,7 @@ In the solver framework, this is implemented by index bending. If the target coe
 \begin{figure}[h]
 \centering
 \missingfigure{image showing neumann boundary conditions and index bending. also visualize the boundary surface.}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_bc_neumann}
 \end{figure}
 
@@ -282,7 +282,7 @@ Therefore, the details about the surrounding framework are not really important 
 \begin{figure}[h]
 \centering
 \missingfigure{class diagram of solver framework, including stencil, stencil api, voxelmanager, fields and pnsystem}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_classes}
 \end{figure}
 
@@ -319,7 +319,7 @@ In figure~\ref{fig:pn_staggered_grid_problems}\subref{fig:pn_collocated_grid_art
 \label{fig:pn_staggered_grid_idea}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{caption}
+\caption{TODO}
 \label{fig:pn_staggered_grid_problems}
 \end{figure}
 
@@ -329,7 +329,7 @@ The staggered grid locations are found by subdividing the original grid into a f
 \begin{figure}[h]
 \centering
 \missingfigure{simple staggered grid}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:staggered_grid}
 \end{figure}
 
@@ -339,7 +339,7 @@ Assuming this structure, the unknown locations are found by the following algori
 \begin{figure}[h]
 \centering
 \missingfigure{placing staggered grid coefficients}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:staggered_grid_placement}
 \end{figure}
 
@@ -366,7 +366,7 @@ Staggering spherical harmonics coefficients also makes handling boundary conditi
 \label{fig:pn_staggering_asymmetry_bc_checkerboard}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{caption}
+\caption{TODO}
 \label{fig:pn_staggered_grid_unhandled_bc}
 \end{figure}
 
@@ -387,7 +387,7 @@ The solution to this problem is to introduce additional unknowns to the system f
 \label{fig:pn_staggering_correct_bc_checkerboard}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{caption}
+\caption{TODO}
 \label{fig:pn_staggered_grid_handled_bc}
 \end{figure}
 
@@ -399,7 +399,7 @@ As shown in figure~\ref{fig:pn_staggered_grid_noartefacts}, using the collocated
 \begin{figure}[h]
 \centering
 \missingfigure{correct staggered grid checkerboard solution}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_staggered_grid_noartefacts}
 \end{figure}
 
@@ -412,7 +412,7 @@ However, the system matrix $A$, when having been generated from the $P_N$-equati
 \begin{figure}[h]
 \centering
 \missingfigure{structure of the system matrix and solution vector (the figure from the paper)}
-\caption{Some caption}
+\caption{TODO}
 \label{fig:pn_matrix_layout}
 \end{figure}
 
