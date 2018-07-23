@@ -13,7 +13,7 @@ In the following, the typical steps for building a linear system from a given pa
 
 \subsubsection*{Spatial Discretization}
 
-As mentioned in section~\ref{sec:discretization}, a discrete representation of the geometry that covers the problem domain is required in order to discretize the spatial variable. Throughout this thesis, a regular cartesian grid is used, which in this thesis will be referred to as finite difference grid. This type of grid is very simple and commonly used in graphics. In the future it might be worth exploring other more complex meshes, such as tetrahedral irregular grids, which are often used in finite element analysis. 
+As mentioned in section~\ref{sec:foundations_deterministic}, a discrete representation of the geometry that covers the problem domain is required in order to discretize the spatial variable. Throughout this thesis, a regular cartesian grid is used, which in this thesis will be referred to as finite difference grid. This type of grid is very simple and commonly used in graphics. In the future it might be worth exploring other more complex meshes, such as tetrahedral irregular grids, which are often used in finite element analysis. 
 
 The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by a worldspace bounding box and a resolution $res=(I,J,K)$ or gridspacing $h=(h_x, h_y, h_z)$ in each dimension. The local space of the grid is referred to as voxelspace.
 

@@ -1,38 +1,79 @@
 \chapter{Introduction}
 \label{sec:introduction}
 
-\section{Linear Transport}
-\todo[inline]{Linear Transport as Intersection between Astrophysics, Nuclear Sciences and Computergraphics}
 
-\missingfigure{graph showing linear transport as intersection between different fields.}
 
-\TD{With the increase in compute power came the viability of physical based methods. allowed better crosspollination with other fields}
+The need and desire to faithfully reproduce the world around us as we see it with images is rooted deep in human nature. Images of our world always played a fundamental role in human culture for telling stories, passing on knowledge and building visual maps of reality. Realistic images of the world in essence are a tool for humans to reflect upon it, learn about it and build visions for it. There is a consistent line of development from cave and rock carvings dating back to 30.000 BC over the wall paintings in egypt burial chambers to the old masters such as Da Vinci or Rembrandt. Today these works are primarily seen as art as they have this element of human expression coupled with a very creative process. However, at the same time there also always was the element of technique and understanding of nature which was required to make the images as realistic as possible. For example painters such as Caspar David Friedrich would extensively study cloud shapes and cloud formations in order to be able to draw them as realistically as possible.
 
-\TD{inverse rendering}
+With computers a completely new medium appeared and with it a new methodology and way of thinking about realistic image creation. Crude rudimental rules, such as the one on aerial perspective by Leonardo Da Vinci~\cite{DaVinci1651}, evolved into highly accurate physical models and instead of applying paint with a brush, numerical methods are employed to solve for pixel colors making up the image. This is the domain of computer graphics, a branch in computer sciences, which has the goal to develop methods for the generation of photorealistic images from digital content and constantly tries to push the boundaries of what is technically possible.
 
-\todo[inline]{Large Body of Work on very similar problems exist in other fields.}
+Computer generated imagery (CGI) is used widely across many domains and industries such as architecture, entertainment, advertising, automotive, manufacturing and scientific visualization, where each brings its own challenges with it. This high demand and wide adoption is why rendering in computer graphics is a heavily researched subject in industry and academia alike. The main challenge research in rendering is trying to address is the high amount of computation current algorithms require in order to generate realistic images. For example a single frame in an animation movie by Disney or Pixar takes on average multiple hours and much more in extreme cases. To produce all images for the whole movie, multiple computing centers with thousands of CPU cores are used. A substantial economical investment. One of the main efforts in rendering research therefore is to reduce the computational cost for realistic image generation.
 
-\todo[inline]{Translational research important contributor to scientific advances. Translation, reframing, enhancing, adopting.}
+The advent of graphics computing hardware paved the way for realtime applications. Here, together with some additional compromises in physical accuracy, incredible performance gains allow to generate images in fractions of seconds and are the basis for new powerful interactive applications in the industries mentioned above. Finding methods which can generate results at interactive rates while still allowing to control or at least understand the loss in accuracy is another important research direction in graphics.
 
-\todo[inline]{Example: Deon, Quantized diffusion, Zero Variance. Russian roulette and splitting stuff.}
+Computer hardware is ever evolving and while for a long time most of the increase in compute power came from higher density semiconductor fabrication, this trend has almost come to an halt. Today the growth in compute power is driven by parallelization on multi- and manycore systems. This challenges existing standard rendering algorithms which mostly do not play well to the intricacies of the underlying hardware. While some first steps are being made in this direction (see for example Eisenacher et al.~\cite{Eisenacher13}), designing rendering algoithms which fully exploit the potential of next generation multi- or manycore hardware has been proclaimed as one of the future challenges for rendering by industry leaders (see Fascione~\cite{Fascione15}).
 
-\todo[inline]{This work follows the same path.}
+This thesis seeks to address these problems by following a trend which has been spurred by the so called physical based rendering revolution in graphics (see Keller et al.~\cite{Keller15}). In the early days of computer graphics, limitation in compute power required the use of cheap ad-hoc methods and other tricks to facilitate efficient image generation algorithms. With the growth in compute capacities, techniques and methods based on accurate physical models became feasible and started replacing older heuristical approaches. Rendering became concerned with energy conservation, the use of correct physical quantities for describing the virtual scene and quantifiable error to physically correct ground truth results. Consistently adopting the framework provided by optical physics allowed rendering researchers to much better investigate and compare with work in other fields attacking very similar problems. While graphics research has always drawn inspiration and methods from other scientific domanis, the ermergence of physical based rendering caused a significant increase in research work which is based on findings and theories from other domains. Physics provided a common language allowing much easier to talk across disciplines.
 
-\section{Deterministic Methods based on Spherical Harmonics Expansion}
+In this spirit this thesis investigates theories and methods from the astrophysics domain and nuclear sciences and adopts them for application in rendering. The resulting work presented in this thesis addresses all the three challenges mentioned above. Specifically, methods are presented which allow to reduce computational cost for the demanding problem of rendering participating media such as clouds, smoke, fire etc. and even allows---with some compromise in accuracy---applications at interactive rates. The methods devised in this thesis turn the rendering problem into the problem of solving a linear system of equations, exactly what high performance computing clusters (large scale many-core systems) have been designed for (see Koerner et al.~\cite{Koerner17}). This thesis constitutes an significant effort in putting forward an alternative approach to light transport simulation which has not seen a lot of attention lately but might have the potential to answer some of the reseach challenges in rendering today and tomorrow.
 
-\todo[inline]{Explain deterministic methods and discretization on a high level.}
-
-\todo[inline]{Explain spherical harmonics based disretization.}
+%\TD{visualization}
+%\TD{inverse rendering}
 
 \section{Research Questions}
 
-\todo[inline]{How can SH based methods in other domains be applied to the problem of rendering in graphics? Is it viable?}
+This thesis is concerned with rendering volumetric media such as clouds, fire, milk and fog which interacts with light. These participating media elements are ubiquitous in the real world and therefore also common in rendering. Todays standard methods in rendering work by tracing particles of light (photons) through the scene. These particles interact with the scene and form complex trajectories from light sources to the sensor of the virtual camera which captures the image. Participating media such as clouds or milk cause particularly long trajectories for light particles and therefore are computationally very demanding. This is specifically extreme for media like clouds or milk where the particle trajectories become excessively long.
+\begin{figure}[ht]
+\centering
+\missingfigure{participating media examples}
+\caption{TODO}
+\label{fig:intro_participating_media_examples}
+\end{figure}
 
-\TD{mention application in HPC as a motivation}
+The problem of tracing particles through participating medium which causes a lot of interaction with the particle and therefore long trajectories is not exclusive to light particles in computer graphics. Very similar problems exist in nuclear science for example when computing the dosis of radiation leaving the protected core of a nuclear power plant. Here high energy neutrons are traced from the reaction through the surrounding wall which acts as a participating medium (e.g. Haghighat et al.~\cite{Haghighat03}). In astrophysics for example the study of the formation of planets (which apparently to this day is not fully understood) has models which take the radiation of stars into account and for simulation requires tracing particles which are emitted from fusion through clouds of debree and dust (see Armitage et al.~\cite{Armitage11}).
 
-\section{Contributions and Outline}
-\todo[inline]{Mention, that the real-valued PN equation is a contribution}
+Common to all these different problems is the migration and interaction of particles or energy within a host medium. This is being described by linear transport theory, a field in mathematical physics which is at the intersection between astrophysics, nuclear sciences and computer graphics.
+\begin{figure}[ht]
+\centering
+\missingfigure{linear transport as intersection between astrophysics nuclear sciences computer graphics }
+\caption{TODO}
+\label{fig:intro_linear_transport_fields}
+\end{figure}
 
-\TD{mention structure of the thesis: foundations and three main chapters with theory, intuition, solving, rendering application}
+Now astrophysics and nuclear sciences have a much longer standing history than computer graphics and a lot of research was done before modern computers were widely available. This led to a large volume of work in those fields dealing with very similar problems in graphics from a very different perspective. As a result there are many interesting ideas, methods and techniques to find which could be benefitial for applications in computer graphics.
 
-\section{Reused and Copyrighted Material}
+D'Eon~\cite{DEon14} in his work explains vividly the challenges this type of research comes with. Starting with notation and terminology which makes it difficult to read and understand papers from these fields. Further many seminal texts from those other domains are out of print, expensive to aquire, lack offical digital distribution formats and generally are hard to find. Since a lot of research was published before modern computers became a commodity, most publications focus exclusively on theoretical treatments and simple one-dimensional or two-dimensional problems. Practical computational methods are lacking and simply were not focus of research back then. New methods will have to be devised after going through the literature and putting the puzzle pieces together. However, doing this type of translational research can lead to powerful new tools in graphics. Significant recent advances, such as the work by D'Eon et al.~\cite{dEon11}, Vorba et al.~\cite{Vorba16} or Krivanek et al.~\cite{Krivanek14} are based to a large degree on old methods which were invented in other scientific domains.
+
+The work in this thesis follows the same spirit. The $P_N$-method (see Brunner~\cite{Brunner02}) is a very popular method in nuclear sciences. It allows to compute a global solution without using the computational demanding standard method of following particle trajectories. The classical diffusion approximation (see~Ishimaru~\cite{Ishimaru78}) is a method which is used in the astrophysics domain and actually has been introduced to graphics by Stam~\cite{Stam95}. However an extension to flux-limited diffusion was introduced in the astrophysics domain by Levermore et al.~\cite{Levermore81} and has not been introduced to graphics yet. What all these different methods unify is the fact that they are based on a model which uses the same discretization.
+
+The central research question this thesis will explore is whether these methods have merit for applications in computer graphics and how they could be adopted to typicall problems in rendering. This consists of two parts. First the theory needs to be revisited and presented to a computer graphics audience. How is the theory derived from first order principles? Is it applicable for applications in rendering? What are the theoretical limitations and how do they affect the scope of applications? Second, modern and efficient methods need to be derived which allow application in a typical computer graphics context. How can the theoretical problem be solved for a typical application in rendering? How could a practical and efficient method look like? What shortcomings does it have and how could those be overcome?
+
+\section{Summary of Original Contributions}
+
+The research which was carried out as part of this thesis resulted in two major contributions which are based on $P_N$-method research in nuclear sciences and flux-limited diffusion in the astrophysics domain. In both cases practical methods for full three-dimensional problems did not exist and had to be devised, resulting in original published contributions in its own right.
+
+\textbf{$P_N$-Method for Multiple Scattering in Participating Media~\cite{Koerner18}} The first contribution is a novel deterministic method for solving the $P_N$-equations on a finite difference grid for applications in rendering. The $P_N$-theory is derived and presented for a computer graphics audience. An original side product is a very concise and compact form of the real-valued $P_N$-equation which is new to the whole literature on $P_N$. The devised method introduced in this thesis is based on the idea of automated discretization. This approach works not only for the $P_N$-equations, but also for arbitrary potentially coupled PDE's and therefore has potential to be of interest for other applications and problems in graphics. This publication was inspired by research which was also carried out as part of this thesis on using high performance computing for application in rendering (\textbf{High-Performance Computing for Artistic Content Creation}~\cite{Koerner17}).
+
+\textbf{Flux-limited Diffusion for Multiple Scattering in Participating Media~\cite{Koerner14}} The second contribution is a new and efficient method for computing multiple scattered light contribution in participating media. The method is based on flux-limited diffusion theory which is being derived and presented for a computer graphics audience. The moment closure problem and variable Eddington factors are introduced and a non-linear Gauss-Seidel method is devised to solve it. Further the results and performance traits are compared against $P_N$-method and classical diffusion approximation to give a clear understanding about the merits of each method.
+
+Finally an additional contribution of this thesis is the clear and detailed discussion of the theory behind deterministic methods based on the spherical harmonics discretization of the linear transport equation. Additionally, the classical diffusion approximation are derived and a multigrid method for solving it is presented, making this thesis a comprehensive treatment on the subject.
+
+Additional research which only provided an indirect benefit to the topic of this thesis resulted in a publication on next event estimation in the context of Monte-Carlo methods for rendering subsurface scattering (\textbf{Subdivision Next-Event Estimation for Path-Traced Subsurface Scattering}~\cite{Koerner16}).
+
+\section{Organization of the Dissertation}
+
+At the core of this thesis are the three chapters~\ref{sec:pnmethod}, \ref{sec:diffusion_approximation} and \ref{sec:fld}. Each chapter is related to one of the methods which can be derived from the spherical harmonics discretization of the underlying transport equation. Each chapter contains a detailed derivation of the theory behind the method the chapter is dedicated to. Then in each chapter a method for solving the respective equation is devised. These core chapters are complemented with a chapter on the foundations on light transport simulation (chapter~\ref{sec:foundations}). Here the radiative transfer equation is given and the main approaches for solving it are outlined. Non-deterministic methods are introduced briefly and contrasted against deterministic methods to which spherical harmonics based discretizations covered in this thesis belong to. Finally the thesis closes with chapter~\ref{sec:conclusion} where major conclusions from the three core chapters are reiterated and future directions for research are identified. Figure~\ref{fig:intro_organization} gives a visual overview over the structure of this thesis.
+\begin{figure}[ht]
+\centering
+\missingfigure{organizational structure thesis}
+\caption{TODO}
+\label{fig:intro_organization}
+\end{figure}
+
+
+
+
+
+
+
+

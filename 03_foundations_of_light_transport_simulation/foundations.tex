@@ -40,6 +40,8 @@ The direction of that vector specfifies the direction of bulk or dominant energy
 
 The radiance field $L$ fully describes the distribution of photon densities in our scene and can easily be used to generate images by integrating it over the sensor surface of a virtual camera sensor and over all directions from which photons can arrive on that sensor. This results in the energy the sensor receives over a certain time (flux $\psi$).
 
+\TD{pixel color as integral over sensor surface}
+
 However, we need the model to describe how the radiance field $L$ changes with respect to the properties of the virtual scene. This is done using the directional derivative $\left(\omega\cdot\nabla\right)L$. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\omega$.
 \begin{figure}[h]
 \centering
@@ -69,6 +71,7 @@ Scattering is the effect when photons collide with medium particles. They are no
 The second way scattering affects how the radiance field changes along $\omega$ is that photons arriving from all directions will collide with the volume and scatter into the direction $\omega$. This is called inscattering:
 \begin{align}
 \left(\omega\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}p\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\label{eq:rte_inscattering}
 \end{align}
 The quantity $p$ is the phase function, a medium parameter which determines how light is redistributed from an incident direction $\omega'$ to the outgoing direction $\omega$. Since medium particles are assumed to either be spherical or randomly oriented, this function does not change as both vectors $\omega_i$ and $\omega$ are rotated and therefore the cosine of the angle between the two vectors is sufficient as a parameter.
 
@@ -119,6 +122,7 @@ The radiative transfer equation as presented here brings with it some important 
 For notational convenience and for developing the theory for deterministic methods, we express the radiative transfer equation in operator notation where transport, collision, and scattering are expressed as operators $\mathcal{T}$, $\mathcal{C}$ and $\mathcal{S}$ being applied to the radiance field $L$:
 \begin{align}
 \mathcal{T}\left(L\right) = -\mathcal{C}\left(L\right) + \mathcal{S}\left(L\right) + Q_e
+\label{eq:rte_operator_notation}
 \end{align}
 
 Light transport simulation is the process for finding the solutions to $L$. Either for specific values of $\vec{x}$ and $\omega$ or globally. In the following section we will give a high level overview over the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subjet of this thesis. The next section briefly covers analytical solutions which have been used to great effect and enjoy immense popularity. Section~\ref{sec:foundations_mc} covers non-deterministic methods, such as Monte-Carlo. These will be introduced to motivate the need for deterministic methods as a potential means to boost convergence of non-deterministic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
@@ -141,35 +145,53 @@ The main drawback of analytical models is their restriction to simple problems a
 
 For most practical applications analytical solutions do not exist and numerical integration is required. The key challenge with solving the radiative transfer equation using numerical integration is the global nature of $L$. Changing a scene parameter in one place will affect all other parts in the scene. This gobal dependency is introduced by the integral over the radiance field in the scattering term. 
 
-Integrating the scattering term using common quadrature rules based on interpolation functions leads to distributed raytracing (see Cook et al.~\cite{Cook84}). These techniques become prohibitive already with one or two recursion levels as the function evaluations grow exponentially with the number of recursions. This is known as the \emph{curse of dimensionality}.
+Naivley integrating the scattering term using common quadrature rules based on interpolation functions on a regular grid (e.g. Riemann integration) becomes prohibitively expensive with one or two recursion levels already as the function evaluations grow exponentially with the number of recursions. This is known as the \emph{curse of dimensionality}. An alternative way to interpolation based quadrature is Monte-Carlo integration based on random samples. This is the core principle behind all non-deterministic methods.
 
-An alternative way to interpolation based quadrature is Monte-Carlo integration based on random samples which is the core principle behind all non-deterministic methods. The growth in compute power and the never ending need for more realistic imagery played into the fact that Monte-Carlo methods much better deal with higher dimensions and can produce unbiased result. This made these methods become the gold standard for light transport simulation in computer graphics. 
+In the following sections a very brief overview over standard Monte-Carlo methods is given for various reasons: First it will help to differentiate deterministic methods which are introduced later. Secondly it explains how the ground truth images used in the result sections of chapter~\ref{sec:pnmethod}, chapter~\ref{sec:diffusion_approximation} and chapter~\ref{sec:fld} were generated. Further the introduced methods in this thesis require computation of the single scattered light contribution for which non-deterministic methods presented in this section are used. Lastly this section is also meant to inspire research in combining non-deterministic methods with deterministic methods into hybrid approaches combining the benefits of both worlds and by this motivates research into deterministic methods in general.
 
-Monte-Carlo methods can be broadly categorized into three groups: Standard Monte-Carlo, Markov-Chain-Monte-Carlo and Hamiltonian Monte-Carlo. In this thesis only standard Monte-Carlo is being used and the reader is referred to the work by Veach~\cite{VeachThesis97} and Cline et al.~\cite{Cline05, Cline05apractical} as a starting point into Markov-Chain-Monte-Carlo and the work by Li et al.~\cite{Li15} for Hamiltonian Monte-Carlo.
+\subsubsection*{Distributed Ray Tracing}
 
-In the following section a very brief overview over standard Monte-Carlo methods is given for various reasons. First it helps to differentiate deterministic methods which are introduced later. Secondly it explains how the ground truth images used in the result sections of chapter~\ref{sec:pnmethod}, chapter~\ref{sec:diffusion_approximation} and chapter~\ref{sec:fld} were generated. Further the introduced methods in this thesis require computation of the single scattered light contribution for which non-deterministic methods presented in this section are used. Lastly this section also is meant to inspire research in combining non-deterministic methods with deterministic methods into hybrid approaches which combine the benefits of both worlds and by this motivates research into deterministic methods in general.
-
-%why this section ?
-%-traits compared to deterministic methods
-%-show how groundtruth is computed
-%-show how to rendering single scattered light
-%-motivate how deterministic methods could be used to boost %non-deterministic methods through variance reduction techniques
-
-%\subsection{Standard Monte-Carlo}
-\label{sec:pathtracing}
-
-Standard Monte-Carlo methods became fully established with the work by Veach~\cite{VeachThesis97} and Pharr et al.~\cite{Pharr10}. They are based on the idea to turn the argument $x$ of a function $f(x)$ into a random variable. This is what makes the method non-deterministic (or rather pseudo-non-deterministic when using computers). The key principle is then to express the integral of $f(x)$ over the domain $\mu(x)$ as the expected value of $f$:
+The invention of Monte-Carlo integration is attributed to Stanislaw Ulam who came up with the idea in 1946 during his work on the Manhatten project in the Los Alamos National Lab (see Metropolis~\cite{Metropolis49, Metropolis87}). Consider a function $f\left(x\right)$ for which the following integral over domain $\mathbb{R}$ needs to be found:
 \begin{align}
-E[f] = \int_{\mu\left(x\right)} f\left(x\right)p\left(x\right)\ud\mu\left(x\right)
+\int f\left(x\right)\ud x
+\label{eq:mc_integral_1}
 \end{align}
-The probability of sampling $x$ is implicitly given by the function $p$ which in turn is driven by the sampling method chosen. Since the sample $x$ represents an infinitely small point in the continous space $\mu\left(x\right)$ a probability can not be assigned directly the same way mass can not be assigned to an infinitely small particle (the particle will always be smaller than any mass value assigned to it). This is why $p(x)$ returns a probability density for a specific sample $x$. Probabities can be found by integrating probability density $p$ over elements in subsets of $\mu\left(x\right)$.
+The key idea is to turn the argument $x$ of a function $f(x)$ into a random variable. A stochastic process for randomly choosing instances of $x$ augments each individual value of $x$ with a probability density $p(x)$ and turns the set of all possible $x$ into a measure $\mu(x)$.
 
-Mapping this concept to light transport simulation yields the path integral formulation of radiative transfer. Remember that the aim of light transport simulation is to find a solution for $L$:
+With $x$ being a random variable, $f\left(x\right)$ becomes a random variable itsself for which statistical moments can be computed. In particular the expected value can be computed by integrating over the measure $\mu(x)$ and weighting the results of $f$ with the probabilty for sampling $x$:
 \begin{align}
-L\left(\vec{x},\omega\right) = E[f] = \int_{\mu\left(\bar{\mathrm{x}}\right)} f\left(\bar{\mathrm{x}}\right)p\left(\bar{\mathrm{x}}\right)
-\ud\mu\left(\bar{\mathrm{x}}\right)
+E\left[f\right] = \int_{\mu\left(x\right)} f\left(x\right)p\left(x\right)\ud\mu\left(x\right)
 \end{align}
-The quantity $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photon trajectories which arrive at $\vec{x}$ from direction $\omega$ and start at any photon emitting light source in the scene. The quantity $\bar{\mathrm{x}}$ is a single specific sample---a path---from that set which was chosen according to a sampling method. The function $f$ is called the contribution function and returns the amount of radiant energy (in radiance) which is carried through the specific path represented by $\bar{\mathrm{x}}$. The function $p(\bar{\mathrm{x}})$ returns the probabiliy density for sampling the particular path $\bar{\mathrm{x}}$ and is driven by the sampling method.
+The probability of sampling $x$ is implicitly given by the function $p$ which in turn is driven by the sampling method chosen. Since the sample $x$ represents an infinitely small point in the continous space $\mu\left(x\right)$ a probability can not be assigned directly the same way mass can not be assigned to an infinitely small particle (the particle can always be seen to be smaller than any mass value assigned to it). This is why $p(x)$ returns a probability \emph{density} (probability mass per probability volume) for a specific sample $x$. Probabilities can be found by integrating probability density $p$ over elements in subsets of $\mu\left(x\right)$.
+
+The key idea behind Monte-Carlo integration is to turn the computation of the expected value into the computation of the integral in equation~\ref{eq:mc_integral_1}. This is done by introducing a new function $g$ which cancels out the term $p\left(x\right)$:
+\begin{align}
+E\left[g\right]
+=E\left[\frac{f\left(x\right)}{p\left(x\right)}\right]
+= \int_{\mu\left(x\right)} \frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\ud\mu\left(x\right)
+=\int f\left(x\right)\ud x
+\end{align}
+The power of Monte-Carlo integration as a numerical algorithm comes with that the expected value---and therefore the sought integral---can be estimated by the arithmetic mean over a set of $N$ random samples of $x$. This estimate is denoted by the operator $\left<\bullet\right>_N$:
+\begin{align}
+\left<E[g]\right>_N = 
+\frac{1}{N}\sum_{i=0}^{N}
+g\left(X_i\right)
+\end{align}
+This relation is derived from the law of large numbers which states that the average of the results optained from $N$ number of trials of an experiment approaches its expected value as $N$ increases (see standard textbooks such as Karlos et al.~\cite{Kalos86}):
+\begin{align}
+\lim_{N\rightarrow\infty} \left<E[g]\right>_N = E[g]
+\end{align}
+For numerical prodedures a finite number of samples is used which introduces some error in the estimate. The estimation error shows up as noise when using independent random samples to compute the radiance field estimates on the camera sensor for each pixel.
+
+Naively using the Monte-Carlo integration technique with the inscattering integral (see equation~\ref{eq:rte_inscattering}) gives rise to distributed raytracing and was devised by Cook et al.~\cite{Cook84}. It allowed unbiased rendering of complex effects such as motion blur and depth of field but did not really address the curse of dimensionality. Recursing the radiative transfer equation would still cause an exponential growth of evalutations with each interaction, depending on the number samples $N$.
+
+
+% path tracing --------------------------------------------
+\subsubsection*{Path Tracing}
+
+Instead of applying Monte-Carlo directly to the in-scattering integral of the radiative transfer equation and integrating over solid angle, Kajiya~\cite{Kajiya86} proposed to reformulate the solution of the radiative transfer equation as an integral over all possible paths of photons which start from the place of emission (light sources) and arrive at position $\vec{x}$ from direction $\omega$ to contribute to $L(\vec{x}, \omega)$. This layed the foundation of the path integral formulation which is the underlying framework used by all Monte-Carlo techniques today.
+
+The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ which represents the trajectory a photon can make by traveling from where it was emitted to some position $\vec{x}$ with some incident direction $\omega$. The path $\bar{\mathrm{x}}$ consists of $N$ vertices $\vec{x}_i$ at which interaction events occur. The function $f\left(\bar{\mathrm{x}}\right)$ takes such a single path as input and returns the contribution which a photon makes to $L(\vec{x}, \omega)$ after being emitted with initial energy $L_e$ from the light source and traveling along the path trajectory represented by $\bar{\mathrm{x}}$ accounting for all the terms in the radiative transfer equation~\ref{eq:rte} which reduce energy along the way.
 \begin{figure}[t]
 \centering
 \missingfigure{path sample and contribution factors}
@@ -177,17 +199,18 @@ The quantity $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photo
 \label{fig:mc_path_sample_contributions}
 \end{figure}
 
-The contribution function $f$ accounts for all the terms in the radiative transfer equation~\ref{eq:rte}. The initial energy emitted from the light source $L_e$ is reduced as it travels along the path $\bar{\mathrm{x}}$ which consists of $N$ vertices $\vec{x}_i$ at which scattering events occur. Energy is reduced for each segment $\vec{x}_i \vec{x}_{i+1}$ by the geometry term $G$ which results from radiance being defined in terms of the change in projected area, the transmittance term $T$ which accounts for absorption and outscattering and the visibility term $V$ which accounts for geometry obstructing the path alltogether. At each interior path vertex $\vec{x}_i$ scattering is accounted for by multiplying with $p(\vec{x}_i)$. Finally an importance weight $W_e$ accounts for sensor sensitivity.
+Energy is reduced for each segment $\vec{x}_i \vec{x}_{i+1}$ by the geometry term $G$ which results from radiance being defined in terms of the change in projected area, the transmittance term $T$ which accounts for absorption and outscattering and the visibility term $V$ which accounts for geometry obstructing the path alltogether. At each interior path vertex $\vec{x}_i$ scattering is accounted for by multiplying with $p(\vec{x}_i)$. Finally an importance weight $W_e$ accounts for sensor sensitivity.
 \begin{align}
 f\left(\bar{\mathrm{x}}\right) =
 L_e\left(\vec{x}_0\right)
+W_e\left(\vec{x}_N\right)
 \prod_{i=0}^{i=N-1}
 G\left(\vec{x}_i, \vec{x}_{i+1}\right)
 T\left(\vec{x}_i, \vec{x}_{i+1}\right)
 V\left(\vec{x}_i, \vec{x}_{i+1}\right)
 \prod_{i=1}^{i=N-1}
 p\left(\vec{x}_i\right)
-W_e\left(\vec{x}_N\right)
+\label{eq:foundations_mc_pathintegral}
 \end{align}
 The transmittance is defined as
 \begin{align}
@@ -224,9 +247,76 @@ p\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}\right), & \text{for $\vec{x}_
 \end{align}
 This thesis exclusively deals with participating media and therefore surface scattering is of no concern.
 
-Choosing random samples $\bar{\mathrm{x}}$ is a vast research branch in its own right within Monte-Carlo based rendering methods as it has a significant effect on convergence and computational demands. The simplest form is incremental path construction which starts with an inital vertex either on the light source (light path sampling) or the sensor (eye path sampling) and incrementally samples additional points from which additional path segments are constructed. The probability density function is constructed by chaining the conditional probabilities for each decision made along the path.
+The set $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photon trajectories which arrive at $\vec{x}$ from direction $\omega$ and start at any light source in the scene. Each sample is assigned a probability density $p\left(\bar{\mathrm{x}}\right)$ according to a sampling method. The aim of light transport simulation is to find a solution for $L(\vec{x}, \omega)$. With the path integral formulation this can be expressed as a Monte-Carlo integral over path space:
+\begin{align}
+L\left(\vec{x},\omega\right) = E[g] = \int_{\mu\left(\bar{\mathrm{x}}\right)} \frac{f\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right)
+\end{align}
+This can be estimated using a finite number of samples $X_i$:
+\begin{align}
+\left<E[g]\right>_N = 
+\frac{1}{N}\sum_{i=0}^{N}
+g\left(X_i\right)
+\approx
+L\left(\vec{x},\omega\right)
+\end{align}
+As mentioned above, the estimation error shows up as image noise (if random samples are independent). It can be shown formally that in order to cut the amount of noise in half, four times the number of samples is needed (see Veach~\cite{VeachThesis97}). This means that for noise-free results a huge number of samples are needed---a significant drawback of Monte-Carlo methods.
 
-\TD{TODO}
+\subsubsection*{Variance Reduction}
+
+Reducing the variance of Monte-Carlo estimators and therefore improving the convergence behaviour is the goal of most of the research on non-deterministic rendering methods. The primary strategy for variance reduction is to reduce the deflection or range of values under the integral sign. This is because the variance is driven by the amount the integrated function deviates from its mean over the integrated range.
+
+There are two ways to reduce the amount of variation of the integrand around its mean value. The first is to adjust the sampling strategy such that the probability density function $p\left(x\right)$ correlates with $f\left(x\right)$ as closely as possible. Ideally the probability density function is identical to $f$ up to a normalization factor $c$. This approach is called importance sampling:
+\begin{align}
+L = E[g] =
+\int_{\mu\left(\bar{\mathrm{x}}\right)} \frac{f\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right)
+\stackrel{p\left(x\right)=c f\left(x\right)}{=}
+\frac{1}{c}\int_{\mu\left(\bar{\mathrm{x}}\right)} p\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right) = \frac{1}{c}
+\end{align}
+Clearly such a sampling strategy would have to know the solution $L$ in the first place and therefore is only of theoretical interest. However, if the sampling strategies can account for some factors within $f$, a signficiant improvement in variance can be made. Finding good sampling strategies is a vast research branch in its own right within Monte-Carlo based rendering methods. The simplest form is incremental path construction which starts with an inital vertex either on the light source (light path sampling) or the sensor (eye path sampling) and incrementally samples additional points from which additional path segments are constructed. The random decisions are taken according to the terms in $f$ (see equation~\ref{eq:foundations_mc_pathintegral}). The probability density function is constructed by chaining the conditional probabilities for each decision made along the path. This causes the probability density function to respect individual terms and better correlate with the final contribution. 
+
+However, sampling according to individual terms does not respect the product of those terms and therefore is not optimal. This is a continuing subject of research. The basic incremental path sampling was extended by Lafortune et al.~\cite{Lafortune93} and Veach et al.~\cite{Veach94} to bi-directional path-tracing. Here two paths are constructed incrementally. One starts at the light source and the second at the camera sensor. From these two paths multiple individual full paths were constructed and their contribution combined in order to reduce variance. This concept was later generalized by Veach et al.~\cite{Veach95MIS} into multiple importance sampling. It allowed to combine different Monte-Carlo estimators optimized for different light transport aspect. This spurred an explosion of research into sampling techniques and strategies.
+
+Instead of incrementally sampling local terms such as phase function and geometry term to construct the next path vertex, globally informed sampling techniques appear to be a promising avenue. These techniques work by using an approximation to the radiance field function for importance sampling and therefore produce better variance reduction than just using local information at each path vertex. Methods differentiate in their caching datastructure (Gaussian-Mixture Models are used by Vorba et al.~\cite{Vorba14} and an adaptive spatial-directional tree datastructure by M\"{u}ller et al.~\cite{Mueller17}) and the way these caches are bootstrapped (update from Monte-Carlo samples during rendering is done by Vorba et al.~\cite{Vorba14} and reinforcement learning is used by M\"{u}ller et al.~\cite{Mueller17}). These methods are a strong motivation for the use of fast approximative solutions from deterministic methods which are the topic of this thesis. Instead of using expensive unbiased Monte-Carlo samples which are then discretized into a cache datastructure, an approximate solution from a deterministic method could be used to quickly learn the skeleton of light transport in the scene and bootstrap the cache.
+
+The second popular variance reduction technique for Monte-Carlo path tracing is based on control variates. Here the idea is to reduce the deflection of the integrand by using a closed form solution $C$ of an approximation $c\left(x\right)$ to the function $f\left(x\right)$:
+\begin{align}
+L &= E[g] =
+\int_{\mu\left(\bar{\mathrm{x}}\right)}
+\frac{f\left(\bar{\mathrm{x}}\right)-c\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right)
++C\left(\vec{x}, \omega\right)
+\\
+C\left(\vec{x}, \omega\right) &= 
+\int_{\mu\left(\bar{\mathrm{x}}\right)}
+c\left(\bar{\mathrm{x}}\right)
+\ud\mu\left(\bar{\mathrm{x}}\right)
+\end{align}
+In the ideal case of $c=f$ the integral becomes zero and the equation reduces to $L=C$. Again this would require a closed-form solution of the original problem which does not exist. However, if $c$ correlates well with $f$, variance can be reduced. If no closed form solution for $C$ exists, it can also be integrated numerically using Monte-Carlo integration. Applying the control variates to the integration of $C$ in such a nested fashion yields multilevel Monte-Carlo methods which have not been applied in rendering yet. 
+
+Control variates have been used for surface rendering by Mehta et al.~\cite{Mehta12} and Clarberg et al.~\cite{Clarberg08}. For rendering of participating media control variates have been applied successfully by Pegoraro et al.~\cite{Pegoraro08} where individual samples are used to create and update an adaptive cache of the discretized five-dimensional radiance field. This is very similar to the path-guiding techniques mentioned earlier with the difference that here the guiding cache is used as a control variate instead of a sampling function in the estimator. This work is likewise a good motivation for the deterministic methods developed as part of this thesis. Instead of building the cache from unbiased Monte-Carlo samples and introducing error by discretization into a cache datastructure, an approximation from deterministic methods could be used to bootstrap the cache.
+
+More advanced variance reduction techniques work by better exploring the sample space $\mu\left(x\right)$. Markov-Chain-Monte-Carlo based methods start with a sample which has been generated using standard sampling and from there explore the sampling space by perturbation of that single sample. This concept has been further extended with Hamiltonian Monte-Carlo, where newton dynamics are used to generate trajectories which efficiently explore the important regions in high dimensional sample space. This requires sample space gradients which is a challenge due to the discontinuous visibility function. Coverage of these techniques is far beyond the scope of this thesis. The reader is referred to the work by Veach~\cite{VeachThesis97} and Cline et al.~\cite{Cline05, Cline05apractical} as a starting point into Markov-Chain-Monte-Carlo and the work by Li et al.~\cite{Li15} as an entry point into the use Hamiltonian Monte-Carlo for rendering.
+
+The growth in compute power and the never ending need for more realistic imagery played into the fact that Monte-Carlo methods much better deal with higher dimensions and can produce unbiased result. As in other fields, Monte-Carlo methods are now the gold standard for light transport simulation in computer graphics and improving their convergence is the primary research challenge.
+
+The variance reduction techniques have been presented in this section because they show that having an approximation of the radiance function could be used with importance sampling and control variates to reduce the variance of Monte-Carlo estimators. This is a strong motivation for the use of fast approximative solutions from deterministic methods which will be discussed in the next section and are the topic of this thesis.
+
+
+% hybrid methods
+% Premože et al. proposed a sound mathematically-based version of this approach in the form of the most probable paths most probable (MPP) [PAS03, PAT+04] (bothours thesis p.87) \cite{Premoze04}
+%\todo[inline]{Anton Bouthours stuff}
+% granular media stuff to show the coupling between diffusion and monte carlo
+
+% hybrid methods: path guiding
+% russian roulette and splitting \cite{Vorba16}
+% importance sampling \cite{Mueller17}
+% propose deterministic methods as initial guide (discuss discretization etc.)
+
+
+
 %\todo[inline]{explain the concept of variance}
 %\todo[inline]{explain the concept of bias}
 %\subsection{Variance Reduction Techniques}
@@ -252,30 +342,88 @@ Choosing random samples $\bar{\mathrm{x}}$ is a vast research branch in its own 
 \section{Deterministic Methods}
 \label{sec:foundations_deterministic}
 
-\TD{TODO}
+Deterministic methods are based on the discretization of functions which depend on the continuous variables $\vec{x}$ and $\omega$ into a discrete set of scalar values which are flattened into a column vector $\vec{u}$. The discretization operator in angular domain is denoted $\mathcal{P}_\omega$ and the spatial discretization operator is expressed as $\mathcal{P}_{\vec{x}}$
+\begin{align*}
+L\left(\vec{x}, \omega\right)
+\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
+\vec{u}
+\end{align*}
+The discretization operators are also applied to the individual operators $\mathcal{T}$, $\mathcal{C}$ and $\mathcal{S}$ which constitute the radiative transfer equation, producing operator matrices $T$, $C$ and $S$ respectively:
+\begin{align*}
+\mathcal{T}
+\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
+T
+\\
+\mathcal{C}
+\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
+C
+\\
+\mathcal{S}
+\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
+S
+\end{align*}
+If linear, these discretizations allow to express the application of the radiative transfer operators to the radiance field (see equation~\ref{eq:rte_operator_notation}) to be expressed in terms of matrix vector products:
+\begin{align*}
+T\vec{u}&=-C\vec{u}+S\vec{u}+Q
+\\
+T\vec{u}+C\vec{u}-S\vec{u}&=Q
+\\
+(T+C-S)\vec{u}&=Q
+\\
+A\vec{u}&=Q
+\end{align*}
+Deterministic methods turn the problem of solving the radiative transfer equation into the problem of solving a system of linear equations with the solution vector being a discretized version of the radiance field $L$.
 
-%\subsection{Discretization}
-%\label{sec:discretization}
+The particular choice of $\mathcal{P}_{\vec{x}}$ and $\mathcal{P}_\omega$ determines the concrete method used. For the spatial discretization $\mathcal{P}_{\vec{x}}$ a common choice in nuclear sciences are finite elements and hexagonal meshes in particular, because it allows to best approximate solid geometry (e.g. from reactors) for boundary conditions. However, finite element discretization is unwieldy and difficult to setup. Throughout this theses we use a finite difference discretization which is very common in graphics and also easy to work with in a practical context.
 %https://en.wikipedia.org/wiki/Types_of_mesh
 %\TD{talk about discretization and meshing}
-
-%\subsection{Ad-hoc and Heuristical Methods}
-%\todo[inline]{What constitutes a heuristic method? Not directly connected to theory.}
-%\todo[inline]{Light Propagation Volumes}
-%\todo[inline]{Anton Bouthours stuff}
-%\todo[inline]{Wavefront stuff from Dreamworks}
-
-%\subsection{Discretized Radiative Transfer}
-%\todo[inline]{Point out difference to ad-hoc methods (that it is grounded to theory)}
-%\todo[inline]{mention isotropic medium, anisotropic medium}
 %\todo[inline]{Spatial Discretization}
 %\todo[inline]{Finite differences}
 %\todo[inline]{Finite elements}
-%\todo[inline]{Angular Discretization}
-%\todo[inline]{Lattice Boltzmann, Discrete Ordinates, Spherical Harmonics/DiffusionApproximation}
-%\missingfigure{overview of all angular discretization methods.}
 
-%\TD{benefits and drawbacks}
+\subsubsection*{Spherical Harmonics Methods}
+%PN
+Using the spherical harmonics expansion for the discretization of the radiative transfer equation is a very popular branch of deterministic methods in other fields. Functions which depend on the angular variable are turned into a discrete set of spherical harmonics coefficients. Likewise the radiative transfer equation is turned into a coupled set of partial differential equations through spherical harmonics projection yielding the general $P_N$-equations. The underlying theory has its origins in astrophysics (see Brunner~\cite{Brunner02}) and is also popular in nuclear sciences (see Seibold et al.~\cite{Seibold14}) and medical science (see Frank et al.\cite{Frank08}). In computer graphics $P_N$-theory was discussed briefly in a paper by Kajia~\cite{Kajiya84} without any details on how to solve the equations. In fact, as Max~\cite{Max95} pointed out, it is not clear if Kajiya succeeded at all at implementing a method for solving the $P_N$-equations, as all of the results in his paper were produced with a simpler approach\footnote{\cite{Max95} p.4: \emph{``[...] Kajiya attempted to solve these equations for the case of isotropic scattering, but it is unclear whether he succeeded, since all the pictures in \cite{Kajiya84} were produced by the simpler 'slab' method.[...]"}}. In this thesis we derive the real-valued $P_N$-equations and present a new method for solving them on a finite difference grid. 
 
-%\todo[inline]{reiterate, that in this thesis we are concerned with methods using SH based discretization of angular variable.}
+The $P_N$-theory has spurred the developement of a rich variety of methods in other domains of which only the diffusion approximation has been introduced into the field of computer graphics (see Stam~\cite{Stam95}). It is derived as a degenerated case of the $P_N$-equations and gained a lot of popularity in graphics. Wang et al.~\cite{Wang08} applied diffusion to the problem of rendering subsurface scattering with heterogeneous particpating media using finite elements. This approach was further extended to anisotropic media by Jakob et al.~\cite{Jakob10} who also used a more complex finite-element discretization in spatial domain. Arbree et al.~\cite{Arbree11} later in a similar approach addressed various problems in Wang's work and simplified discretization by using a tetrahedral mesh basis. Li et al.~\cite{Li13} used the same tetrahedral representation but a more efficient method for constructing the coefficient matrix which allowed realtime application under changing topology.
+
+Another method which is being derived from the spherical harmonics expansion and which can be seen as an extension to the classical diffusion approximation is flux-limited diffusion. The theory has been invented in the astrophysics domain and is primarily attributed to Levermore et al.~\cite{Levermore81}. In computer graphics a method which has some resemblance to flux-limited diffusion in that light transport is modelled as a combination of diffusion and advection has been presented by Zhang et al.~\cite{Zhang13}. In contrast to flux-limited diffusion, their approach is based on ad-hoc assumptions and was not derived formally from the radiative transfer equation. It further works with time-dependent problems and uses a time stepping scheme involving alternating diffusion and advection steps using arbitrary time step and duration parameters. In this thesis, we introduce flux-limited diffusion to the problem of rendering in computer graphics and present a new and efficient method for solving the flux-limited diffusion equation for steady-state radiative transfer.
+
+The purpose of this thesis is to introduce the class of spherical harmonics methods to computer graphics and investigate their merit for applications in rendering. The theory for each method is derived from the spherical harmonics expansion and a solver for practical applications is devised. This includes the $P_N$-method (chapter~\ref{sec:pnmethod}) and flux-limited diffusion (chapter~\ref{sec:fld}). Although classical diffusion already has been introduced to graphics, it is revisited in chapter~\ref{sec:diffusion_approximation} because its theory is important for the introduction of flux-limited diffusion and the multigrid diffusion solver presented has not been discussed in detail in the literature before.
+
+\subsubsection*{Discrete Ordinate Method ($S_N$-Method)}
+% SN
+Instead of using the continuous spherical harmonics basis functions, an alternative approach for the discretization $\mathcal{P}_\omega$ is to replace the continuous variable $\omega$ by a discrete set of direction vectors $\omega_i$ (e.g. using Gaussian quadrature points) which causes the inscattering integral (equation~\ref{eq:rte_inscattering}) to turn into a sum and in the end produces a system of linear equations. Usually in other fields the variable $s$ is used to identify the direction vector and the discrete directions are denoted $s_i$. This is why the method is also referred to as $S_N$-method (with $N$ being the number of directions). Development of the method is mostly attributed to Wick~\cite{Wick43} and Chandrasekhar~\cite{Chandrasekhar60} who derived the $S_N$-method in one dimension. Later Carlson et al.~\cite{Carlson61} extended the method to two and three dimensions. For the one-dimensional case it has been shown, that $S_{N+1}$-theory is equivalent to $P_N$-theory if Gaussian quadrature points are used (see~\cite{Cullen01}). In this case, the discrete $S_N$-directions correspond to the zero crossings of the Legendre polynomials used in $P_N$. In two or three dimensions however, this correspondence is broken and causes non-physical results, such as the ray effects for which the $S_N$-method is known for.
+
+Like the $P_N$-method, the $S_N$ method also has not been fully explored in the context of rendering in computer graphics yet. Most related is work by Max~\cite{Max95} who introduced a method for computing light propagation in participating media based on directional bins in a regular grid in some way resembling discrete ordinates.
+
+
+\subsubsection*{Lattice-Boltzmann Method}
+
+The Lattice-Boltzmann method was introduced by Geist et al.~\cite{Geist04} as an alternative to finite-element and finite difference methods for solving partial differential equations. The idea is to simulate transport by tracing evolution of particle distributions through updates on a discrete grid. The iterative step for finding the solution is based on simple voxel update rules which are simple to implement. However, the method hardly got traction as there is no directional resolution but only photon densities per voxel. In addition the formal derivation of the method from the radiative transfer equation is tedious.
+
+\subsubsection*{Heuristical Methods}
+
+The lack of excessive compute power and the need for realtime performance in graphics gave rise to methods which have not been derived formally from radiative transfer and which take additional assumptions to allow further simplification.
+
+Miller et al.~\cite{Miller12} present a method for computing multiple scattering in clouds which seperates the cloud into directly illuminated boundary parts facing the lightsource and a remaining indirectly illuminated part. For the whole dataset the distance function to the directly illuminated part is computed. This requires solving the Eikonal equation using the fast marching method (see~\cite{Tsitsiklis95}). Then the amount of light reaching each point within the medium is computed as a function of distance. While being a crude simplification, the method allows for art-directabiltiy through customizeable radiance-distance profiles.
+
+Light Propagation Volumes by Kaplanyan et al.~\cite{Kaplanyan10} were orginally developed for surface geometry only and have later been extended to participating media by Billeter et al.~\cite{Billeter12}. The scene is aligned with a regular grid where each voxels contains a truncated spherical harmonics expansions of the radiance field (similar to $P_N$). Light emission is computed from single scattered light using reflective shadow maps by Dachsbacher et al.~\cite{Dachsbacher05}. Indirect light is computed by an interative method. For each iteration, the light at every voxel is distributed to all voxels in a local neighbourhood. The exchange of light is computed for each neighbouring voxel taking the projected surface area of voxel faces into acconut. The process of updating all neighbouring voxels within a certain radius using the light at the center voxel has some resemblance of wavefronts being emitted from the voxel. Although the technique is not derived directly from radiative transfer, it became very popular with realtime rendering for its convincing results.
+
+%\todo[inline]{mention isotropic medium, anisotropic medium}
+
+\begin{figure}[t]
+\centering
+\missingfigure{overview of all angular discretization methods.}
+\caption{TODO}
+\label{fig:rte_change_L_all}
+\end{figure}
+
+The benefits of deterministic methods generally are that they provide a noise-free solution for the complete radiance field $L$ throughout the whole domain. Its main drawbacks are their significant memory requirements from storing the representation for the five-dimensional radiance field function and the discretization error from spatial and angular discretization. Further deterministic methods tend to not be as general as Monte-Carlo methods and are limited to a subset of problems (e.g. isotropic phase functions). Additionally some deterministic methods take a lot of time to converge to a solution in certain scenarios.
+
+These drawbacks and the focus on accurate and unbiased Monte-Carlo methods has shifted attention away from deterministic methods lately. However, trends such as the path-guiding techniques discussed in section~\ref{sec:foundations_mc} motivate further research on deterministic methods as they may be useful for bootstrapping guiding caches and therefore could lead to hybrid methods combining the best of both worlds. Consequently, this thesis investigates spherical harmonics methods, the branch of deterministic methods which has seen most popularity in other domains, and tries to asses their merit for applications in rendering.
 

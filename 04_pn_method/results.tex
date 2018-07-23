@@ -52,7 +52,7 @@ Running the $P_N$-method on the checkerboard problem allows to compare it agains
 \subsection{Procedural Cloud}
 \label{sec:pn_results_clouds}
 
-In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset which is being illuminated by a directional cloud. The radiance field is seperated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward pathtracer (see section~\ref{sec:pathtracing}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
+In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset which is being illuminated by a directional cloud. The radiance field is seperated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward pathtracer (see section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
 
 Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction) which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behaviour of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular when regions of pure vacuum exist in the dataset.
 
