@@ -84,6 +84,10 @@
 % Jan Hyperref should be loaded last
 \usepackage{hyperref} % hyperref creates clickable links in pdfs)
 
+% remove page number from empty pages
+% https://tex.stackexchange.com/questions/21629/avoiding-page-numbers-in-empty-pages
+\usepackage{emptypage}
+
 % \usepackage{breakcites}
 \def\UrlBreaks{\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\,\do\?\do\'\do+\do\=\do\#\do\-\do\:\do\&}% New linebreaks for URLs in bibliography
 % \urlstyle{same}
@@ -140,15 +144,15 @@
 \renewcommand{\dblfloatpagefraction}{.66}
 
 % Jan: Remove Header from empty pages
-\makeatletter
-\renewcommand*{\cleardoublepage}{\clearpage\if@twoside \ifodd\c@page\else
-	\hbox{}%
-	% \thispagestyle{empty}%
-	\fancyhead[LO]{~} 
-	\fancyhead[RE]{~}
-	\newpage%
-	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
-\makeatother
+%\makeatletter
+%\renewcommand*{\cleardoublepage}{\clearpage\if@twoside \ifodd\c@page\else
+%	\hbox{}%
+%	% \thispagestyle{empty}%
+%	\fancyhead[LO]{~} 
+%	\fancyhead[RE]{~}
+%	\newpage%
+%	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+%\makeatother
 
 % From Timo
 %\renewcommand{\topfraction}{0.85}
@@ -235,7 +239,8 @@
 \begin{document}
 
 \include{01_preamble/Title} 
-\cleardoublepage
+%\cleardoublepage
+\clearpage{\pagestyle{empty}\cleardoublepage}
 
 \pagestyle{fancy}
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
@@ -285,11 +290,11 @@
 %\end{spacing}
 
 %\onehalfspacing % set one and a half linespacing
-\addcontentsline{toc}{chapter}{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Symbols}
 % Jan Fix for weird LaTex behaviour:
-\fancyhead[LO]{\bfseries List of Abbreviations} 
-\fancyhead[RE]{\bfseries List of Abbreviations}
-%\include{01_Preamble/Abbreviations}
+\fancyhead[LO]{\bfseries List of Symbols} 
+\fancyhead[RE]{\bfseries List of Symbols}
+\include{01_Preamble/symbols}
 \cleardoublepage
 
 

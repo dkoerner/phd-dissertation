@@ -61,7 +61,7 @@ The transport term of the RTE is given as
 \label{eq:real_transport_term}
 \end{align}
 
-To improve readability, we first project the term into SH by multiplying with the conjugate complex of the Sh basis, and replace $L$ by its Sh expansion afterwards. This order was reversed, when we derived the complex-valued $P_N$-equation in section~\ref{sec:complex_transport_term}.
+To improve readability, we first project the term into SH by multiplying with the conjugate complex of the Sh basis, and replace $L$ by its Sh expansion afterwards. This order was reversed, when we derived the complex-valued $P_N$-equation in section~\ref{sec:pn_cvalued}.
 
 We now multiply equation~\ref{eq:real_transport_term} with the real-valued SH basis and integrate over solid angle. However, the SH basis is different for $m'<0$, $m'=0$ and $m'>0$, and therefore will give us different $P_N$-equations depending on $m'$. We will go through the derivation in detail for the $m'<0$ case and give the results for the other cases at the end.
 
@@ -622,7 +622,7 @@ with
 \right.
 \end{align}
 
-We now carry out the same derivation for the assumption of $m'>0$. We multiply equation~\ref{sec:complex_transport_term} with the definition of the real-valued SH basis for $m'>0$ and get:
+We now carry out the same derivation for the assumption of $m'>0$. We multiply equation~\ref{sec:pn_cvalued} with the definition of the real-valued SH basis for $m'>0$ and get:
 \begin{align*}
 \int{\left(\frac{1}{\sqrt{2}}\overline{Y_{\mathbb{C}}^{l', -m'}}(\omega )+\frac{1}{\sqrt{2}}\left({-1}\right)^{m'}\overline{Y_{\mathbb{C}}^{l', m'}}(\omega )\right)\left(\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\right)\mathbf{d}\omega}
 \end{align*}
@@ -954,7 +954,7 @@ b^{l'+1,-m'}\partial_z L^{l'+1,m'}\left (\vec{x}\right)
 \nonumber
 \end{align}
 
-Finally the $m'=0$ case needs to be derived. The derivation starts very similar to the complex-valued $P_N$-equations as in this case, the real-valued SH basis function is identical to the complex-valued SH basis function. We multiply equation~\ref{sec:complex_transport_term} with the definition of the real-valued SH basis for $m'=0$ and get:
+Finally the $m'=0$ case needs to be derived. The derivation starts very similar to the complex-valued $P_N$-equations as in this case, the real-valued SH basis function is identical to the complex-valued SH basis function. We multiply equation~\ref{sec:pn_cvalued} with the definition of the real-valued SH basis for $m'=0$ and get:
 \begin{align*}
 \int{\overline{Y_{\mathbb{C}}^{l', m'}}(\omega )\left(\omega_{x}\partial_xL\left (\vec{x} ,\omega \right )+\omega_{y}\partial_yL\left (\vec{x} ,\omega \right )+\omega_{z}\partial_zL\left (\vec{x} ,\omega \right )\right)\mathbf{d}\omega}
 \end{align*}

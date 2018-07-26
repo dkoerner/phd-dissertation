@@ -1,0 +1,99 @@
+\chapter*{List of Symbols}
+%
+\begin{flushleft}
+%
+%\begin{tabular}{ l l }
+%Abbrevations marked in \textcolor{blue}{blue} are introduced in this Thesis. \jJan{Gute Idee?}\\
+%~\\
+%
+
+% BC boundary conditions
+% FLD
+% \lambda flux limiter
+% R transport measure
+% CDA
+% VEF
+
+% l: mean freepath
+% delta distribution
+% \omega
+
+% notation
+% || parallel lines
+% \otimes outer product
+% conjugate complex \overline
+
+\renewcommand*{\arraystretch}{1.75}
+\begin{longtable}[c]{@{}p{28.5mm}@{} p{120.5mm}}
+	%
+	%
+	% First Mention: {hdrChallengesChapter}
+	$l$	&  mean free path $\left[\si{\meter}\right]$\\
+	$\sigma_a$	&  absorption coefficient $\left[\si{\meter}^{-1}\right]$
+	\\
+	$\sigma_s$	&  scattering coefficient $\left[\si{\meter}^{-1}\right]$
+	\\
+	$\sigma_t=\sigma_a+\sigma_s$	&  extinction coefficient $\left[\si{\meter}^{-1}\right]$
+	\\
+	$\sigma_{min}$	&  extinction coefficient minimum threshold $\left[\si{\meter}^{-1}\right]$
+	\\
+	$\alpha$	&  single scattering albedo $\sigma_s/\sigma_t$
+	\\
+	$g$	&  spherical function mean cosine
+	\\
+	$\vec{x}$	&  position vector
+	\\
+	$\bar{\mathrm{x}}$	&  path sample
+	\\
+	$\omega$	&  unit length direction vector
+	\\
+	$D\left(\vec{x}\right)$	&  diffusion coefficient $\left[\si{\meter}\right]$
+	\\
+	$R\left(\vec{x}\right)$	&  transport regime measure
+	\\
+	$L\left(\vec{x}, \omega\right)$	&  radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$L_u\left(\vec{x}, \omega\right)$	&  unscattered light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$L_s\left(\vec{x}, \omega\right)$	&  single light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$L_m\left(\vec{x}, \omega\right)$	&  medium radiance field (single and multiple scattered light) $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$\widehat{L}\left(\vec{x}, \omega\right)$	&  radiance field truncated spherical harmonics reconstruction $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$\phi\left(\vec{x}\right)$	&  fluence (zero moment of the radiance field) $\left[\frac{\si{\watt}}{\si{\meter}^2}\right]$
+	\\
+	$\vec{E}\left(\vec{x}\right)$	&  flux-vector (first moment of the radiance field) $\left[\frac{\si{\watt}}{\si{\meter}^2}\right]$
+	\\
+	$P\left(\vec{x}\right)$	&  radiative pressure tensor (second moment of the radiance field)
+	\\
+	$p\left(\vec{x}, \omega'\cdot\omega\right)$	&  phase function $\left[\si{\steradian}\right]$
+	\\
+	$Q_e\left(\vec{x}, \omega\right)$	&  emission field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	\\
+	$E\left[f\right]$	&  expected value of random variable f
+	\\
+	$\vec{u}$	&  discretized radiance field (solution vector)
+	\\
+	$A$	&  coefficient matrix from discretized radiative transfer operators
+	\\
+	$L^{l,m}$	&  radiance field spherical harmonics coefficients
+	\\
+	$\rho_{R\left(\omega\right)}\left(f\right)$	&  operator for rotating radial functions about vector $\omega$
+	\\
+	$\Omega$	&  solid angle domain of the unit sphere
+	\\
+	$h_x, h_y, h_z$	&  finite difference grid voxelsize
+	\\
+	$\odot$	&  tensor contraction operator
+	\\
+	$\mu_n\left[\cdot\right]$	&  $n$-th moment expansion of a given spherical function
+	\\
+	$\mathbf{I}$	&  identity matrix
+	\\
+	$\chi$	&  variable Eddington factor
+\end{longtable}
+%\end{tabular}
+\end{flushleft}
+%
+%
