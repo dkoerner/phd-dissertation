@@ -1,11 +1,11 @@
 \section{Two-dimensional problems}
 \label{sec:pn_2d}
 
-Working with three-dimensional problems is computationally demanding and makes debugging and visualization difficult. It is therefore common practice in other fields to study and validate ideas on two-dimensional problems. The derivation of the two-dimensional $P_N$-equation is straightforward and will be given in this section.
+Working with three-dimensional problems is computationally demanding and makes debugging and visualization difficult. In other fields it is common practice to study and validate ideas on two-dimensional problems. The derivation of the two-dimensional $P_N$-equation is straightforward and will be presented in this section.
 
-Consider a domain in the two-dimensional space $\mathbb{R}^2$, which is extruded infinitely along the $z-axis$ in both directions into $\mathbb{R}^3$. Now we further assume that input fields, such as $\sigma_t$, and boundary conditions also do not change along the $z$-axis.
+A domain in the two-dimensional space $\mathbb{R}^2$ is considered, which is extruded infinitely along the $z-axis$ in both directions into $\mathbb{R}^3$. It shall be further assumed that input fields, such as $\sigma_t$, and boundary conditions, also do not change along the $z$-axis.
 
-Since the domain has infinite extent in $z$-direction and radiative quantities do not vary along that axis, the radiance field $L$ will also not change along the $z$-axis at any position within the domain. Further, the upper hemisphere of the spherical radiance function will be a mirrored version of the lower hemisphere, with the equator being the mirror plane. In mathematical terms this is expressed as $L$ being an even function in the polar angle $\theta$.
+Since the domain has infinite extent in $z$-direction and radiative quantities do not vary along that axis, the radiance field $L$ will also not change along the $z$-axis at any position within the domain. Further, the upper hemisphere of the spherical radiance function will be a mirrored version of the lower hemisphere, with the equator being the mirror plane. In mathematical terms this is expressed as $L$, being an even function in the polar angle $\theta$.
 
 From the definition of the Associated Legendre Polynomials (see equation~\ref{eq:sh_Plm}) it can be concluded that they are either even or odd according to
 \begin{align}
@@ -14,9 +14,9 @@ P^{l,m}\left(-\operatorname{cos}\theta\right) =
 P^{l,m}\left(\operatorname{cos}\theta\right)
 \ .
 \end{align}
-If $l+m$ is odd, then $P^{l,m}$ is odd. This means that it integrates to zero over a symmetric interval around the origin, such as the polar angle range. Since the spherical harmonics basis functions scales $P^{lm}$ only uniformly and along the azimuthal angle, it can be infered that the spherical harmonics basis functions are odd in the polar angle $\theta$ if $l+m$ is odd.
+If $l+m$ is odd, then $P^{l,m}$ is odd. This means that it integrates to zero over a symmetric interval around the origin, such as the polar angle range. Since the spherical harmonics basis functions scales $P^{lm}$ only uniformly and along the azimuthal angle, it can be inferred that the spherical harmonics basis functions are odd in the polar angle $\theta$ if $l+m$ is odd.
 
-The spherical harmonics projection of the radiance field consists of multiplying the radiance field with the spherical harmonics basis function and integrating over solid angle. This is done for each spherical harmonics coefficient ($l,m$-pair) required. We established that if $l+m$ is odd, the basis function will be odd in $\theta$. Since the radiance field is even in $\theta$, this means that their product will be odd. This implies that the integral of their product over the polar angle range will be zero.
+The spherical harmonics projection of the radiance field multiplies the radiance field with the spherical harmonics basis function and integrates it over solid angle. This is done for each spherical harmonics coefficient ($l,m$-pair) that is required. It has been established that if $l+m$ is odd, the basis function will be odd in $\theta$. Since the radiance field is even in $\theta$, this means that their product will be odd. This implies that the integral of their product over the polar angle range will be zero.
 
-This means that the spherical harmonics coffeficients of $L$ will be zero for all coefficients where $l+m$ is odd. We further can set all occurances of $\partial_z$ in the $P_N$-equations to zero.
+This in turn leads to the spherical harmonics coffeficients of $L$ to be zero for all coefficients where $l+m$ is odd. Further, all occurances of $\partial_z$ in the $P_N$-equations can be set to zero.
 

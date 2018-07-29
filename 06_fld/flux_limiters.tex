@@ -6,17 +6,17 @@ Levermore et. al~\cite{Levermore81} construct their theory by starting from the 
 \label{eq:iso_var_fld_rte}
 \frac{1}{c}\frac{\partial (\phi\hat{L})}{\partial t} + \left(\omega\cdot\nabla\right)(\phi\hat{L})&=-\sigma_t\phi\hat{L} + \frac{1}{4\pi}\sigma_s\phi + Q
 \end{align}
-After applying the moment expansion, we have for the first moment equations:
+After applying the moment expansion, for the first moment equations are as follows:
 \begin{align}
 \label{eq:iso_var_fld_rte_zero}
 \frac{1}{c}\frac{\partial \phi}{\partial t} + \nabla\vec{E} &= -\sigma_a\phi + Q_0
 \end{align}
-As a next step, equation~\ref{eq:iso_var_fld_rte_zero} is resolved for $\partial \phi/\partial t$ on the left hand side and used to substitute $\partial\phi/\partial t$ in equation~\ref{eq:iso_var_fld_rte} (after applying the product rule to the time derivative term). By further assuming the absence of self-emission ($Q=0$) and that the space and time derivatives of the radiance distribution $\hat{L}$ can be neglected, we arrive at:
+As a next step, equation~\ref{eq:iso_var_fld_rte_zero} is resolved for $\partial \phi/\partial t$ on the left hand side and used to substitute $\partial\phi/\partial t$ in equation~\ref{eq:iso_var_fld_rte} (after applying the product rule to the time derivative term). By further assuming the absence of self-emission ($Q=0$) and that the space and time derivatives of the radiance distribution $\hat{L}$ can be neglected, the result is:
 \begin{align}
 \label{eq:iso_var_fld_eliminated_time}
 \left( \left(\omega\cdot\nabla\right)\phi -\vec{f}\cdot\nabla\phi + \sigma_t'\phi\right)\hat{L} = \frac{1}{4\pi}\sigma_t'\phi
 \end{align}
-Solving Eq.~\ref{eq:iso_var_fld_eliminated_time} for $\hat{L}$ gives:
+Solving equation~\ref{eq:iso_var_fld_eliminated_time} for $\hat{L}$ gives:
 \begin{align}
 \label{eq:iso_var_fld_Lhat}
 \hat{L} = \frac{1}{4\pi}\frac{1}{1+\widehat{\vec{E}}\cdot\vec{R}-\omega\cdot\vec{R}}
@@ -26,25 +26,25 @@ with
 \label{eq:iso_var_fld_R}
 \vec{R} = -\frac{\nabla\phi}{\sigma_t'\phi}
 \end{align}
-We use the definition of the flux-vector in equation~\ref{eq:second_moment_iso3}, which was derived in section~\ref{sec:fld_streaming_limit_approximation}:
+The definition of the flux-vector in equation~\ref{eq:second_moment_iso3} is used, which was derived in section~\ref{sec:fld_streaming_limit_approximation}:
 \begin{align}
 \widehat{\vec{E}} = \frac{\vec{E}}{\phi}= T\vec{R}
 \label{eq:iso_var_fld_normalized_flux}
 \end{align}
 
-Following the same argument about the radial symmetry of $\hat{L}$ and its relation to the flux-vector and eigenvectors of $T$, we replace $T$ with a proportionality function $\lambda(R)$, where $R=\norm{\vec{R}}$:
+Following the same argument about the radial symmetry of $\hat{L}$ and its relation to the flux-vector and eigenvectors of $T$, $T$ is replaced with a proportionality function $\lambda(R)$, where $R=\norm{\vec{R}}$:
 \begin{align}
 \widehat{\vec{E}} = \lambda(R)\vec{R}
 \label{eq:iso_var_fld_relation_normalized_flux_R}
 \end{align}
 
-Using this in Eq.~\ref{eq:iso_var_fld_Lhat} gives:
+Using this in equation~\ref{eq:iso_var_fld_Lhat} gives:
 \begin{align}
 \label{eq:iso_var_fld_Lhat_R}
 \hat{L} = \frac{1}{4\pi}\frac{1}{1+\lambda(R)R^2-\omega\cdot\vec{R}}
 \end{align}
 
-By enforcing that $\hat{L}$ integrates to one over the solid angle of the unit sphere, we can derive the following expression for $\lambda(R)$:
+By enforcing that $\hat{L}$ integrates to one over the solid angle of the unit sphere, the following expression for $\lambda(R)$ can be derived:
 \begin{align}
 \label{eq:iso_var_fld_lambdaR}
 \lambda(R) = \frac{1}{R}\left(\mathbf{\operatorname{coth}}R - \frac{1}{R}\right)
@@ -87,7 +87,7 @@ In the transport limit, $R$ will approach infinity and the diffusion coefficient
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
 \end{align}
-It can be seen that the flux-limited diffusion coefficient will normalize the fluence gradient $\nabla\phi$ to unit length and scale it with the total power $\phi$. Flux-limited diffusion not only suppresses the flux in the free streaming transport regime, it also saturates it at the appropriate value to ensure correct free propagation (at the level of the approximation).
+It can be seen that the flux-limited diffusion coefficient will normalize the fluence gradient $\nabla\phi$ to unit length and scale with the total power $\phi$. Flux-limited diffusion not only suppresses the flux in the free streaming transport regime, it also saturates it at the appropriate value to ensure correct free propagation (at the level of the approximation).
 
 The flux-limiter introduced by Levermore et al.~\cite{Levermore81} was shown to relate to the variable Eddington factor formalism in a seperate study (\cite{Whalen82, Levermore84}) to be:
 \begin{align}
@@ -112,4 +112,4 @@ As mentioned in the previous section, the theory sets up the limits, which flux-
 \end{table}
 \missingfigure{flux-limiters graphs}
 
-In this section we derived a non-linear form of the diffusion equation which respects the flux-limit constraint. The following section will present a novel solver, which solves flux-limited diffusion on a finite difference grid over a given domain.
+In this section a non-linear form of the diffusion equation is derived which respects the flux-limit constraint. The following section will present a novel solver, which solves flux-limited diffusion on a finite difference grid over a given domain.

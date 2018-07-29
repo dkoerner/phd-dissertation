@@ -3,7 +3,7 @@
 
 %In the previous section, we learned about the moment expansion of the radiance field $L$, which is closely related to the spherical harmonics expansion. It differs in that it uses coordinate free tensor notation, instead of spherical harmonics basis functions. It is much better for notation and therefore useful for the discussion and presentation of the theory. This is particularily true when working with lower order moments. 
 
-As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a very concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion first replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the only difference, that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the replacement is done as a second step.
+As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the difference that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the replacement is done as a second step.
 
 The $n$-th moment of the RTE is found by applying the moment projection operator $\mu_n$ to all the terms of the RTE:
 \begin{align*}
@@ -17,7 +17,7 @@ Since $\mu_n$ is linear, the LHS gives:
 							     & =\nabla\int_{S^2}{L(\vec{x}, \omega)N_n\omega\ud\omega} \\
 							     & =\nabla\mu_{n+1}\left[L\right]
 \end{align*}
-The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation of the RTE for the $n$-th moment therefore is:
+The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation of the RTE for the $n$-th moment is:
 \begin{align}
 \nonumber
 \nabla\mu_{n+1}\left[L\right] =&
@@ -27,9 +27,9 @@ The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation o
 \nonumber
 &+\mu_n\left[Q(\vec{x}, \omega)\right]
 \end{align}
-Generally, the moment equations of the RTE relate the divergence of the $n+1$ moment of the radiance field to the $n$-th moment of changes to the radiance field due to inscattering, absorption and emission. The inscattering term actually convolves the radiance field with the phase function and applies the scattering coefficient as a weighting function on top. Each moment produces a number of equations, which is identical to the number of tensor components for a tensor of the rank associated with that moment.
+Generally, the moment equations of the RTE relate the divergence of the $n+1$ moment of the radiance field, to the $n$-th moment of changes to the radiance field due to inscattering, absorption and emission. The inscattering term convolves the radiance field with the phase function and applies the scattering coefficient as a weighting function on top. Each moment produces a number of equations, which are identical to the number of tensor components for a tensor of the rank associated with that moment.
 
-For the derivation of the diffusion approximation in this chapter, we expand the moment expansion of the RTE into its first two moments. Expanding equation~\ref{eq:gme} with $n=0$ gives the zero moment equation:
+For the derivation of the diffusion approximation in this chapter, the moment expansion of the RTE into its first two moment will be expanded. Expanding equation~\ref{eq:gme} with $n=0$ gives the zero moment equation:
 \begin{align}
 \nonumber
 \nabla\vec{E}(\vec{x})=&
@@ -53,7 +53,7 @@ The first moment equation is likewise found by using $n=1$ in equation~\ref{eq:g
 \nonumber
 + \mu_1\left[Q(\vec{x}, \omega)\right]
 \end{align}
-$P=\mu_2[L]$ is the radiation pressure tensor, a $3\times3$ - matrix. The divergence of a second rank tensor is defined by tensor calculus to be the vector containing the divergence of each single column vector of that tensor. Therefore, $\nabla P = \partial_i P_{ij}$.
+$P=\mu_2[L]$ is the radiation pressure tensor, a $3\times3$ - matrix. The divergence of a second rank tensor is defined by tensor calculus to be the vector, containing the divergence of each single column vector of that tensor. Therefore, $\nabla P = \partial_i P_{ij}$.
 
 The next step is to replace the radiance field $L$ by its two term expansion (equation~\ref{eq:moment_expansion_L}). Doing this with the zero moment expansion of the RTE (equation~\ref{eq:p1_zero}) gives:
 \begin{align*}
@@ -92,11 +92,11 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
 \end{align*}
-Here we used that $\mu_1[1] = 0$ and that the phase function is normalized, which results in:
+Using $\mu_1[1] = 0$ and normalized phase function results in:
 \begin{align*}
 \mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right] = \mu_0\left[1\right] = 4\pi
 \end{align*}
-We likewise replace the radiance field with its two moment expansion in the first moment expansion of the RTE (equation~\ref{eq:p1_firstme}):
+Likewise the radiance field is replaced with its two moment expansion in the first moment expansion of the RTE (equation~\ref{eq:p1_firstme}):
 \begin{align*}
 \nabla P =&
 -\sigma_t(\vec{x})\mu_1\left[\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
@@ -144,17 +144,17 @@ We likewise replace the radiance field with its two moment expansion in the firs
 -\sigma_t'(\vec{x})\vec{E}\left(\vec{x}\right)
 +Q_1\left(\vec{x}\right)
 \end{align*}
-Here we used that
+Here, following is used
 \begin{align*}
 \mu_2[1] = \frac{4\pi}{3}\mathbf{I}
 \end{align*}
-and we further used that the first moment of a phase function, which only depends on the angle between incident and outgoing direction is its mean cosine $g$.
+along with that the first moment of a phase function, which only depends on the angle between incident and outgoing direction, is its mean cosine $g$.
 
-The quantity $\sigma_t'$ is called the reduced extinction coefficient and it is defined as
+The quantity $\sigma_t'$ is called the reduced extinction coefficient and it is defined as:
 \begin{align*}
 \sigma_t' = \sigma_t - g\sigma_s
 \end{align*}
-With that we have the two term expansion of the radiative transfer equation
+With that the two term expansion of the radiative transfer equation is provided:
 \begin{align}
 \label{eq:me_zero}
 \nabla\vec{E}\left(\vec{x}\right)&=
@@ -165,9 +165,9 @@ With that we have the two term expansion of the radiative transfer equation
 \nabla P\left(\vec{x}\right) &= -\sigma_t'(\vec{x})\vec{E}\left(\vec{x}\right)
 +Q_1\left(\vec{x}\right)
 \end{align}
-These equations are the direct counterpart to the $P_1$-equations in moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same step can be carried out for the $P_1$-equations (using spherical harmonics coefficients). However, the notation of the moment expansion is much more expressive, which is why this form is much more popular in the literature.
+These equations are the direct counterpart to the $P_1$-equations in the moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same procedure can be carried out for the $P_1$-equations (using spherical harmonics coefficients). However, the notation of the moment expansion is more expressive, which is the reason for its popularity in the literature.
 
-We start by resolving equation~\ref{eq:me_first} for $\vec{E}$:
+Equation~\ref{eq:me_first} is resolved for $\vec{E}$ as follows:
 \begin{align}
 \label{eq:me_first_resolved_E}
 \vec{E}\left(\vec{x}\right) =
@@ -177,7 +177,7 @@ We start by resolving equation~\ref{eq:me_first} for $\vec{E}$:
 -Q_1\left(\vec{x}\right)
 \right)
 \end{align}
-Then we take equation~\ref{eq:me_first_resolved_E} and use it to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way we eliminate the unknown $\vec{E}$ and get a single scalar partial differential equation
+Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way the unknown $\vec{E}$ is eliminated and a single scalar partial differential equation provided:
 \begin{align}
 \nabla
 \left(
@@ -190,7 +190,7 @@ Then we take equation~\ref{eq:me_first_resolved_E} and use it to substitute $\ve
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
 \end{align}
-which we can further rearrange into
+which can be further rearranged into:
 \begin{align}
 \label{eq:general_diffusion_equation}
 \nabla
@@ -201,8 +201,9 @@ which we can further rearrange into
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
 +\nabla Q_1\left(\vec{x}\right)
+.
 \end{align}
-The result comes very close to the popular diffusion approximation equation. A single unknown remains: the second moment of the radiance field $P$, which is called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
+The result is similar to the popular diffusion approximation equation. A single unknown remains: the second moment of the radiance field $P$, which is called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
 
 
 

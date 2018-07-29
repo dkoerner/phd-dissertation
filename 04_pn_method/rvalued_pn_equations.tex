@@ -1,9 +1,9 @@
 \section{Real-valued $P_N$-equations}
 \label{sec:pn_rvalued}
 
-Depending on the truncation value $N$, the complex-valued $P_N$-equations will induce a certain number of spherical harmonics coefficients for every discretized position within the domain. These will be complex and therefore produce two unknowns per coefficient. Moreover, the whole pipeline from solver to rendering integration will have to deal with complex numbers. This is an unnecessary burden, as we actually only have real-valued radiance fields and volumetric quantities in rendering.
+Depending on the truncation value $N$, the complex-valued $P_N$-equations will induce a number of spherical harmonics coefficients for every discretized position within the domain. These will be complex and therefore produce two unknowns per coefficient. Moreover, the pipeline from solver to rendering integration will have to deal with complex numbers. This is an unnecessary burden, as there exist only real-valued radiance fields and volumetric quantities in rendering.
 
-If the spherical harmonics projected function or operator is real-valued, then the resulting projection will have a redundant structure which allows cutting the number of coefficients in half. The real-valued spherical harmonics basis function (denoted $\SHBR$) can be defined by projecting the remaining coefficients onto their real and imaginary parts:
+If the spherical harmonics projected function or operator is real-valued, then the resulting projection will have a redundant structure, which allows cutting the number of coefficients in half. The real-valued spherical harmonics basis function (denoted $\SHBR$) can be defined by projecting the remaining coefficients onto their real and imaginary parts:
 % real valued SH ------------------
 \begin{align}
 \label{eq:real_sh_basis}
@@ -16,11 +16,11 @@ If the spherical harmonics projected function or operator is real-valued, then t
 \end{array}
 \right.
 \end{align}
-Therefore the number of spherical harmonics coefficients remains the same, but since those are now real only, the number of unknowns is cut in half when compared to complex-valued spherical harmonics.
+Therefore, the number of spherical harmonics coefficients remains the same, but since those are now real, the number of unknowns is cut in half when compared to complex-valued spherical harmonics.
 
-In this section, the real-valued $P_N$-equations are derived by using $\SHBR$ instead of $\SHBC$ for the derivation. This allows to get rid of complex numbers everywhere in the pipeline and reduces the amount of unknowns. The real-valued $P_N$-equations as such are not new. However, performing the derivation steps manually produces very large equations which are hard to work with and make it very difficult to see structures and opportunities for simplification. Therefore in the literature, the real-valued $P_N$-equations are usually specified in form of the complex-valued $P_N$-equations in matrix form with an additional transformation matrix, representing the projection to real-valued spherical harmonics (see for example Seibold et al.~\cite{Seibold14}). An explicit form of the real-valued $P_N$-equation cannot be found in the literature. An attempt to derive such a form has been made by Frank et al.~\cite{Frank14} (appendix A), but their result still requires matrix notation with unwieldy coefficient matrices. 
+In this section, the real-valued $P_N$-equations are derived by using $\SHBR$ instead of $\SHBC$ for the derivation. This allows to eliminate of complex numbers in the pipeline and reduces the unknowns. The real-valued $P_N$-equations as such are not new. However, performing the derivation steps manually produces very large equations, which are hard to work with and make it very difficult to see structures and opportunities for simplification. Therefore, in the literature, the real-valued $P_N$-equations are usually specified as complex-valued $P_N$-equations in matrix form with an additional transformation matrix, representing the projection to real-valued spherical harmonics (Seibold et al.~\cite{Seibold14}). An explicit form of the real-valued $P_N$-equation cannot be found in the literature. An attempt to derive such a form has been made by Frank et al.~\cite{Frank14} (appendix A), but their result still requires matrix notation with unwieldy coefficient matrices. 
 
-In this thesis a new explicit form of the real-valued $P_N$-equations is derived, which is very concise and compact. This derivation was made possible by using the computer algebra representation framework which has been developed as part of the solver (see section~\ref{sec:pn_car}). The derivation steps for the $P_N$-equations were carried out using this representation and simplification opportunities could be discovered much more easily, leading to the compact form presented at the end of this section.
+In this thesis a new explicit form of the real-valued $P_N$-equations is derived, which is very concise and compact. This derivation was made possible by using the computer algebra representation framework which has been developed as part of the solver (see section~\ref{sec:pn_car}). The derivation steps for the $P_N$-equations were carried out using this representation and simplification opportunities that could be discovered much easier, leading to the compact form presented at the end of this section.
 
 Being real-valued implies that no complex-conjugate is needed for the inner product. The projection into real-valued spherical harmonics therefore is
 \begin{align}
@@ -53,7 +53,7 @@ All properties of the complex-valued spherical harmonics basis functions, except
 % --------------------------------------------------------------
 \subsubsection*{Transport Term}
 
-Carrying out the derivation for the transport term of the radiative transfer equation produces very different terms compared to the complex-valued counterpart. The derivation is extensive and given in appendix~\ref{app:rpn}. As the spherical harmonics basis functions are different depending on the sign of $m$ (see equation~\ref{eq:real_sh_basis}), the projected transport term is also different accordingly. After carrying out the derivation steps we arrive for $m<0$ at:
+Carrying out the derivation for the transport term of the radiative transfer equation produces very different terms compared to the complex-valued counterpart. The derivation is extensive and can be found in appendix~\ref{app:rpn}. As the spherical harmonics basis functions are different depending on the sign of $m$ (equation~\ref{eq:real_sh_basis}), the projected transport term differs accordingly. After carrying out the derivation steps, the result for $m<0$ is:
 \begin{align*}
 &-\frac{1}{2}c^{{l-1,m-1}}
 \partial_y
@@ -156,7 +156,7 @@ The remaining terms of the radiative transfer equation are derived in the same w
 -\sigma_t L^{l,m}
 \ .
 \end{align}
-We have for the scattering term
+For the scattering term the equation is
 \begin{align}
 \label{eq:pn_rvalued_transport_scattering}
 \sigma_s\lambda_{l}p^{l,0}\left(\vec{x}\right)L^{l,m}
@@ -171,7 +171,7 @@ Q^{l,m}
 % --------------------------------------------------------------
 \subsubsection*{Final Equation}
 
-By putting equation~\ref{eq:pn_rvalued_transport_m0}, equation~\ref{eq:pn_rvalued_transport_collision}, equation~\ref{eq:pn_rvalued_transport_scattering} and equation~\ref{eq:pn_rvalued_transport_emission} together we get for $m=0$:
+By putting equations~\ref{eq:pn_rvalued_transport_m0},~\ref{eq:pn_rvalued_transport_collision},~\ref{eq:pn_rvalued_transport_scattering} and~\ref{eq:pn_rvalued_transport_emission} together, the result for $m=0$ is:
 \begin{align}
 &
 \frac{1}{\sqrt{2}}c^{\scaleto{l-1,-1}{4pt}}\partial_x L^{\scaleto{l-1,1}{4pt}}
@@ -192,7 +192,7 @@ By putting equation~\ref{eq:pn_rvalued_transport_m0}, equation~\ref{eq:pn_rvalue
 + Q^{\scaleto{l,m}{4pt}}
 %\label{eq:rpn_m_=_z}
 \end{align}
-We can compact the equations for $m<0$ and $m>0$ into a single expression by differentiating the signs using $\pm$. The  top sign is associated with $m<0$ and for $m>0$ we use the bottom sign. This results in the real-valued $P_N$-equation for $m<0$ and $m>0$:
+The equations for $m<0$ and $m>0$ can be compressed into a single expression by differentiating the signs using $\pm$. The top sign is associated with $m<0$ and for $m>0$ the bottom sign is used. This results in the real-valued $P_N$-equation for $m<0$ and $m>0$:
 \begin{align}
 &
 \frac{1}{2}c^{\scaleto{l-1,\pm m-1}{4pt}}\partial_x L^{\scaleto{l-1,m\mp 1}{4pt}}

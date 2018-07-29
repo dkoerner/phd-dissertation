@@ -3,7 +3,7 @@
 
 %In this section, the moment expansion of the radiance field is introduced. It represents the radiance field after being discetized in angular domain using spherical harmonics. The difference to the standard spherical harmonics expansion is, that writing the radiance field in terms of its moments is notationally more efficient and therefore is particularily useful for theoretical treatments like in this chapter. However, the downside is, that it introduces a lot of reduncancy, which makes working with the spherical harmonics expansion more practical for implementation purposes.
 
-We derive the moment expansion by starting from the spherical harmonics reconstruction of the radiance field:
+The moment expansion is derived starting from the spherical harmonics reconstruction of the radiance field:
 \begin{align}
 \label{eq:fld_moment_expansion_sh_expansion}
 L\left(\omega\right) =
@@ -12,13 +12,13 @@ L\left(\omega\right) =
 \end{align}
 with $L^{l,m}$ being the spherical harmonics basis function coefficients, which are found by spherical harmonics projection (equation~\ref{eq:sh_projection}).
 
-The major step in the derivation of the moment expansion is the replacement of the spherical harmonics basis function $\SHBC^{l,m}$ by a sum of tensor contractions:
+The main step in the derivation of the moment expansion is the replacement of the spherical harmonics basis function $\SHBC^{l,m}$ by a sum of tensor contractions:
 \begin{align}
 \label{eq:fld_moment_expansion_sum}
 \SHBC^{l,m}(\omega) =
 \sum_{j=0}^\infty{y^{l,m}_j\odot N_j(\omega)}
 \end{align}
-The operator symbol $\odot$ denotes a tensor contraction. In this instance, it is a sum over products of the individual components of the tensors $y^{l,m}_j$ and $N_j$. Each contraction therefore collapses into a scalar value. These values are then added up over all moments $j$. The tensor $N_j$ is a tensor of rank $j$ with $N_0=1$ and it is constructed by a sequence of outer products of the direction vector $\omega$:
+The operator symbol $\odot$ denotes a tensor contraction. In this instance, it is a sum over products of the individual components of the tensors $y^{l,m}_j$ and $N_j$. Therefore, each contraction collapses into a scalar value. These values are then added up over all moments $j$. The tensor $N_j$ is a tensor of rank $j$ with $N_0=1$, and is constructed by a sequence of outer products of the direction vector $\omega$:
 \begin{align}
 N_j\left(\omega\right)
 =N_{k_1, k_2, ..., k_{j-1}, k_j} 
@@ -26,17 +26,17 @@ N_j\left(\omega\right)
 \end{align}
 The index set $\{k_1, k_2, ..., k_{j-1}, k_j\}$ identifies specific tensor components, with each index running over all components of $\omega$ ($k_i \in \{x, y, z\}$).
 
-The tensors $y^{l,m}_j$ are found by expanding $\SHBC^{l,m}(\omega)$ into a sum of tensor components of $N_j$. The factors to these components can be easily extracted and constitute the components of $y^{l,m}_j$. The expansion can be done by using the following non-recursive definition of the Legendre-polynomial which is derived using the multiple-angle formula\footnote{\url{http://mathworld.wolfram.com/Multiple-AngleFormulas.html}}:
+The tensors $y^{l,m}_j$ are found by expanding $\SHBC^{l,m}(\omega)$ into a sum of tensor components of $N_j$. The factors to these components can be easily extracted and constitute the components of $y^{l,m}_j$. An expansion is possible by using the following non-recursive definition of the Legendre-polynomial, which is derived with the use of the multiple-angle formula\footnote{\url{http://mathworld.wolfram.com/Multiple-AngleFormulas.html} (date of access: 07/26/2018)}:
 \begin{align}
 P^{lm}(\theta, \phi) = \operatorname{sin}^m(\phi)\sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\operatorname{cos}^{l-m-2j}(\theta)
 \qquad \text{for } m \ge 0
 \end{align}
-Inserting this into the definition of the spherical harmonics basis function $\SHBC^{l,m}$ (see equation~\ref{eq:sh_definition_C}) gives:
+Inserting this into the definition of the spherical harmonics basis function $\SHBC^{l,m}$ (equation~\ref{eq:sh_definition_C}) results in:
 \begin{align}
 \SHBC^{l,m}(\theta, \phi) = C^{l,m}\left(e^{i\phi}\operatorname{sin}\left(\phi\right)\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\operatorname{cos}^{l-m-2j}(\theta)
 \qquad \text{for } m \ge 0
 \end{align}
-As a next step we express $\SHBC^{l,m}$ in terms of unit direction vector $\omega$, instead of spherical coordinates. This is done by using the identity $e^{i\phi}\operatorname{sin}\left(\phi\right) = \omega_x + i\omega_y$ and $\operatorname{cos}(\theta) = \omega_z$:
+As a next step $\SHBC^{l,m}$ will be expressed in terms of unit direction vector $\omega$, instead of spherical coordinates. This is done by using the identity $e^{i\phi}\operatorname{sin}\left(\phi\right) = \omega_x + i\omega_y$ and $\operatorname{cos}(\theta) = \omega_z$:
 \begin{align}
 \SHBC^{l,m}(\omega) &=  C^{l,m}\left( \omega_x + i\omega_y\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\omega_z^{l-m-2j}
 &\qquad \text{for } m \ge 0
@@ -45,15 +45,15 @@ As a next step we express $\SHBC^{l,m}$ in terms of unit direction vector $\omeg
 &= \left(-1\right)^m\overline{\SHBC^{l,\abs{m}}}
 &\qquad \text{for } m < 0
 \end{align}
-Expanding the expression above for concrete values of $l$ and $m$ will give a sequence of terms, which involve components of $N_j$, multiplied with some factors. By seeing the expanded formula as a tensor contraction, the components of $y^{l,m}_j$ can be easily extracted. For $l=0$ and $m=0$ equation~\ref{eq:da_moment_expansion_L_shbasis2} results in:
+Expanding the expression for concrete values of $l$ and $m$, will give a sequence of terms, which involve components of $N_j$, multiplied with specified factors. By seeing the expanded formula as a tensor contraction, the components of $y^{l,m}_j$ can be extracted. For $l=0$ and $m=0$ equation~\ref{eq:da_moment_expansion_L_shbasis2} results in:
 \begin{align}
 \SHBC^{0,0}(\omega) = C^{{0,0}}a^{{0,0,0}} = \frac{1}{\sqrt{4\pi}}N_0\quad,
 \end{align}
-from wich we can infer
+from wich the following can be inferred:
 \begin{align}
 y^{0,0}_0 = \frac{1}{\sqrt{4\pi}}
 \end{align}
-For $l=1$ we get:
+For $l=1$ the result is:
 \begin{align}
 \SHBC^{1,0}(\omega) &= C^{{1,0}}a^{{1,0,0}}\omega_z = \sqrt{\frac{3}{4\pi}}\omega_z
 \\
@@ -62,7 +62,7 @@ For $l=1$ we get:
 \SHBC^{1,-1}(\omega) &= -\overline{\SHBC^{1,1}}(\omega)
 = \sqrt{\frac{3}{8\pi}}\omega_x - \sqrt{\frac{3}{8\pi}}\omega_yi
 \end{align}
-From which we can infer:
+From which the following can be inferred:
 \begin{align}
 y^{1,-1}_1 = \begin{pmatrix}\sqrt{\frac{3}{8\pi}}  \\ -\sqrt{\frac{3}{8\pi}}i \\ 0 \end{pmatrix}
 \qquad
@@ -70,29 +70,29 @@ y^{1,0}_1 = \begin{pmatrix}0  \\ 0 \\ \sqrt{\frac{3}{4\pi}} \end{pmatrix}
 \qquad
 y^{1,1}_1 = \begin{pmatrix}-\sqrt{\frac{3}{8\pi}}  \\ -\sqrt{\frac{3}{8\pi}}i \\ 0 \end{pmatrix}
 \end{align}
-This scheme continues and becomes more involved for higher moments. For example with $l=3$ an $m=0$ we get:
+This scheme continues and becomes more involved for higher moments. For example with $l=3$ an $m=0$:
 \begin{align}
 \SHBC^{3,0}(\omega) &= \underbrace{C^{{3,0}}a^{{3,0,0}}}_{\in y^{3,0}_3}{\omega_z}^{3}+\underbrace{C^{{3,0}}a^{{3,0,1}}}_{\in y^{3,0}_1}\omega_z
 \end{align}
-Here we have a term containing ${\omega_z}^{3}$, which is an element of $N_3$ and another term containing $\omega_z$, which is an element of $N_1$. This shows how the spherical harmonics basis functions are expressed as a sum over tensor contractions of different ranks, as shown in Equation~\ref{eq:fld_moment_expansion_sum}.
+Here a term containing ${\omega_z}^{3}$ is presented, which is an element of $N_3$ and another term containing $\omega_z$, which is an element of $N_1$. This shows the expression of the the spherical harmonics basis functions as a sum over tensor contractions of different ranks, as Equation~\ref{eq:fld_moment_expansion_sum}.
 
 Inserting equation~\ref{eq:fld_moment_expansion_sum} into equation~\ref{eq:fld_moment_expansion_sh_expansion} gives:
 \begin{align}
 L\left(\omega\right) =
 \sum_{l=0}^{\infty}\sum_{m=-l}^{l}L^{l,m}\sum_{j=0}^\infty{y^{l,m}_j\odot N_j(\omega)}
 \end{align}
-After rearranging terms we get:
+After rearranging terms that leads to:
 \begin{align}
 L\left(\omega\right) =
 \sum_{l=0}^{\infty}\sum_{m=-l}^{l}\sum_{j=0}^\infty{L^{l,m}y^{l,m}_j\odot N_j(\omega)}
 \end{align}
-For each spherical harmonics basis $l,m$, we iterate over all rank $j$ tensors, and contract them with their respective $N_j$ (after applying the respective spherical harmonics coefficient as weight). Since the indices $l$ and $j$ run over the same range, we are allowed to swap them. This is identical to simply rearranging the order of terms:
+For each spherical harmonics basis $l,m$, all rank $j$ tensors will be iterated, and contracted with their respective $N_j$ (after applying the respective spherical harmonics coefficient as weight). Since the indices $l$ and $j$ run over the same range, this can be swapped. This is identical to rearranging the order of terms:
 \begin{align}
 L\left(\omega\right) =
 \sum_{l=0}^{\infty}\underbrace{\sum_{j=0}^\infty\sum_{m=-j}^{j}{L^{j,m}y^{j,m}_l}}_{=f_l}
 \odot N_l(\omega)
 \end{align}
-For each spherical harmonics band $l$, we iterate over all spherical harmonics bases $j,m$ and weight and contract the rank $l$ tensor of each particular basis with $N_l$. We can further factorize the sum of equal rank tensors into the moment tensor $f_l$ to finally get the moment expansion of the radiance field:
+For each spherical harmonics band $l$, all spherical harmonics bases $j,m$ will be iterated, weighted and the rank $l$ tensor of each particular basis contracted with $N_l$. Further, the sum of equal rank tensors can be factorized into the moment tensor $f_l$ to receive the moment expansion of the radiance field:
 \begin{align}
 L\left(\omega\right) =
 \sum_{l=0}^{\infty}f_l\odot N_l(\omega)
@@ -108,7 +108,7 @@ f_0 &= L^{0,0}y^{0,0}_0 = \int_\Omega{L\left(\omega\right)\SHBC^{0,0}\left(\omeg
 \frac{1}{4\pi}\int_\Omega{L\left(\omega\right)\ud\omega} =
 \frac{1}{4\pi}\phi
 \end{align}
-For $f_1$, we need to add $L^{1,-1}y^{1,-1}_1$, $L^{1,0}y^{1,0}_1$ and $L^{1,1}y^{1,1}_1$. Starting with $L^{1,-1}y^{1,-1}_1$, we have:
+For $f_1$, $L^{1,-1}y^{1,-1}_1$, $L^{1,0}y^{1,0}_1$ and $L^{1,1}y^{1,1}_1$ shall be added. Starting with $L^{1,-1}y^{1,-1}_1$, following result is given:
 \begin{align}
 L^{1,-1}y^{1,-1}_1 &= 
 \int_\Omega{L\left(\omega\right)\SHBC^{1,-1}\left(\omega\right)\ud\omega}
@@ -118,7 +118,7 @@ L^{1,-1}y^{1,-1}_1 &=
 \frac{3}{8\pi}\int_\Omega{L\left(\omega\right)\operatorname{sin}\theta e^{-i\phi}\ud\omega}
 \begin{pmatrix}1  \\ -i \\ 0 \end{pmatrix}
 \end{align}
-Using the trigonometric identities $e^{-i\phi} = \operatorname{cos}\phi - i\operatorname{sin}\phi$ and $e^{i\phi} = \operatorname{cos}\phi + i\operatorname{sin}\phi$, we get:
+Using the trigonometric identities $e^{-i\phi} = \operatorname{cos}\phi - i\operatorname{sin}\phi$ and $e^{i\phi} = \operatorname{cos}\phi + i\operatorname{sin}\phi$, the outcome is:
 \begin{align}
 L^{1,-1}y^{1,-1}_1 &= 
 \begin{pmatrix}
@@ -129,7 +129,7 @@ L^{1,-1}y^{1,-1}_1 &=
 0
 \end{pmatrix}
 \end{align}
-Now we use that
+Following identity is used:
 \begin{align}
 \omega &= 
 \begin{pmatrix}
@@ -151,7 +151,7 @@ L^{1,-1}y^{1,-1}_1 &=
 0
 \end{pmatrix}
 \end{align}
-Following similar procedures for $L^{1,0}y^{1,0}_1$ and $L^{1,1}y^{1,1}_1$, we get:
+Similar procedures for $L^{1,0}y^{1,0}_1$ and $L^{1,1}y^{1,1}_1$, lead to:
 \begin{align}
 L^{1,0}y^{1,0}_1 &= 
 \begin{pmatrix}
@@ -171,7 +171,7 @@ L^{1,1}y^{1,1}_1 &=
 0
 \end{pmatrix}
 \end{align}
-We now can put $f_1$ together. Note how all the imaginary terms cancel out:
+Subsequently $f_1$ can be merged. Note how all the imaginary terms cancel out:
 \begin{align}
 f_1 &= 
 L^{1,-1}y^{1,-1}_1+L^{1,0}y^{1,0}_1+L^{1,1}y^{1,1}_1
@@ -187,7 +187,7 @@ L^{1,-1}y^{1,-1}_1+L^{1,0}y^{1,0}_1+L^{1,1}y^{1,1}_1
 =
 \frac{3}{4\pi}\vec{E}
 \end{align}
-With $f_0$ and $f_1$, we can write down the moment expansion of the radiance field truncated after the first moment, which is used for reconstruction in the diffusion approximation:
+With $f_0$ and $f_1$, the moment expansion of the radiance field truncated after the first moment can be written down and used for reconstruction in the diffusion approximation:
 \begin{align}
 \nonumber
 L\left(\omega\right) &= 
@@ -201,10 +201,10 @@ f_0\odot N_0 + f_1\odot N_1
 &=
 \frac{1}{4\pi}\phi + \frac{3}{4\pi}\left(w \cdot \vec{E}\right)
 \end{align}
-The tensor $f_0$ is expressed in terms of the fluence $\phi$ and the tensor $f_1$ in terms of the flux vector $\vec{E}$. These quantities are often referred to as the zero and first moment of the radiance field respectively. These moments generalize to higher order and are denoted $L_i$. They are computed using the moment projection operator $\mu_i$:
+The tensor $f_0$ is expressed in terms of the fluence $\phi$ and the tensor $f_1$ in terms of the flux vector $\vec{E}$. These quantities are often referred to as the zero and first moment of the radiance field respectively, generalize to higher order and are denoted $L_i$. They are computed using the moment projection operator $\mu_i$:
 \begin{align}
 \label{eq:moment_expansion_mu}
 \mu_i\left[L\right] = L_i = \int_\Omega{L\left(\omega\right)N_i\left(\omega\right)\ud\omega}
 \end{align}
-An important quantity for deriving flux-limited diffusion is the second moment of the radiance field, the radiative pressure tensor $L_2$. Its intuition is very similar to that of the stress tensor in continuum mechanics.
+An important quantity for deriving flux-limited diffusion is the second moment of the radiance field, the radiative pressure tensor $L_2$. Its intuition is very similar to the stress tensor in continuum mechanics.
 

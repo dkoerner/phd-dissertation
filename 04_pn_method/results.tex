@@ -1,34 +1,34 @@
 \section{Results}
 \label{sec:pn_results}
 
-After outlining the $P_N$-solver in section~\ref{sec:pn_solver} and its integration into a rendering framework in the previous section, this section will give and discuss results produced by the system which was developed as part of this thesis.
+After outlining the $P_N$-solver in section~\ref{sec:pn_solver} and its integration into a rendering framework in the previous section, this section will give and discuss results produced by the system, which was developed as part of this thesis.
 
 \subsection{Point Source Problem}
 \label{sec:pn_results_pointsource}
 
-The point source problem is a canonical problem which is well suited to validate the method and assess its accuracy. The problem is simple and an analytical solution exists to allow comparison against the ground truth (see section~\ref{sec:foundations_analytical}). The medium is a homogeneous medium with infinite extent. This is approximated for the solver by a unit cube. The emission term is an ideal unit power point light with isotropic emission in angular domain and a delta function in spatial domain. This delta function is discretized into the finite difference grid by distributing its unit power over the volume of a single voxel:
+The point source problem is a canonical problem, which is well suited to validate the method and assess its accuracy. The problem is simple and an analytical solution exists to allow comparison against the ground truth (section~\ref{sec:foundations_analytical}). The medium is homogeneous with infinite extent. This is approximated for the solver by a unit cube. The emission term is an ideal unit power point light with isotropic emission in angular domain and a delta function in spatial domain. This delta function is discretized into the finite difference grid by distributing its unit power over the volume of a single voxel:
 \begin{align}
 Q_{ijk} = \frac{1}{h_xh_yh_z}
 \end{align}
-Here the index {ijk} refers to the voxel in which the point light is located.
+The index {ijk} refers to the voxel, in which the point light is located.
 
-Note that here the radiance field is not seperated as outlined in section~\ref{sec:pn_rendering_integration}. The emission field represents only the discretized light source and therefore the resulting discretized radiance field represents all light transport, including single scattered light.
+Note that here the radiance field is not seperated as outlined in section~\ref{sec:pn_rendering_integration}. The emission field represents only the discretized light source and therefore, the resulting discretized radiance field represents all light transport, including single scattered light.
 
-For this problem an analytical solution exists for the fluence, that is the integral of the radiance field over solid angle. The correct analytical solution is given by D'Eon et al.~\cite{dEon11}. They also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$) which we therefore can compare directly with the Grosjean solution.
+For this problem an analytical solution exists for the fluence, that is the integral of the radiance field over solid angle. The correct analytical solution is given by D'Eon et al.~\cite{dEon11}. The authors also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$), which shall be can compared directly with the Grosjean solution.
 \begin{figure}[h]
 \centering
 \missingfigure{pointsource plots PN}
 \caption{TODO}
 \label{fig:pn_results_pointsource_1}
 \end{figure}
-Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$, $P_3$, $P_4$, $P_5$ against the Grosjean solution. The figure shows that with higher $N$, the $P_N$-solution becomes more accurate. What is also noticeable is that with increasing truncation order $N$, the $P_N$-solution oscillates around the exact solution and approaches it with alternating under- and overestimation, especially near the point source. Even truncation order will overestimate and odd truncation order will produce an underestimate. 
+Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$, $P_3$, $P_4$, $P_5$ against the Grosjean solution. The figure shows that with higher $N$, the $P_N$-solution increases in accuracy. Also noticeable is that with increasing truncation order $N$, the $P_N$-solution oscillates around the exact solution and approaches it with alternating under- and overestimation, especially near the point source. Even truncation order will overestimate and odd truncation order will produce an underestimate. 
 
 \subsection{Checkerboard Problem}
 \label{sec:pn_results_checkerboard}
 
-The checkerboard problem is a two-dimensional setup solved by the two-dimensional $P_N$-equations introduced in section~\ref{sec:pn_2d}. This problem is popular in the nuclear science field and is used across the literature to compare and validate implementations of deterministic methods. It consists of absorbing regions which are embedded in a scattering medium and arranged in a checkerboard pattern. An emitting region is located in the center square.
+The checkerboard problem is a two-dimensional setup solved by the two-dimensional $P_N$-equations, introduced in section~\ref{sec:pn_2d}. This problem is known to the nuclear science field and is used across literature to compare and validate implementations of deterministic methods. It consists of absorbing regions, which are embedded in a scattering medium and arranged in a checkerboard pattern. An emitting region is located in the center square.
 
-Running the $P_N$-method on the checkerboard problem allows to compare it against the \textsf{StaRMAP} solver by Seibold et al.~\cite{Seibold14}. Their solver solves the time-dependent $P_N$-equations and employs a time-stepping scheme for which a step-size and a target time has to be specified. In contrast, the solver which has been introduced in this thesis solves for the steady-state solution of the real-valued $P_N$-equations using a global linear system. No step-size or duration parameters are required. We run our $P_N$-method on the checkerboard problem for $N=5$. The results from \textsf{StaRMAP} have been generated by setting a long duration and a small step-size to get an accurate and close-to steady state result.
+Running the $P_N$-method on the checkerboard problem, allows to compare it against the \textsf{StaRMAP} solver by Seibold et al.~\cite{Seibold14}. Their solver solves the time-dependent $P_N$-equations and employs a time-stepping scheme, for which a step-size and a target time has to be specified. In contrast, the solver, which has been introduced in this thesis, solves for the steady-state solution of the real-valued $P_N$-equations using a global linear system. No step-size or duration parameters are required. The $P_N$-method will be used on the checkerboard problem for $N=5$. The results from \textsf{StaRMAP} have been generated by setting a long duration and a small step-size to get an accurate and close-to steady state result.
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.49\columnwidth}
@@ -45,18 +45,18 @@ Running the $P_N$-method on the checkerboard problem allows to compare it agains
 %\label{fig:pn_results_nebulae1_P1}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{$P_5$-result for the checkerboard problem in comparsison to \textsf{StaRMAP} by Seibold et al.~\cite{Seibold14}. The solution of the solver developed as part of this thesis is in very good agreement.}
+\caption{$P_5$-result for the checkerboard problem in comparsison to \textsf{StaRMAP} by Seibold et al.~\cite{Seibold14}. The solution of the solver, developed as part of this thesis, is in very good agreement.}
 \label{fig:pn_results_checkerboard1}
 \end{figure}
 
 \subsection{Procedural Cloud}
 \label{sec:pn_results_clouds}
 
-In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset which is being illuminated by a directional cloud. The radiance field is seperated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward pathtracer (see section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
+In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset, which is being illuminated by a directional cloud. The radiance field is seperated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward pathtracer (section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
 
-Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction) which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behaviour of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular when regions of pure vacuum exist in the dataset.
+Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction), which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behaviour of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular, when regions of pure vacuum exist in the dataset.
 
-We ran the $P_N$-method for $N={1,2,3,4,5}$ and used a minimum threshold of $\sigma_{min}=1.0e^{-3}$. The resolution of the finite difference grid used by the $P_N$-metod is $64\times 64\times 64$. Seperating the multiple scattered light from the single scattered light has the benefit that the multiple scattered light has lower frequencies which allows using a coarser finite difference grid without a significant loss of accuracy.
+The $P_N$-method for $N={1,2,3,4,5}$ has been run using a minimum threshold of $\sigma_{min}=1.0e^{-3}$. The resolution of the finite difference grid used by the $P_N$-metod is $64\times 64\times 64$. Seperating the multiple scattered light from the single scattered light has the benefit that the multiple scattered light has lower frequencies, which allows using a coarser finite difference grid without a significant loss of accuracy.
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.49\columnwidth}
@@ -106,7 +106,7 @@ We ran the $P_N$-method for $N={1,2,3,4,5}$ and used a minimum threshold of $\si
 \label{fig:pn_results_nebulae1}
 \end{figure}
 
-The results for the procedural cloud problem are shown in figure~\ref{fig:pn_results_nebulae1}. As expected the increase of the truncation order improves the accuracy of the solution. Especially the regions at the bottom of the cloud which only receive indirect light are better resolved with higher $N$. However, with the increase of the truncation order, the size of the system increases as well and requires longer time to converge. The performance characteristics are given in table~\ref{tab:results_cloud}.
+The results for the procedural cloud problem are shown in figure~\ref{fig:pn_results_nebulae1}. As expected, the increase of the truncation order improves the accuracy of the solution. Especially the regions at the bottom of the cloud, which only receive indirect light are better resolved with higher $N$. However, with the increase of the truncation order, the size of the system increases and requires longer time to converge. The performance characteristics are given in table~\ref{tab:results_cloud}.
 \begin{table}[!h]
 	\centering
 	\caption[TODO]{Performance characteristics of the $P_N$-method for the procedural cloud dataset.}
