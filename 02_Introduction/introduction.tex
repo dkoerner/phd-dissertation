@@ -6,6 +6,12 @@
 The need and desire to faithfully reproduce the world around us as we see it with images is rooted deep in human nature. Images of our world always played a fundamental role in human culture for telling stories, passing on knowledge and building visual maps of reality. Realistic images of the world in essence are a tool for humans to reflect upon it, learn about it and build visions for it. There is a consistent line of development from cave and rock carvings dating back to 30,000 BC encompassing wall paintings and burial chambers in Egypt up to well reknown painters such as Da Vinci or Rembrandt. These works of art integrate elements of human expression that is the result of creative processes. However, there has also been the element of technique and understanding of nature, which was required to create realistic imagery. Painters such as Caspar David Friedrich would extensively study cloud shapes and cloud formations to be able to produce images of unprecedented realism.
 
 With the computer, a completely new medium emerged and with it a new methodology and way of thinking about realistic image creation. Crude rudimental rules, such as on aerial perspective by Leonardo Da Vinci~\cite{DaVinci1651}, evolved into highly accurate physical models and instead of a paint brush, numerical methods are employed to compute pixel colors which create an image. This is the domain of computer graphics, a branch in computer sciences, which aims at developing methods for the generation of photorealistic images from digital content and constantly tries to push the boundaries of what is technically possible.
+\begin{figure}[ht]
+\centering
+\missingfigure{participating media examples}
+\caption{Real world examples of participating media. Reproducing these optical phenomena with computers requires resource intensive light transport simulations for which deterministic methods are developed in this thesis.}
+\label{fig:intro_participating_media_examples}
+\end{figure}
 
 Computer generated imagery (CGI) is used widely across many domains and industries such as architecture, entertainment, advertising, automotive, manufacturing and scientific visualization, where each brings its own challenges with it. This high demand and wide adoption is why rendering in computer graphics is a heavily researched subject in industry and academia alike. The main challenge research in rendering is trying to address is the high amount of computation current algorithms require in order to generate realistic images. For example a single frame in an animation movie by Disney or Pixar takes on average multiple hours and much more in extreme cases. To produce all images for the whole movie, multiple computing centers with thousands of CPU cores are used. A substantial economical investment. One of the main efforts in rendering research therefore is to reduce the computational cost for realistic image generation.
 
@@ -23,12 +29,7 @@ In this spirit this thesis investigates theories and methods from the astrophysi
 \section{Research Questions}
 
 This thesis is concerned with rendering volumetric media such as clouds, fire, milk and fog which interacts with light. These participating media elements are ubiquitous in the real world and therefore also common in rendering. Todays standard methods in rendering work by tracing particles of light (photons) through the scene. These particles interact with the scene and form complex trajectories from light sources to the sensor of the virtual camera which captures the image. Participating media such as clouds or milk cause particularly long trajectories for light particles and therefore are computationally very demanding. This is specifically extreme for media like clouds or milk where the particle trajectories become excessively long.
-\begin{figure}[ht]
-\centering
-\missingfigure{participating media examples}
-\caption{TODO}
-\label{fig:intro_participating_media_examples}
-\end{figure}
+
 
 The problem of tracing particles through participating medium which causes a lot of interaction with the particle and therefore long trajectories is not exclusive to light particles in computer graphics. Very similar problems exist in nuclear science for example when computing the dosis of radiation leaving the protected core of a nuclear power plant. Here high energy neutrons are traced from the reaction through the surrounding wall which acts as a participating medium (e.g. Haghighat et al.~\cite{Haghighat03}). In astrophysics for example the study of the formation of planets (which apparently to this day is not fully understood) has models which take the radiation of stars into account and for simulation requires tracing particles which are emitted from fusion through clouds of debree and dust (see Armitage et al.~\cite{Armitage11}).
 
@@ -36,7 +37,7 @@ Common to all these different problems is the migration and interaction of parti
 \begin{figure}[ht]
 \centering
 \missingfigure{linear transport as intersection between astrophysics nuclear sciences computer graphics }
-\caption{TODO}
+\caption{Light transport simulation for rendering in graphics shares problems with other domains such as astrophysics and nuclear sciences. This thesis draws ideas from the long history of research done in those fields and inspires new methods for application in graphics.}
 \label{fig:intro_linear_transport_fields}
 \end{figure}
 
@@ -66,7 +67,7 @@ At the core of this thesis are the three chapters~\ref{sec:pnmethod}, \ref{sec:d
 \begin{figure}[ht]
 \centering
 \missingfigure{organizational structure thesis}
-\caption{TODO}
+\caption{Organigram of this thesis showing original contributions (green), }
 \label{fig:intro_organization}
 \end{figure}
 
