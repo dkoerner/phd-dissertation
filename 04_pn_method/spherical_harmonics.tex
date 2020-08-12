@@ -44,34 +44,43 @@ The factor $C^{l,m}$ in equation~\ref{eq:sh_definition} is defined as
 C^{l,m}=(-1)^m\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}
 \end{align}
 Since spherical harmonics are used in many different fields, their definition can vary and one has to be careful, when comparing them across literature. This concerns the $(-1)^m$ factor in particular, which is called the Condon-Shortley phase. Sometimes, this factor is part of the definition of the associated Legendre polynomial $P^{l,m}$ and therefore does not appear in $C^{l,m}$. More importantly, the definition of $C^{l,m}$ depends on how the spherical harmonics are expected to be normalized.
+\newline
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-%spherical harmonics basis function hierarchy in 2d
-\missingfigure{see comment}
-\caption{TODO}
-\label{fig:sh_vis_1}
-\end{subfigure}
-\hspace{0.01\columnwidth}
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-%some environment map and truncated reconstruction in 2d
-\missingfigure{see comment}
-\caption{TODO}
-\label{fig:sh_vis_2}
-\end{subfigure}
-\hspace{0.01\columnwidth}
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-%the hierarchy for the reconstruction with weights
-\missingfigure{see comment}
-\caption{TODO}
-\label{fig:sh_vis_3}
-\end{subfigure}%
-\caption{TODO}
+\includegraphics[width=\columnwidth]{04_pn_method/figures/fig_sph_frequencies.pdf}
+\caption{Approximating a spherical function using spherical harmonics with increasing truncation order (from left to right). Like with the Fourier-transform, higher truncation order allows capturing higher frequencies.}
 \label{fig:sh_vis}
 \end{figure}
+
+
+%\begin{figure}[h]
+%\centering
+%\begin{subfigure}{0.31\columnwidth}
+%%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
+%%spherical harmonics basis function hierarchy in 2d
+%\missingfigure{see comment}
+%\caption{TODO}
+%\label{fig:sh_vis_1}
+%\end{subfigure}
+%\hspace{0.01\columnwidth}
+%\begin{subfigure}{0.31\columnwidth}
+%%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
+%%some environment map and truncated reconstruction in 2d
+%\missingfigure{see comment}
+%\caption{TODO}
+%\label{fig:sh_vis_2}
+%\end{subfigure}
+%\hspace{0.01\columnwidth}
+%\begin{subfigure}{0.31\columnwidth}
+%%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
+%%the hierarchy for the reconstruction with weights
+%\missingfigure{see comment}
+%\caption{TODO}
+%\label{fig:sh_vis_3}
+%\end{subfigure}%
+%\caption{TODO}
+%\label{fig:sh_vis}
+%\end{figure}
 
 \subsubsection*{Normalization and Orthogonality}
 

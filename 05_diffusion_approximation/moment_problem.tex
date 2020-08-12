@@ -92,8 +92,9 @@ Inserting the isotropic second moment into the first moment expansion of the rad
 This allows for some intuition about the diffusion approximation. Instead of depending on the global radiance field $L$, the flux-vector depends on the local gradient of the fluence to determine the transport of radiative energy at position $\vec{x}$.
 \begin{figure}[h]
 \centering
-\missingfigure{Visualize the idea behind diffusion approximation: to approximate global transport by using a local gradient of the fluence. mention ficks law of diffusion}
-\caption{TODO}
+%\missingfigure{Visualize the idea behind diffusion approximation: to approximate global transport by using a local gradient of the fluence. mention ficks law of diffusion}
+\includegraphics[width=0.85\textwidth]{05_diffusion_approximation/figures/fig_diffusion_idea.pdf}
+\caption{Ficks first law of diffusion (visualized on the right) states that the diffusive flux can be related to the difference in concentration (of fluence $\phi$), allowing to approximate a global quantity (left) by a local quantity. This is the fundamental idea behind diffusion approximation.}
 \label{fig:da_moment_problem_flux_as_fluence_gradient}
 \end{figure}
 Solving the diffusion equation is unequivocal and in the next section an efficient solver is introduced based on the multigrid method.

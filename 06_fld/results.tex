@@ -11,52 +11,60 @@ The rendering integration aspects to be considered are identical to the diffusio
 At first it shall be turned towards the point source problem in order to validate the results from the flux-limited diffusion solver and assess its accuracy by comparing against an analytical ground truth solution.
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{pointsource plots FLD DA maybe a seperate plot for plotting R?}
-\caption{TODO}
+\includegraphics[width=0.7\textwidth]{06_fld/results/fld_result_plot_pointsource.pdf}
+\caption{Comparing the solution from flux-limited diffusion (blue) against classical diffusion approximation (red), $P_5$-solution (green) and groundtruth (black). Flux-limited diffusion much closer to the groundtruth and $P_5$-result at much lower computational cost.}
 \label{fig:fld_results_pointsource_1}
-\end{subfigure}%
-\hspace{0.01\columnwidth}
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{R along radius from point source}
-\caption{TODO}
-\label{fig:fld_results_pointsource_2}
-\end{subfigure}%
-\caption{TODO}
-\label{fig:fld_results_pointsource}
 \end{figure}
-
-%\ref{fig:fld_results_pointsource_1}\subref{fig:fld_results_pointsource_1}
-
-As seen in figure~\ref{fig:fld_results_pointsource_1}, the result from flux-limited diffusion agree well with the ground truth and diffusion approximation results. Like with the diffusion approximation, a perfect match to the ground truth is not to be expected as flux-limited diffusion is still an approximation based on the spherical harmonics expansion of the radiative transfer equation truncated after the first moment. However, very close to the point source the flux-limited diffusion is more accurate than classical diffusion. This is explained by the fact that the fluence gradient becomes arbitrary large as the point light is approached, due to the geometry term (figure~\ref{fig:fld_results_pointsource_2}). This causes the transport measure $R$ to likewise become arbitrary large, which shows that pure streaming transport will dominate arbitrarily close to the point source.
+As seen in figure~\ref{fig:fld_results_pointsource_1}, the result from flux-limited diffusion agree well with the ground truth and diffusion approximation results. Like with the diffusion approximation, a perfect match to the ground truth is not to be expected as flux-limited diffusion is still an approximation based on the spherical harmonics expansion of the radiative transfer equation truncated after the first moment. However, very close to the point source the flux-limited diffusion is more accurate than classical diffusion. This is explained by the fact that the fluence gradient becomes arbitrary large as the point light is approached, due to the geometry term. This causes the transport measure $R$ to likewise become arbitrary large, which shows that pure streaming transport will dominate arbitrarily close to the point source.
+% figure of R: (figure~\ref{fig:fld_results_pointsource_2})
 
 In comparison to the results from $P_N$-method and $P_5$ in particular, the $P_N$-method with higher truncation order is more accurate than flux-limited diffusion. This an important observation since it means that increasing the truncation order will alleviate the problems caused by not accounting for the flux-limit constraint. However, flux-limited diffusion has a signficicant advantage over $P_N$ due to its computational and memory efficiency.
 
-\subsection{Checkerboard Problem}
-\label{sec:pn_results_checkerboard}
+\begin{table}[!h]
+	\centering
+	\caption{Performance characteristics of flux-limited diffusion for the pointsource problem.}
+	\label{tab:results_pointsource}
+	% \flushleft
+	\begin{tabular}{l r}
+    \hline
+	\textbf{N}
+    & 1
+    \\
+    \hline
+    Number of rows/columns in $A$
+    & 262.144
+    \\
+    Size of linear system (in MB)
+    & 1.3
+    \\
+    Solve time (in s)
+    & 34
+	\end{tabular}
+\end{table}
 
-For the checkerboard problem, the hand-crafted stencil for flux-limited diffusion had been modified to ignore all derivative terms in the z-dimension. The results in figure~\ref{fig:fld_results_checkerboard_1} show how...
-\TD{discuss fld solution on checkerboard}
-\begin{figure}[h]
-\centering
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{checkerboard plots FLD}
-\caption{TODO}
-\label{fig:fld_results_checkerboard_1}
-\end{subfigure}%
-\hspace{0.01\columnwidth}
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{checkerboard plots CDA for comparison}
-\caption{TODO}
-\label{fig:fld_results_checkerboard_2}
-\end{subfigure}%
-\caption{TODO}
-\label{fig:fld_results_checkerboard}
-\end{figure}
+%\subsection{Checkerboard Problem}
+%\label{sec:pn_results_checkerboard}
+%
+%For the checkerboard problem, the hand-crafted stencil for flux-limited diffusion had been modified to ignore all derivative terms in the %z-dimension. The results in figure~\ref{fig:fld_results_checkerboard_1} show how...
+%\TD{discuss fld solution on checkerboard}
+%\begin{figure}[h]
+%\centering
+%\begin{subfigure}{0.49\columnwidth}
+%%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
+%\missingfigure{checkerboard plots FLD}
+%\caption{TODO}
+%\label{fig:fld_results_checkerboard_1}
+%\end{subfigure}%
+%\hspace{0.01\columnwidth}
+%\begin{subfigure}{0.49\columnwidth}
+%%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
+%\missingfigure{checkerboard plots CDA for comparison}
+%\caption{TODO}
+%\label{fig:fld_results_checkerboard_2}
+%\end{subfigure}%
+%\caption{TODO}
+%\label{fig:fld_results_checkerboard}
+%\end{figure}
 
 \subsection{Procedural Cloud}
 \label{sec:pn_results_clouds}
@@ -67,52 +75,37 @@ Further flux-limited diffusion well captures the indirectly illuminated parts at
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{checkerboard plots FLD}
-\caption{TODO}
+\begin{subfigure}[t]{0.48\columnwidth}
+\includegraphics[width=\columnwidth]{06_fld/results/nebulae_ms_groundtruth.png}
+\caption{Pathtraced}
 \label{fig:fld_results_nebulae_1}
 \end{subfigure}
 \hspace{0.01\columnwidth}
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{nebulae plots CDA for comparison}
-\caption{TODO}
+\begin{subfigure}[t]{0.48\columnwidth}
+\includegraphics[width=\columnwidth]{06_fld/results/nebulae_ms_fld.png}
+\caption{Flux-limited Diffusion}
 \label{fig:fld_results_nebulae_2}
 \end{subfigure}
-\hspace{0.01\columnwidth}
-\begin{subfigure}{0.31\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{nebulae plots P5 for comparison}
-\caption{TODO}
-\label{fig:fld_results_nebulae_2}
+
+\begin{subfigure}[t]{0.48\columnwidth}
+\includegraphics[width=\columnwidth]{06_fld/results/nebulae_ms_cda.png}
+\caption{Diffusion Approximation}
+\label{fig:fld_results_nebulae_3}
 \end{subfigure}%
-\caption{TODO}
+\hspace{0.01\columnwidth}
+\begin{subfigure}[t]{0.48\columnwidth}
+\includegraphics[width=\columnwidth]{06_fld/results/nebulae_ms_p5.png}
+\caption{$P_5$}
+\label{fig:fld_results_nebulae_4}
+\end{subfigure}
+
+%\vspace{-0.2in}
+\caption{Flux-limited diffusion results for the procedural cloud dataset compared against previous methods. FLD produces results which are similarily close to the pathtraced solution than $P_5$ at a fraction of its computational cost.}
 \label{fig:fld_results_nebulae}
 \end{figure}
 
-In terms of performance chacteristics it can be expected that flux-limited diffusion requires more computational effort than the diffusion approximation, due to the non-linear nature of flux-limited diffusion coefficient, which requires to be updated for every voxel in each Gauss-Seidel iteration. This impact appears moderate when compared to the visual improvement it brings. When compared to $P_N$ it can be concluded that flux-limited diffusion offers a much better result at a significantly lower computational cost.
-\begin{table}[!h]
-	\centering
-	\caption[TODO]{Performance characteristics of flux-limited diffusion for the procedural cloud dataset.}
-	\label{tab:results_cloud}
-	% \flushleft
-	\begin{tabular}{l r}
-    \hline
-	\textbf{N}
-    & 1
-    \\
-    \hline
-    Number of rows/columns in $A$
-    & ?
-    \\
-    Size of linear system (in MB)
-    & ?
-    \\
-    Solve time (in min)
-    & ?
-	\end{tabular}
-\end{table}
+In terms of performance chacteristics it is to be expected that flux-limited diffusion requires more computational effort than the diffusion approximation, due to the non-linear nature of flux-limited diffusion coefficient, which requires to be updated for every voxel in each Gauss-Seidel iteration. This impact appears moderate when compared to the visual improvement it brings. When compared to $P_N$ it can be concluded that flux-limited diffusion offers a much better result at a significantly lower computational cost.
+
 %\TD{complete table maybe table showing the performance characteristic for all three datasets}
 %\TD{mention how the performance of FLD allows aplication of transfer function and solve for different color channels}
 %\TD{mention publication}

@@ -5,7 +5,7 @@ This chapter gives an overview on light transport simulation in the context of r
 
 The field of computer graphics is primarily concerned with the generation of images from virtual scenes as seen by a virtual camera. This requires to reproduce the emission of light and its interaction with the scene and the sensor. The study of the behaviour of light is subject to optics, a seperate branch of physics. Due to the intricate nature of light, a series of increasingly complex models exist, which can account for various properties. Fundamental to light is its particle-wave duality, which states that light can be described both, as individual particles (photons) or waves. Challenging to the subject is, that not all properties of light can be described by solely the particle nor the wave perspective. To account for all properties, both have to be considered and require quantum mechanics. The field of wave optics is a simpler model that can account for optical effects, caused by the wave property, such as interference and diffraction. The simplest is provided by geometric optics, which models light as particle trajectories or rays and is referred to as ray optics. This model works well, when the wavelength is small compared to the scene the light propagates. 
 
-As the virtual (and real) camera is supposed to capture the image as closely as possible to human perception, the simulated wavelength of light is limited the visible range of a human being (390 to 700 nanometers). Because this is very small compared to distances encountered in real world scenes, wave effects are of less importance and geometric optics are sufficient most of the time. It is the basis for light transport simulation in graphics. This thesis is exclusively concerned with light transport in participating media i.a. clouds, smoke, fire and water.
+As the virtual (and real) camera is supposed to capture the image as closely as possible to human perception, the simulated wavelength of light is limited to the visible range of a human being (390 to 700 nanometers). Because this is very small compared to distances encountered in real world scenes, wave effects are of less importance and geometric optics are sufficient most of the time. It is the basis for light transport simulation in graphics. This thesis is exclusively concerned with light transport in participating media i.a. clouds, smoke, fire and water.
 
 
 % ============================================================
@@ -40,15 +40,9 @@ The direction of the vector specifies the direction of bulk or dominant energy f
 
 The radiance field $L$ describes the distribution of photon densities in the scene and can easily be used to generate images by integrating it over the sensor surface of a virtual camera sensor and over all directions, from which photons can arrive on the sensor. This results in the energy that the sensor receives over a certain time (flux $\psi$).
 
-\TD{pixel color as integral over sensor surface}
+%\TD{pixel color as integral over sensor surface}
 
-However, the model needs to describe changes in the radiance field $L$ changes with respect to the properties of the virtual scene. For this purpose, using the directional derivative $\left(\omega\cdot\nabla\right)L$ is used. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\omega$.
-\begin{figure}[h]
-\centering
-\missingfigure{directional derivative of L}
-\caption{TODO}
-\label{fig:rte_change_of_L}
-\end{figure}
+However, the model needs to describe changes in the radiance field $L$ through changes in position. For this purpose, using the directional derivative $\left(\omega\cdot\nabla\right)L$ is used. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\omega$.
 
 The radiance field $L$ changes along direction $\omega$ due to different optical phenomena, such as absorption, scattering and emission. Absorption models the effect of radiative energy being transformed into heat or kinetic energy. The amount of absorption depends on the medium and is controlled by the absorption coefficient $\sigma_a$. This value combines the number of absorbing particles in the medium as well as the collective surface area of their intersection with a hypothetical plane, which is oriented into the direction of change. The particles are assumed to be spherical or to have a random distribution of orientation. The coefficient controls the loss of energy due to absorption, when making an infintesmial step into direction $\omega$:
 \begin{align}
@@ -57,8 +51,9 @@ The radiance field $L$ changes along direction $\omega$ due to different optical
 
 \begin{figure}[t]
 \centering
-\missingfigure{visualization of inscattering, outscattering and absorption.}
-\caption{TODO}
+%\missingfigure{visualization of inscattering, outscattering and absorption.}
+\includegraphics[width=1.0\textwidth]{03_foundations_of_light_transport_simulation/figures/fig_rte_terms.pdf}
+\caption{Directional derivatives of the radiance $L$ along direction $\omega$ model the interaction of light with participating media and constitue the radiative transfer equation.}
 \label{fig:rte_change_L_all}
 \end{figure}
 
@@ -125,7 +120,7 @@ For notational convenience and for developing the theory for deterministic metho
 \label{eq:rte_operator_notation}
 \end{align}
 
-Light transport simulation is the process for finding the solutions to $L$. Either for specific values of $\vec{x}$ and $\omega$ or globally. The following section gives an overview over the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subjet of this thesis. The next section briefly covers analytical solutions which have been used to great effect and enjoy popularity. Section~\ref{sec:foundations_mc} covers non-deterministic methods, such as the Monte Carlo method. These solutions will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of non-deterministic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
+Light transport simulation is the process for finding the solutions to $L$. Either for specific values of $\vec{x}$ and $\omega$ or globally. The following section gives an overview over the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subject of this thesis. The next section briefly covers analytical solutions which are popular and have been used to great effect. Section~\ref{sec:foundations_mc} covers non-deterministic methods, such as the Monte Carlo method. These methods will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of non-deterministic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
 
 % ============================================================
 \section{Analytical Solutions}
@@ -194,8 +189,9 @@ Instead of applying Monte-Carlo directly to the in-scattering integral of the ra
 The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ which represents the trajectory a photon can make by traveling from where it was emitted to some position $\vec{x}$ with some incident direction $\omega$. The path $\bar{\mathrm{x}}$ consists of $N$ vertices $\vec{x}_i$ at which interaction events occur. The function $f\left(\bar{\mathrm{x}}\right)$ takes such a single path as input and returns the contribution which a photon makes to $L(\vec{x}, \omega)$ after being emitted with initial energy $L_e$ from the light source and traveling along the path trajectory represented by $\bar{\mathrm{x}}$ accounting for all the terms in the radiative transfer equation~\ref{eq:rte} which reduce energy along the way.
 \begin{figure}[t]
 \centering
-\missingfigure{path sample and contribution factors}
-\caption{TODO}
+%\missingfigure{path sample and contribution factors}
+\includegraphics[width=1.0\textwidth]{03_foundations_of_light_transport_simulation/figures/fig_path_sample.pdf}
+\caption{Path sample and its contributing factors to energy loss of radiant energy from the light source to the sensor.}
 \label{fig:mc_path_sample_contributions}
 \end{figure}
 
@@ -412,14 +408,15 @@ The lack of excessive compute power and the need for realtime performance in gra
 
 Miller et al.~\cite{Miller12} present a method for computing multiple scattering in clouds which seperates the cloud into directly illuminated boundary parts facing the lightsource and a remaining indirectly illuminated part. For the whole dataset the distance function to the directly illuminated part is computed. This requires solving the Eikonal equation using the fast marching method (see~\cite{Tsitsiklis95}). Then the amount of light reaching each point within the medium is computed as a function of distance. While being a crude simplification, the method allows for art-directabiltiy through customizeable radiance-distance profiles.
 
-Light Propagation Volumes by Kaplanyan et al.~\cite{Kaplanyan10} were orginally developed for surface geometry only and have later been extended to participating media by Billeter et al.~\cite{Billeter12}. The scene is aligned with a regular grid where each voxels contains a truncated spherical harmonics expansions of the radiance field (similar to $P_N$). Light emission is computed from single scattered light using reflective shadow maps by Dachsbacher et al.~\cite{Dachsbacher05}. Indirect light is computed by an interative method. For each iteration, the light at every voxel is distributed to all voxels in a local neighbourhood. The exchange of light is computed for each neighbouring voxel taking the projected surface area of voxel faces into acconut. The process of updating all neighbouring voxels within a certain radius using the light at the center voxel has some resemblance of wavefronts being emitted from the voxel. Although the technique is not derived directly from radiative transfer, it became very popular with realtime rendering for its convincing results.
+Light Propagation Volumes by Kaplanyan et al.~\cite{Kaplanyan10} were orginally developed for surface geometry only and have later been extended to participating media by Billeter et al.~\cite{Billeter12}. The scene is aligned with a regular grid where each voxels contains a truncated spherical harmonics expansions of the radiance field (similar to $P_N$). Light emission is computed from single scattered light using reflective shadow maps by Dachsbacher et al.~\cite{Dachsbacher05}. Indirect light is computed by an iterative method. For each iteration, the light at every voxel is distributed to all voxels in a local neighbourhood. The exchange of light is computed for each neighbouring voxel taking the projected surface area of voxel faces into acconut. The process of updating all neighbouring voxels within a certain radius using the light at the center voxel has some resemblance of wavefronts being emitted from the voxel. Although the technique is not derived directly from radiative transfer, it became very popular with realtime rendering for its convincing results.
 
 %\todo[inline]{mention isotropic medium, anisotropic medium}
 
 \begin{figure}[t]
 \centering
-\missingfigure{overview of all angular discretization methods.}
-\caption{TODO}
+%\missingfigure{overview of all angular discretization methods.}
+\includegraphics[width=1.0\textwidth]{03_foundations_of_light_transport_simulation/figures/fig_overview_methods.pdf}
+\caption{Overview of deterministic methods for light transport simulation.}
 \label{fig:rte_change_L_all}
 \end{figure}
 

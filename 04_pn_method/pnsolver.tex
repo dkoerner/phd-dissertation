@@ -20,8 +20,9 @@ The finite difference grid defines the locations at which radiative transfer qua
 Using finite difference grids, the discretization consists of replacing quantities, which depend on the continuous variable~$\vec{x}$ with its discrete counterpart $x_{ijk}$, where $ijk$ is a coordinate in voxelspace. This coordinate is still continuous and $x_{i+\frac{1}{2}jk}$ is a valid coordinate. Quantities around grid point locations are found by interpolation. Troughout this thesis a trilinear interpolation for three-dimensional grids and bilinear interpolation for two-dimensional grids will be used. Higher order interpolation would be possible and an avenue for future exploration.
 \begin{figure}[h]
 \centering
-\missingfigure{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
-\caption{TODO}
+%\missingfigure{image of finite difference grid showing domain, and gridpoints and indices and voxelsize h, and interpolation}
+\includegraphics[width=0.6\textwidth]{04_pn_method/figures/fig_fd_grids.pdf}
+\caption{Image of finite difference grid showing domain (white cells), boundary (gray cells), gridpoints (red), voxelsize $h$ and interpolation.}
 \label{fig:pn_solver_finite_difference_grid}
 \end{figure}
 
@@ -107,10 +108,12 @@ q_{ij}
 \subsubsection*{Stencil Code Crafting}
 
 Consequently, the canonical form is used to derive the stencil code. This is done by interpreting the equation as a product between a row in the coefficient matrix $A$ and the vector of unknowns (the solution vector $\vec{u}$), resulting in the right hand side $q_{ij}$. The regular structure of the discretization reveals a pattern, which is the same for every row and is called a stencil code.
+
 \begin{figure}[h]
 \centering
-\missingfigure{source code figure for simple stencil code}
-\caption{TODO}
+\includegraphics[width=0.6\textwidth]{04_pn_method/figures/fig_code_stencil.pdf}
+%\missingfigure{source code figure for simple stencil code}
+\caption{Spatial discretization of partial differential equations will lead to stencil code which is executed to populate the system matrix $A$ and right hand side vector $b$.}
 \label{fig:pn_solver_stencil_code}
 \end{figure}
 
@@ -126,8 +129,9 @@ Also functions for accessing discretized input fields (such as $q$ in the Laplac
 The stencil code is compiled and executed for each row in $A$ to populate the system. Depending on the matrix-properties of $A$, different standard methods for solving the linear system $A\vec{u}=\vec{b}$ can be applied to find the solution $\vec{u}$, the discretized radiance field. This solution can then be used in a rendering application.
 \begin{figure}[h]
 \centering
-\missingfigure{image overview of the numerical pipeline}
-\caption{TODO}
+%\missingfigure{image overview of the numerical pipeline}
+\includegraphics[width=1.0\textwidth]{04_pn_method/figures/fig_pipeline.pdf}
+\caption{Overview of the method for solving the $P_N$-equations which is introduced in this chapter. The core idea is to automate the stencil code generation using a computer algebra representation of the equations.}
 \label{fig:pn_solver_stencil_overview}
 \end{figure}
 
@@ -141,36 +145,22 @@ At the core of the solver is a computer algebra representation of the equations,
 A number of computer algebra systems exist, such as SymPy~\cite{Meurer17}, which allow to generate and manipulate computer algebra representations. However, for this thesis a small lightweight computer algebra representation containing the required subset has been developed. Figure~\ref{fig:pn_math_expression_tree_generation} demonstrates how this system is used to build the expression trees for the examples above.
 \begin{figure}[h]
 \centering
-\missingfigure{code listing showing how the expression tree is build}
-\caption{TODO}
+%\missingfigure{code listing showing how the expression tree is build}
+\includegraphics[width=1.0\textwidth]{04_pn_method/figures/fig_car_representation2.pdf}
+\caption{An Python-API is used to create the expression tree representation for mathematical expressions.}
 \label{fig:pn_math_expression_tree_generation}
 \end{figure}
 
-Figure~\ref{fig:pn_math_expression_tree} shows the expression tree for a squared binom and the Laplace equation example used throughout this section.
+Manipulations of mathematical expressions, such as expansions, the application of identities, substitution, factorization or rearranging of terms can be expressed as operations on the expression tree (see figure~\ref{fig:pn_math_expression_tree_manipulation}). Section~\ref{sec:pn_stencil_gen} will assess how the spatial discretization is carried out as such an operation.
 \begin{figure}[h]
 \centering
-\missingfigure{image of a computer algebra representation of the laplace equation and binomial}
-\caption{TODO}
-\label{fig:pn_math_expression_tree}
-\end{figure}
-
-Manipulations of mathematical expressions, such as expansions, the application of identities, substitution, factorization or rearranging of terms can be expressed as operations on the expression tree. Section~\ref{sec:pn_stencil_gen} will assess how the spatial discretization is carried out as a manipulation of the expression tree (figure~\ref{fig:pn_math_expression_tree_manipulation}).
-\begin{figure}[h]
-\centering
-\missingfigure{image of representing binomial expansion as operation on expression tree}
-\caption{TODO}
+%\missingfigure{image of representing binomial expansion as operation on expression tree}
+\includegraphics[width=0.7\textwidth]{04_pn_method/figures/fig_car_expansion.pdf}
+\caption{Algebraic manipulations of equations are expressed as operations on the expression tree given by the computer algebra representation.}
 \label{fig:pn_math_expression_tree_manipulation}
 \end{figure}
 
-After creation and manipulation, the final expression tree can be turned into another representation, such as latex expressions or source code. This is done by different rendering frontends, which parse the expression tree and generate the appropriate output.
-\begin{figure}[h]
-\centering
-\missingfigure{image showing rendering frontends for source code and latex}
-\caption{TODO}
-\label{fig:pn_math_expression_tree_rendering}
-\end{figure}
-
-\subsection{Discretization and Stencil Generation}
+\subsection{Discretization}
 \label{sec:pn_stencil_gen}
 
 After expressing the $P_N$-equations in the computer algebra representation, the spatial discretization is carried out as a manipulation step on the mathematical expression tree. This is done by by parsing the tree from the root. The equation is supposed to be discretized at position $\vec{x}$, which initially coincides with the location $x_{ijk}$ in the discretized domain. This location is kept on a stack by the parser.
@@ -178,28 +168,41 @@ After expressing the $P_N$-equations in the computer algebra representation, the
 When a differential operator is encountered during tree parsing, the subtree representing the expression to be derived is instantiated twice according to the finite difference expression in equation~\ref{eq:pn_solver_central_difference} with appropriate weighting factors. The current position on the stack is adjusted and pushed on the stack again, when decending down in the tree on each side of the central difference expression. This will produce higher order stencils for nested differential operators.
 \begin{figure}[h]
 \centering
-\missingfigure{image showing math expression tree for how the differential operator is being replaced with central difference. also mark the position on the stack.}
-\caption{TODO}
+%\missingfigure{image showing math expression tree for how the differential operator is being replaced with central difference. also mark the position on the stack.}
+\includegraphics[width=1.0\textwidth]{04_pn_method/figures/fig_car_discretization.pdf}
+\caption{Discretization is carried out as an operation on the expression tree where partial derivatives are replaced by finite difference subtrees. Continous variables are replaced by discrete counterparts, for which offsets are retrieved from a stack which is maintained during tree parsing.}
 \label{fig:pn_discretization_differential}
 \end{figure}
 
 Once the parser arrives at the symbol $\vec{x}$ in the tree, it is replaced by its discrete counterpart. The top of the discrete position stack indicates where the unknown is expected to be evaluated relative to position $ijk$, at which the whole equation is being evaluated. If the position on top of the stack is the same, then the unknown at $ijk$ is used to replace $\vec{x}$ in the expression. If the unknown is expected to be evaluated at a different location than $ijk$ (due to central differences), then $\vec{x}$ is being substituted by an expression which expresses the interpolation of the unknowns from the gridpoints at which they are defined for the position on top of the stack (figure~\ref{fig:pn_discretization_interpolation}). This ensures, that the final expression only contains unknowns, for which an element in the solution vector exists. This will automatically handle the introduction of staggered grids later in section~\ref{sec:pn_staggered}.
 \begin{figure}[h]
 \centering
-\missingfigure{image showing interpolation.}
-\caption{TODO}
+%\missingfigure{image showing interpolation.}
+\includegraphics[width=0.7\textwidth]{04_pn_method/figures/fig_car_interpolation.pdf}
+\caption{Continuous field variables are turned into discrete counterparts by replacing them with an expression subtree which realizes an interpolation.}
 \label{fig:pn_discretization_interpolation}
 \end{figure}
 
-After applying the discretization to the expression tree, the equation is being factorized according to the unknowns ($\phi$ in the Laplace example). The factorization is applied as a sequence of manipulation operations to the expression tree, including application of the distributive law. A seperate step iterates over all resulting terms and merges coefficients from multiple instances of the same unknown, so that each unknown appears only once. 
+After applying the discretization to the expression tree, the equation is being factorized according to the unknowns ($\phi$ in the Laplace example). The factorization is applied as a sequence of manipulation operations to the expression tree, including application of the distributive law. A seperate step iterates over all resulting terms and merges coefficients from multiple instances of the same unknown, so that each unknown appears only once (canonical form).
 
-Subsequently, the discretized equation has been brought into canonical form, a seperate pass renders the expression tree into the stencil code, where each term is analyzed and turned into source code.
+\subsection{Stencil Code Generation}
+\label{sec:pn_stencil_gen2}
+
+The expression tree of the canoncial form is analyzed and rendered into stencil code. This is facilitated by different rendering frontends which allow rendering the expression tree to latex or C++-code (see figure~\ref{fig:pn_math_expression_tree_rendering}).
+\begin{figure}[h]
+\centering
+%\missingfigure{image showing rendering frontends for source code and latex}
+\includegraphics[width=1.0\textwidth]{04_pn_method/figures/fig_car_rendering.pdf}
+\caption{Rendering frontends allow turning expression trees into source code.}
+\label{fig:pn_math_expression_tree_rendering}
+\end{figure}
 
 If a term contains an unknown, then its factor expression subtree is rendered into a source code string. The symbols for voxelsize and other radiative quantities are replaced by function calls into an API, which is being provided by the framework. Finally, the voxelspace coordinate associated with the unknown is used to find a discrete index into the finite difference grid, relative to the original coordinate $ijk$, at which the equation is being evaluated. This discrete index is being used to compute the column in $A$. Hence the assignment expression in the stencil code can be put together.
 \begin{figure}[h]
 \centering
-\missingfigure{image showing code generation from expression tree in canonical form.}
-\caption{TODO}
+%\missingfigure{image showing code generation from expression tree in canonical form.}
+\includegraphics[width=0.6\textwidth]{04_pn_method/figures/fig_car_canonical_to_code.pdf}
+\caption{The discretized equation in canonical form allows straightforward generation of stencil code from the different parts of the expression tree.}
 \label{fig:pn_discretization_codegen}
 \end{figure}
 
@@ -208,8 +211,9 @@ If the term does not contain an unknown, the whole term is rendered into a singl
 The stencil code is generated with the assumption of certain function calls being available. These are integrated into a single API which is being provided by the solver framework (figure~\ref{fig:pn_discretization_codegen_stencilAPI}). This API allows the stencil to query the current row in the system for which it is being executed, the voxelsize as well as functions for accessing discrete radiative transfer properties.
 \begin{figure}[h]
 \centering
-\missingfigure{image showing the stencil API}
-\caption{TODO}
+\includegraphics[width=0.95\textwidth]{04_pn_method/figures/fig_stencil_api.pdf}
+%\missingfigure{image showing the stencil API}
+\caption{Stencil code generation assumes an API for querying voxel fields of radiative quantities and accessing entries in coefficient matrix $A$ and right hand side $b$}
 \label{fig:pn_discretization_codegen_stencilAPI}
 \end{figure}
 
@@ -242,10 +246,12 @@ A[index(i,j), index(i+1, j)] = 1.0/(h_x*h_x);
 The function call $index(i+1, j)$ will not be able to produce a valid column index into the coefficient matrix $A$ for voxels adjacent to the boundary, because the unknown $\phi$ has no discrete element in the solution vector voxels outside the domain. If the value of $\phi$ on the boundary is zero, then the unknown on the boundary voxel would be zero and its coefficient would not matter. Therefore, the simplest solution is to ignore the coefficient and not write anything into the matrix $A$.
 
 In the solver framework, this is implemented by overloading the assignment operator. If the target coefficient of the assignment belongs to a boundary voxel and Dirichlet boundary conditions are enabled, then the assignment is simply ignored and no change to the system matrix $A$ is done.
+
 \begin{figure}[h]
 \centering
-\missingfigure{image: boundary voxels and dirichlet boundary condition. location of the boundary interface.maybe an arrow indicating the access of the stencil.show assignment and arrow to boundary voxel coefficient. then arrow to nil.also visualize the boundary surface.}
-\caption{TODO}
+%\missingfigure{image: boundary voxels and dirichlet boundary condition. location of the boundary interface.maybe an arrow indicating the access of the stencil.show assignment and arrow to boundary voxel coefficient. then arrow to nil.also visualize the boundary surface.}
+\includegraphics[width=0.8\textwidth]{04_pn_method/figures/fig_bc_dirichlet.pdf}
+\caption{Dirichlet boundary conditions with zero value are modelled by ignoring coefficient assignments to boundary voxels.}
 \label{fig:pn_bc_dirichlet}
 \end{figure}
 
@@ -265,10 +271,12 @@ a\phi_{i,j} + b\phi_{i+1,j} = \left(a+b\right)\phi_{i,j}
 \end{align}
 
 In the solver framework, this is implemented by index bending. If the target coefficient of the assignment belongs to a boundary voxel and Neumann boundary conditions are enabled, then the index function returns the index of the adjacent voxel inside the domain.
+
 \begin{figure}[h]
 \centering
-\missingfigure{image showing neumann boundary conditions and index bending. also visualize the boundary surface.}
-\caption{TODO}
+%\missingfigure{image showing neumann boundary conditions and index bending. also visualize the boundary surface.}
+\includegraphics[width=0.8\textwidth]{04_pn_method/figures/fig_bc_neumann.pdf}
+\caption{Neumann boundary conditions with zero value are modelled by bending indices towards the adjacent inner voxel when assigning coefficients.}
 \label{fig:pn_bc_neumann}
 \end{figure}
 
@@ -281,12 +289,13 @@ The stencil code is the result of the automated discretization step, which is ca
 Therefore, the details about the surrounding framework are not relevant for the method in this thesis. In this section however, an outline of the framework, which was implemented as part of this thesis will be given.
 \begin{figure}[h]
 \centering
-\missingfigure{class diagram of solver framework, including stencil, stencil api, voxelmanager, fields and pnsystem}
-\caption{TODO}
+%\missingfigure{class diagram of solver framework, including stencil, stencil api, voxelmanager, fields and pnsystem}
+\includegraphics[width=0.95\textwidth]{04_pn_method/figures/fig_pn_solver_architecture.pdf}
+\caption{High level overview over the $P_N$-solver architecture.}
 \label{fig:pn_classes}
 \end{figure}
 
-The \emph{Stencil} class is the key structure around which the system is designed, and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The \emph{Stencil} class also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important, when staggered grids are introduced. The stencil specifies the highest order of any derivative operator, which was found during discretization. This will have an effect on the number of layers of boundary voxels around the computational domain. Finally, the \emph{Stencil} class has an apply function, which takes the reference to a \emph{StencilAPI} object as an input and contains the generated stencil code that uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
+The \emph{Stencil} class is the key structure around which the system is designed, and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The \emph{Stencil} class also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important, when staggered grids are introduced. The stencil specifies the highest order of any derivative operator, which was found during discretization. This will have an effect on the number of layers of boundary voxels around the computational domain. Finally, the \emph{Stencil} class has an apply function, which takes the reference to a \emph{StencilAPI} object as an input and runs the generated stencil code that uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
 
 The \emph{StencilAPI} class serves as the single interface between the generated stencil code and the surrounding parts of the framework. Figure~\ref{fig:pn_discretization_codegen_stencilAPI} gives an overview over the different query functions offered by the API. Essential are functions for mapping between coordinate spaces, such as worldspace, voxelspace, discrete grid coordinates $ijk$ and linear indices into the solution vector. Essential are functions for querying radiative transfer quantities, such as extinction coefficient or phase function spherical harmonics coefficients at world space positions. Both groups of functions will make use of a reference to a \emph{VoxelManager} and a \emph{Scene} class respectively.
 
@@ -305,21 +314,23 @@ In figure~\ref{fig:pn_staggered_grid_problems}\subref{fig:pn_collocated_grid_art
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{2d collocated solution with artefacts}
-\caption{test}
+\begin{subfigure}[t]{0.49\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{04_pn_method/results/checkerboard2d_p1_collocated.png}
+%\missingfigure{2d collocated solution with artefacts}
+\caption{$P_1$-solution of the checkerboard problem using collocated discretization grid.}
 \label{fig:pn_collocated_grid_artefacts}
 \end{subfigure}%
 \hspace{0.01\columnwidth}
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{1d schematic view of staggered grid idea, showing the problem with collocated grids}
-\caption{test}
+\begin{subfigure}[t]{0.49\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{04_pn_method/figures/fig_staggered_grid_1d_example.pdf}
+%\missingfigure{1d schematic view of staggered grid idea, showing the problem with collocated grids}
+\caption{Example showing the problem with finite differences producing a false solution (top) and its treatmen with staggering (bottom).}
 \label{fig:pn_staggered_grid_idea}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{TODO}
+\caption{Artefacts in the solution (left) due to shortcomings of collocated grid locations. These are addressed using staggered grids (exemplified right).}
 \label{fig:pn_staggered_grid_problems}
 \end{figure}
 
@@ -328,18 +339,18 @@ The solution to this problem is to offset the coefficients $\alpha$ and $\beta$ 
 The staggered grid locations are found by subdividing the original grid into a finer grid of double resolution. The locations are at the grid points of that finer grid. In terms of the original grid, these are located at the voxel centers, the center of the voxel faces between adjacent voxels, the center of voxel edges and at voxel corners as shown in figure~\ref{fig:staggered_grid}.
 \begin{figure}[h]
 \centering
-\missingfigure{simple staggered grid}
-\caption{TODO}
+\includegraphics[width=0.65\textwidth]{04_pn_method/figures/fig_staggered_grid.pdf}
+\caption{Staggered grid configuration in 2d. Extending the concept to 3d is straightforward.}
 \label{fig:staggered_grid}
 \end{figure}
 
-With a staggered grid configuration, the question is which unknowns (the spherical harmonics coefficients) are placed at which staggered grid location. Seibold et al.~\cite{Seibold14} analysed the structure of the transport term and found that its discretization matrix relates coefficients to their derivatives in a very particular structure after converting the matrix to real-valued spherical harmonics. If coefficients are located on the staggered grid according to this structure, no interpolation is required, when evaluating coefficients for central differences.
+With a staggered grid configuration, the question is which unknowns (the spherical harmonics coefficients) are placed at which staggered grid location. Seibold et al.~\cite{Seibold14} analysed the structure of the transport term and found that its discretization matrix relates coefficients to their derivatives in a very particular structure after converting the matrix to real-valued spherical harmonics. If coefficients are located on the staggered grid according to this structure, no interpolation is required, when evaluating coefficients for central differences (see figure~\ref{fig:staggered_grid_placement}).
 
-Assuming this structure, where the unknown locations are found by the following algorithm: First the zero coefficient is placed at the voxel center. Then all coefficients are found, which depend on derivatives of the zero coefficient. These coefficients are placed according to the central difference offsets. Followingly, the coefficients are found, which depend on derivatives of the recently placed coefficients. The central difference offsets are used anew to find their new location. The particular structure of discretization matrix of the transport term in the real-valued $P_N$-equations is what allows placing the coefficients without any conflicts. 
+Assuming this structure, the unknown locations are found by the following algorithm: First the zero coefficient is placed at the voxel center. Then all coefficients are found, which depend on derivatives of the zero coefficient. These coefficients are placed according to the central difference offsets. Followingly, the coefficients are found, which depend on derivatives of the recently placed coefficients. The central difference offsets are used anew to find their new location. The particular structure of discretization matrix of the transport term in the real-valued $P_N$-equations is what allows placing the coefficients without any conflicts. 
 \begin{figure}[h]
 \centering
-\missingfigure{placing staggered grid coefficients}
-\caption{TODO}
+\includegraphics[width=0.95\textwidth]{04_pn_method/figures/fig_staggered_grid_finding_locations.pdf}
+\caption{The process of finding staggered grid locations for unknowns $\phi_i$. The $P_N$-equations relate the unknowns through spatial derivatives, which imply an order on the finite difference grid. The first unknown is placed at the voxel center and the remaining unknown locations are found by following the spatial derivatives through the equations.}
 \label{fig:staggered_grid_placement}
 \end{figure}
 
@@ -352,42 +363,44 @@ The discretization step will replace the evaluation of a coefficient at a partic
 Staggering spherical harmonics coefficients also makes handling boundary conditions more involved. With collocated grids it is straightforward to identify boundary voxels and voxels in the computational domain. Each voxel in the computational domain contributes the same number of unknowns to the system. With staggered grids some boundary voxels will have a subset of their unknowns that lie directly on the boundary. Without changes to the system, this will imply a shifted boundary interface and introduce an asymmetry. Coefficients, which are located on the boundary, will be unknowns and part of the solution vector on one side and subject to boundary conditions on the other side (figure~\ref{fig:pn_staggered_grid_unhandled_bc}~\subref{fig:pn_staggering_asymmetry_bc}). This creates different boundary conditions on opposite sides of the problem domain and causes an asymmetry in the solution for symmetric problems (figure~\ref{fig:pn_staggered_grid_unhandled_bc}~\subref{fig:pn_staggering_asymmetry_bc_checkerboard}).
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{schematic view of unhandled staggered grid BC.show shifted boundary interface}
-\caption{test}
+\begin{subfigure}[t]{0.49\columnwidth}
+\centering
+\includegraphics[width=1\textwidth]{04_pn_method/figures/fig_staggered_grid_domain_boundary_wrong.pdf}
+\caption{Per voxel staggered grid locations.}
 \label{fig:pn_staggering_asymmetry_bc}
 \end{subfigure}%
 \hspace{0.01\columnwidth}
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{checkerboard result for unhandled BC the asymmetry}
-\caption{test}
+\begin{subfigure}[t]{0.49\columnwidth}
+\centering
+\includegraphics[width=0.66\columnwidth]{04_pn_method/results/p1_staggered_grid_asymmetric_bc.png}
+%\missingfigure{checkerboard result for unhandled BC the asymmetry}
+\caption{$P_1$-solution.}
 \label{fig:pn_staggering_asymmetry_bc_checkerboard}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{TODO}
+\caption{Dealing with staggered grid locations per voxel (left) implies a boundary interface which produces asymmetric results as seen for the solution of the checkerboard problem (right).}
 \label{fig:pn_staggered_grid_unhandled_bc}
 \end{figure}
 
 The solution is to introduce additional unknowns to the system for every coefficient which is located on the boundary in a boundary voxel as shown in figure~\ref{fig:pn_staggered_grid_handled_bc}\subref{fig:pn_staggering_correct_bc}. This will correct the location of the boundary interface and allows the same boundary conditions on opposite sides of the computational domain.
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered_starmap.png}
-\missingfigure{schematic view of unhandled staggered grid BC. show boundary interface}
-\caption{test}
+\begin{subfigure}[t]{0.49\columnwidth}
+\centering
+\includegraphics[width=1\textwidth]{04_pn_method/figures/fig_staggered_grid_domain_boundary_corrected.pdf}
+\caption{Adjusted placement of staggered grid coefficients.}
 \label{fig:pn_staggering_correct_bc}
 \end{subfigure}%
 \hspace{0.01\columnwidth}
-\begin{subfigure}{0.49\columnwidth}
-%\includegraphics[width=\columnwidth]{images/checkerboard2d_p1_neumann_staggered.png}
-\missingfigure{checkerboard result for unhandled BC the asymmetry}
-\caption{test}
+\begin{subfigure}[t]{0.34\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{04_pn_method/results/checkerboard2d_p5_neumann_staggered.png}
+%\missingfigure{checkerboard result for unhandled BC the asymmetry}
+\caption{$P_1$-solution of the checkerboard problem.}
 \label{fig:pn_staggering_correct_bc_checkerboard}
 \end{subfigure}%
 %\vspace{-0.2in}
-\caption{TODO}
+\caption{Placing staggered grid coefficients such that the defined boundary interface is symmetric (left) leads to a correct symmetric solution of the checkerboard problem (right).}
 \label{fig:pn_staggered_grid_handled_bc}
 \end{figure}
 
@@ -395,13 +408,7 @@ The handling of boundary conditions is done by the solver framework. In order to
 
 For client code applications, it is desirable to have all coefficients defined at the centers of voxels covering the problem domain. Therefore the solver framework offers a \emph{unstagger} function for staggered grids, which interpolates all coefficients at the voxel centers of the problem domain from the surrounding coefficient locations. Further the additional unknowns, which have been introduced to get correct boundary conditions, will be removed. This function converts a staggered grid solution vector to a collocated grid solution vector.
 
-As shown in figure~\ref{fig:pn_staggered_grid_noartefacts}, using the collocated grid from converting a staggered grid solution of a staggered grid solve, will produce a result free of oscillation and asymmetry artefacts.
-\begin{figure}[h]
-\centering
-\missingfigure{correct staggered grid checkerboard solution}
-\caption{TODO}
-\label{fig:pn_staggered_grid_noartefacts}
-\end{figure}
+As shown in figure~\ref{fig:pn_staggering_correct_bc_checkerboard}, using the collocated grid from converting a staggered grid solution of a staggered grid solve, will produce a result free of oscillation and asymmetry artefacts.
 
 \subsection{System Matrix and Solution}
 \label{sec:pn_system_matrix}
@@ -411,8 +418,9 @@ After initializing the \emph{PNSystemBuilder} object matrix with the \emph{Stenc
 However, the system matrix $A$, when generated from the $P_N$-equations, has properties which restrict application of certain methods for solving the system. The number of rows and columns of $A$ is determined by the total number of voxels in the computational domain, multiplied by the number of spherical harmonics coefficients per voxel. The matrix is squared and sparse due to the local structure of the discretization and coupling. Unfortunately, the system matrix $A$ is non-symmetric (due to the transport term) and not diagonal dominant, which together rules out many iterative methods for solving linear systems.
 \begin{figure}[h]
 \centering
-\missingfigure{structure of the system matrix and solution vector (the figure from the paper)}
-\caption{TODO}
+%\missingfigure{structure of the system matrix and solution vector (the figure from the paper)}
+\includegraphics[width=0.75\textwidth]{04_pn_method/figures/fig_matrix_layout.pdf}
+\caption{Structure of coefficient matrix $A$ and solution vector $\vec{u}$ after discretization of the $P_N$-equations on a finite difference grid.}
 \label{fig:pn_matrix_layout}
 \end{figure}
 

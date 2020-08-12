@@ -6,12 +6,12 @@ In this section a multigrid solver for the diffusion approximation is developed.
 The automatic discretization machinery, which was developed as part of the $P_N$-solver in section~\ref{sec:pn_solver} takes arbitrary systems of potentially coupled, linear partial differencial equations as input. The diffusion equation, which has been derived in the previous section is such a linear scalar partial differential equation and therefore can be fed into the automated stencil code generation from section~\ref{sec:pn_solver} to produce valid stencil code (independent of mesh resolution).
 
 The idea behind the multigrid method is to accelerate the convergence by using a coarse grid on which information propagates faster throughout the spatial domain. The coarse solution is then used for updating the original grid.
-\begin{figure}[h]
-\centering
-\missingfigure{multigrid mesh setup}
-\caption{TODO}
-\label{fig:da_solver_multigrid_mesh}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%\missingfigure{multigrid mesh setup}
+%\caption{TODO}
+%\label{fig:da_solver_multigrid_mesh}
+%\end{figure}
 
 Quantities on the original fine mesh are denoted with the subscript $F$. Therefore the original system of equations is received:
 \begin{align}
@@ -73,16 +73,18 @@ This process is then repeated by starting a new multigrid iteration with the cor
 This is a two-level multigrid step, which could be extended to more levels by applying the same idea recursively to the coarse mesh solve. This is often done, so that the linear system of the coarsest level is so small that a direct method for solving it can be applied very efficiently. This results in the characteristic V-cycle shown in figure~\ref{fig:da_solver_multigrid_vcycles}.
 \begin{figure}[h]
 \centering
-\missingfigure{multigrid v-cycle}
-\caption{TODO}
+%\missingfigure{multigrid v-cycle}
+\includegraphics[width=0.85\textwidth]{05_diffusion_approximation/figures/fig_vcycle.pdf}
+\caption{The staggered coarse grids for the multigrid v-cycle are computed from interpolating coefficients at their coarse grid locations.}
 \label{fig:da_solver_multigrid_vcycles}
 \end{figure}
 
 Building the upsampling and downsampling matrices $M_{C\rightarrow F}$ and $M_{F\rightarrow C}$ is very similar to the problem of interpolating discretized variables at specific staggered grid locations for the automatic discretization in section~\ref{sec:pn_stencil_gen} (figure~\ref{fig:pn_discretization_interpolation}). In fact, the \emph{PNSystemBuilder} class presented in section~\ref{sec:pn_framework} has been extended to facilitate the automatic generation of the upsampling and downsampling operator matrices from a given discretization and a given vector of coefficients with their respective staggered grid locations. For the interpolation weights to not vary per voxel, the fine grid has to be exactly of double resolution. Further the number of multigrid levels defines the number of subdivisions required, and imposes additional constraints on the resolution. To support the maximum number of multigrid levels possible, the resolution has to be the power of two.
-\begin{figure}[h]
-\centering
-\missingfigure{interpolation matrix M, matrix layout, interpolation, throwing away coefficients}
-\caption{TODO}
-\label{fig:da_solver_multigrid_M}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%\missingfigure{interpolation matrix M, matrix layout, interpolation, throwing away coefficients}
+%%\includegraphics[width=0.6\textwidth]{05_diffusion_approximation/figures/fig_vcycle.pdf}
+%\caption{TODO}
+%\label{fig:da_solver_multigrid_M}
+%\end{figure}
 

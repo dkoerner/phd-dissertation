@@ -4,17 +4,20 @@
 In the two previous sections, diffusion theories have been derived for the two extreme limits of transport. That is purely isotropic radiance, which happens in the limit of thick, highly scattering media or a delta distribution, which in turn happens in the limit of very transparent, low order scattering media. This section will introduce the variable Eddington Factor formalism, which has its origins in the astrophysics domain (Brunner~\cite{Brunner02}). It serves as a conceptual framework in which flux-limited diffusion is embedded. While diffusive transport has been related to a diffusion equation, the streaming transport has been shown to relate to advection. The Variable Eddington Factor formalism is a theory that allows to realize and mix both types of transport within a domain.
 \begin{figure}[h]
 \centering
-\missingfigure{show advection and diffusion transport}
-\caption{TODO}
+%\missingfigure{show advection and diffusion transport}
+\includegraphics[width=0.95\textwidth]{06_fld/figures/fig_diffusion_vs_advection.pdf}
+\caption{Illustration of diffusive (left) and advective (right) transport of particles. With diffusion, particles spread locally depending on the gradient of the particle distribution, which for flux-limited diffusion is the zero moment, the fluence. Advection is the movement of particles along a directed force field. For flux-limited diffusion, this force field is defined by the first moment, the flux vector.}
 \label{fig:fld_vef_advection_diffusion}
 \end{figure}
+
 
 Classical diffusion assumed an isotropic distribution of radiance for the second moment, while pure streaming transport assumed a delta distribution. The Variable Eddington Factor theory assumes a radiance distribution, which is rotationally symmetric around a dominant vector $\vec{n}$. This assumption allows to derive a form for $T$, which represents isotropic distribution as well as a pure delta distribution and those forms inbetween, which are rotationally symmetric around a dominant direction $\vec{x}$.
 \begin{figure}[h]
 \centering
-\missingfigure{show image with isotropic distribution, streaming limit distribution and inbetween forms}
-\caption{TODO}
-\label{fig:fld_vef_advection_diffusion}
+\includegraphics[width=0.55\textwidth]{06_fld/figures/fig_transport_regimes_scene.pdf}
+%\missingfigure{show image with isotropic distribution, streaming limit distribution and inbetween forms}
+\caption{Radiative transfer in typical scenes contains a mix of transport regimes as shown in this figure. Diffuse transport in dense media with high absorbtion and advective transport in thin media. The idea behind the Variable Eddington Factor is to express radiative transfer as a mix between those two extreme transport modes.}
+\label{fig:fld_vef_advection_diffusion2}
 \end{figure}
 
 The Variable Eddington Factor form of $T$ is derived by considering a principal direction of transport, given by the vector $\vec{n}$ of unit length. An important assumption is that the radiance distribution will be radially symmetric around this direction. This means, that the value of $\hat{L}$ will be invariant to a rotation about axis $\vec{n}$. It follows, that its first and second moment $\hat{L}_1$ and $\hat{L}_2$ will also be invariant to rotation about $\vec{n}$. If one approximates $\hat{L}_2$ using the Eddington tensor $T$ with $\hat{L}_2\approx T\phi$, it can be concluded that $\vec{n}$ will be an eigenvector of $T$ with eigenvalue $\chi$:

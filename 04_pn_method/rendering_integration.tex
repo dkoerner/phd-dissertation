@@ -168,8 +168,9 @@ Figure~\ref{fig:pn_rendering_integration_overview} gives a schematic overview ov
 
 \begin{figure}[h]
 \centering
-\missingfigure{show high level picture of a rendering system. input data. precomputation. rasterization. synthesis of first order scattering and higher order scattering}
-\caption{TODO}
+\includegraphics[width=0.99\textwidth]{04_pn_method/figures/fig_rendering_pipeline.pdf}
+%\missingfigure{show high level picture of a rendering system. input data. precomputation. rasterization. synthesis of first order scattering and higher order scattering}
+\caption{Overview over the full rendering process. The single scattering solution is precomputed and projected into RHS $Q$. Coefficient matrix $A$ is assembled from voxelized RTE quantities and used to compute solution $u$. That solution is unprojected and used to lookup the multiple scattering contribution during final render.}
 \label{fig:pn_rendering_integration_overview}
 \end{figure}
 

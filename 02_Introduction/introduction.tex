@@ -7,13 +7,20 @@ The need and desire to faithfully reproduce the world around us as we see it wit
 
 With the computer, a completely new medium emerged and with it a new methodology and way of thinking about realistic image creation. Crude rudimental rules, such as on aerial perspective by Leonardo Da Vinci~\cite{DaVinci1651}, evolved into highly accurate physical models and instead of a paint brush, numerical methods are employed to compute pixel colors which create an image. This is the domain of computer graphics, a branch in computer sciences, which aims at developing methods for the generation of photorealistic images from digital content and constantly tries to push the boundaries of what is technically possible.
 \begin{figure}[ht]
-\centering
-\missingfigure{participating media examples}
-\caption{Real world examples of participating media. Reproducing these optical phenomena with computers requires resource intensive light transport simulations for which deterministic methods are developed in this thesis.}
+\begin{center}
+\resizebox{.98\textwidth}{!}{%
+\includegraphics[height=3cm]{02_Introduction/images/clouds.jpg} %% Magda Ehlers
+\hspace{0.01cm}
+\includegraphics[height=3cm]{02_Introduction/images/iceberg.jpg} %% pixabay
+\hspace{0.01cm}
+\includegraphics[height=3cm]{02_Introduction/images/candle.jpg} %% Brett Sayles
+}
+\end{center}
+\caption{Real world examples of participating media. Reproducing these optical phenomena with computers requires resource intensive light transport simulations for which deterministic methods are developed in this thesis\protect\footnotemark.}
 \label{fig:intro_participating_media_examples}
 \end{figure}
 
-Computer generated imagery (CGI) is used widely across many domains and industries such as architecture, entertainment, advertising, automotive, manufacturing and scientific visualization, where each brings its own challenges with it. This high demand and wide adoption is why rendering in computer graphics is a heavily researched subject in industry and academia alike. The main challenge research in rendering is trying to address is the high amount of computation current algorithms require in order to generate realistic images. For example a single frame in an animation movie by Disney or Pixar takes on average multiple hours and much more in extreme cases. To produce all images for the whole movie, multiple computing centers with thousands of CPU cores are used. A substantial economical investment. One of the main efforts in rendering research therefore is to reduce the computational cost for realistic image generation.
+Computer generated imagery (CGI) is used widely across many domains and industries such as architecture, entertainment, advertising, automotive, manufacturing and scientific visualization, where each brings its own challenges with it. This high demand and wide adoption is why rendering in computer graphics is a heavily researched subject in industry and academia alike. The main challenge research in rendering is trying to address is the high amount of computation current algorithms require in order to generate realistic images. For example a single frame in an animation movie by Disney or Pixar takes on average multiple hours and much more in extreme cases. To produce all images for the whole movie, multiple computing centers with thousands of CPU cores are used. A substantial economical investment. One of the main efforts in rendering research therefore is to reduce the computational cost for realistic image generation.\footnotetext{Photos provided under Creative Commons CC0 license by  Magda Ehlers (clouds), pixabay (iceberg), Brett Sayles (candle).}
 
 The advent of graphics computing hardware paved the way for realtime applications. Here, together with some additional compromises in physical accuracy, incredible performance gains allow to generate images in fractions of seconds and are the basis for new powerful interactive applications in the industries mentioned above. Finding methods which can generate results at interactive rates while still allowing to control or at least understand the loss in accuracy is another important research direction in graphics.
 
@@ -21,7 +28,7 @@ Computer hardware is ever evolving and while for a long time most of the increas
 
 This thesis seeks to address these problems by following a trend which has been spurred by the so called physical based rendering revolution in graphics (see Keller et al.~\cite{Keller15}). In the early days of computer graphics, limitation in compute power required the use of cheap ad-hoc methods and other tricks to facilitate efficient image generation algorithms. With the growth in compute capacities, techniques and methods based on accurate physical models became feasible and started replacing older heuristical approaches. Rendering became concerned with energy conservation, the use of correct physical quantities for describing the virtual scene and quantifiable error to physically correct ground truth results. Consistently adopting the framework provided by optical physics allowed rendering researchers to much better investigate and compare with work in other fields attacking very similar problems. While graphics research has always drawn inspiration and methods from other scientific domanis, the ermergence of physical based rendering caused a significant increase in research work which is based on findings and theories from other domains. Physics provided a common language allowing much easier to talk across disciplines.
 
-In this spirit this thesis investigates theories and methods from the astrophysics domain and nuclear sciences and adopts them for application in rendering. The resulting work presented in this thesis addresses all the three challenges mentioned above. Specifically, methods are presented which allow to reduce computational cost for the demanding problem of rendering participating media such as clouds, smoke, fire etc. and even allows---with some compromise in accuracy---applications at interactive rates. The methods devised in this thesis turn the rendering problem into the problem of solving a linear system of equations, exactly what high performance computing clusters (large scale many-core systems) have been designed for (see Koerner et al.~\cite{Koerner17}). This thesis constitutes an significant effort in putting forward an alternative approach to light transport simulation which has not seen a lot of attention lately but might have the potential to answer some of the reseach challenges in rendering today and tomorrow.
+In this spirit, this thesis investigates theories and methods from the astrophysics domain and nuclear sciences and adopts them for application in rendering. The resulting work presented in this thesis addresses all the three challenges mentioned above. Specifically, methods are presented which allow to reduce computational cost for the demanding problem of rendering participating media such as clouds, smoke, fire etc. and even allows---with some compromise in accuracy---applications at interactive rates. The methods devised in this thesis turn the rendering problem into the problem of solving a linear system of equations, exactly what high performance computing clusters (large scale many-core systems) have been designed for (see Koerner et al.~\cite{Koerner17}). This thesis constitutes a significant effort in putting forward an alternative approach to light transport simulation which has not seen a lot of attention lately but might have the potential to answer some of the reseach challenges in rendering today and tomorrow.
 
 %\TD{visualization}
 %\TD{inverse rendering}
@@ -36,7 +43,8 @@ The problem of tracing particles through participating medium which causes a lot
 Common to all these different problems is the migration and interaction of particles or energy within a host medium. This is being described by linear transport theory, a field in mathematical physics which is at the intersection between astrophysics, nuclear sciences and computer graphics.
 \begin{figure}[ht]
 \centering
-\missingfigure{linear transport as intersection between astrophysics nuclear sciences computer graphics }
+%\missingfigure{linear transport as intersection between astrophysics nuclear sciences computer graphics }
+\includegraphics[width=0.6\textwidth]{02_Introduction/figures/fig_linear_transport.pdf}
 \caption{Light transport simulation for rendering in graphics shares problems with other domains such as astrophysics and nuclear sciences. This thesis draws ideas from the long history of research done in those fields and inspires new methods for application in graphics.}
 \label{fig:intro_linear_transport_fields}
 \end{figure}
@@ -65,9 +73,11 @@ Additional research which only provided an indirect benefit to the topic of this
 
 At the core of this thesis are the three chapters~\ref{sec:pnmethod}, \ref{sec:diffusion_approximation} and \ref{sec:fld}. Each chapter is related to one of the methods which can be derived from the spherical harmonics discretization of the underlying transport equation. Each chapter contains a detailed derivation of the theory behind the method the chapter is dedicated to. Then in each chapter a method for solving the respective equation is devised. These core chapters are complemented with a chapter on the foundations on light transport simulation (chapter~\ref{sec:foundations}). Here the radiative transfer equation is given and the main approaches for solving it are outlined. Non-deterministic methods are introduced briefly and contrasted against deterministic methods to which spherical harmonics based discretizations covered in this thesis belong to. Finally the thesis closes with chapter~\ref{sec:conclusion} where major conclusions from the three core chapters are reiterated and future directions for research are identified. Figure~\ref{fig:intro_organization} gives a visual overview over the structure of this thesis.
 \begin{figure}[ht]
-\centering
-\missingfigure{organizational structure thesis}
-\caption{Organigram of this thesis showing original contributions (green), }
+\hspace{0.1\columnwidth}
+%\centering
+%\missingfigure{organizational structure thesis}
+\includegraphics[width=0.6\textwidth]{02_Introduction/figures/fig_organigram.pdf}
+\caption{Organigram of this thesis showing original contributions in green.}
 \label{fig:intro_organization}
 \end{figure}
 

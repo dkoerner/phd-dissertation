@@ -93,10 +93,24 @@ l\left(\vec{x}\right)
 \frac{\norm{\nabla\phi\left(\vec{x}\right)}}{\phi\left(\vec{x}\right)}
 \end{align}
 It consists of two factors, of which the first is the mean free path $l$, which is the inverse of the extinction coefficient and parameterizes the medium. If the mean free path is small and approaches zero, photons travel only very short distances in average before they encounter another interaction with the medium. In this case the medium is very dense. If the mean free path is large, the medium is very thin and photons travel long distances before they encounter another interaction with the medium. In case of vacuum, where no medium is present, photons travel unhindered and never interact. In this case the mean free path is infinite.
-\missingfigure{transport regimes according to mean free path}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{06_fld/figures/fig_transport_regimes_mfp.pdf}
+\caption{Intuition behind paramterizing the transport regime according to mean free path (average distance between two consecutive scattering events). Small mean free paths imply higher medium density, while larger mean free paths imply lower density or vacuum in case of infinity.}
+\label{fig:fld_transport_regimes_mfp}
+\end{figure}
+
+
+
 The second factor in equation~\ref{eq:flux_limit_factors} is the ratio between the length of the flux-vector (according to diffusion) and the zero moment. If the magnitude of the flux-vector is small, while the total power $\phi$ is large, the incoming radiance is distributed equally over solid angle, which means that light is coming uniformly from all directions. If the flux-vector magnitude is large in comparison to the total power, the energy is concentrating in certain directions. In the extreme case, when the total power is equal to the flux-vector magnitude, the light comes only from a single direction.
-\missingfigure{transport regimes according to moment ratio}
-The two factors in equation~\ref{eq:flux_limit_factors} parameterize the transport regime according to the medium and the distribution of incoming light over solid angle respectively. Combined, they are a local measure for the transport regime in general (as perceived by diffusion). If the medium is very dense (small mean free path) and light arrives equally distributed from all directions (small moment ratio), diffusive transport is dominating and the flux-limit is not violated. The diffusion approximation is a good approximation in these scenarios. If the medium is very thin (large mean free path) and the moment ratio approaches one, ballistic transport and free streaming in the case of vacuum or when the ratio is exactly one is given.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{06_fld/figures/fig_transport_regimes_moment_ratio.pdf}
+\caption{Intuition behind paramterizing the transport regime according to the ratio between the total amount of light arriving at a point and the directionality given by the magnitude of the flux vector (red in the figure). A small ratio results from small directionality in relation to large amounts of light arriving. This implies a uniform distribution of light coming from all directions, which is the case for diffusive transport. The ballistic transport regime is characterized by increased directionality in relation to the amount of light. In free streaming transport, the magnitude of the flux vector equals the amount of light arriving. This is the case when light comes from a single direction.}
+\label{fig:fld_transport_regimes_mfp}
+\end{figure}
+
+The two factors in equation~\ref{eq:flux_limit_factors} parameterize the transport regime according to the medium and the distribution of incoming light over solid angle respectively. Combined, they are a local measure for the transport regime in general (as perceived by diffusion). If the medium is very dense (small mean free path) and light arrives equally distributed from all directions (small moment ratio), diffusive transport is dominating and the flux-limit is not violated. The diffusion approximation is a good approximation in these scenarios. If the medium is very thin (large mean free path) and the moment ratio approaches one, we have ballistic transport. In the case of vacuum, when the moment ration is exactly one, we have the free streaming limit or vacuum, where light travels infinte distances unhindered.
 
 The $1/3$ factor in equation~\ref{eq:flux_limit_factors} is ignored and $R$ is introduced, a transport measure according to the diffusion approximation:
 \begin{align}
