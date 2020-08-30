@@ -113,7 +113,7 @@ The values $\phi_{ijk}$ and $D_{ijk}$ are initialized to small tolerances $\phi_
 
 Boundary conditions are accounted for by updating the values for $\phi_{ijk}$ and $D_{ijk}$ at the boundary voxels. For Dirichlet boundary conditions the values are set directly. For Neumann boundary conditions the boundary voxels are set according to the next inner voxel (section~\ref{sec:pn_bc}). This update is done at the beginning of each Gauss-Seidel iteration.
 
-A criteria will decide when the algorithm ran enough Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here convergence to floating-point precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
+A criteria will decide when the algorithm ran enough Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here, convergence to machine precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
 
 To improve the rate of convergence, successive over-relaxation (SOR) is used (Hadjidimos~\cite{Hadjidimos00}). Defining the over-relaxation parameter $\omega$, where $0<\omega<2$, the update of $\phi_{ijk}$ at each stencil is modified to:
 \begin{equation}

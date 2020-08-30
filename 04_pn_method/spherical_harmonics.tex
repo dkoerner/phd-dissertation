@@ -2,7 +2,7 @@
 \section{Spherical Harmonics}
 \label{sec:sh}
 
-Spherical harmonics are the Fourier series for the sphere, and equally popular for spherical problems. They are often derived as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(d/dx)^2$ on a finite line with the boundary conditions that $y$ and $dy/dx$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$ which are defined as:
+Spherical harmonics are the Fourier series for the sphere, and are an important tool for solving numerical problems involving the spherical domain. They are often derived as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(d/dx)^2$ on a finite line with the boundary conditions that $y$ and $dy/dx$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$, which are defined as:
 \begin{align}
 \label{eq:sh_definition}
 \SHBC^{l,m}(\theta, \phi)=
@@ -146,9 +146,9 @@ Applying a rotation to the argument of a spherical harmonics basis function of b
 \SHBC^{l,m}\left(R\omega\right)=\sum_{j=-l}^{l}r^{l,j}\SHBC^{l,j}\left(\omega\right)
 \ .
 \end{align}
-This is derived from the fact that the spherical harmonics basis functions of order $l$ form an irreducible basis for the group of 3D-rotations (see Corollary $17.17$ in \cite{Hall13}). Equation~\ref{eq:sh_rotation} implies that a rotation of a function represented in spherical harmonics, does not introduce or loose any frequencies from or to other spherical harmonic bands and therefore is not subject to aliasing. Note that in the graphics literature spherical harmonics are often referred to as being rotationally invariant (Wojciech~\cite{Wojciech08}, Green~\cite{Green03}), which is not correct.
+This is derived from the fact that the spherical harmonics basis functions of order $l$ form an irreducible basis for the group of 3D-rotations (see Corollary $17.17$ in \cite{Hall13}). Equation~\ref{eq:sh_rotation} implies that a rotation of a function represented in spherical harmonics, does not introduce or loose any frequencies from or to other spherical harmonic bands and therefore is not subject to aliasing.
 
-The spherical harmonics projection of a rotationally symmetric function $f$ simplifies to Zonal Spherical Harmonics, which are characterized by the fact that only coefficients with $f^{l,0}$ are needed for reconstruction. This is needed for the derivation of the $P_N$-equations. In particular, the phase function depends only on the angle between incident direction $\omega_i$ and outgoing direction $\omega_o$, which means that the phase function will be rotationally symmetric around the outgoing direction, if it is fixed. 
+The spherical harmonics projection of a rotationally symmetric function $f$ simplifies to Zonal Spherical Harmonics, which are characterized by the fact that only coefficients with $f^{l,0}$ are needed for reconstruction. This property is needed for the derivation of the $P_N$-equations. In particular, the phase function depends only on the angle between incident direction $\omega_i$ and outgoing direction $\omega_o$, which means that the phase function will be rotationally symmetric around the outgoing direction, if it is fixed. 
 
 A rotation $R(\alpha)$ of angle $\alpha$ around the pole axis is expressed in spherical harmonics as:
 \begin{align*}
@@ -173,7 +173,7 @@ p^{l,m}
 \SHBC^{l,m}\left(\omega\right)
 }
 \end{align*}
-By equating coefficients it would be:
+By equating coefficients this yields:
 \begin{align*}
 f^{l,m} = f^{l,m}e^{-i m\alpha}
 \end{align*}
@@ -201,8 +201,9 @@ Another property, which will be important for the derivation of the $P_N$-equati
 i\left(-c^{l-1, m-1}\overline{\SHBC^{l-1,m-1}} + d^{l+1, m-1}\overline{\SHBC^{l+1,m-1}} - e^{l-1, m+1}\overline{\SHBC^{l-1,m+1}} + f^{l+1, m+1}\overline{\SHBC^{l+1,m+1}}\right) \\
 2\left(a^{l-1, m}\overline{\SHBC^{l-1,m}}+b^{l+1, m}\overline{\SHBC^{l+1,m}}\right)
 \end{pmatrix}$}
+\ ,
 \end{equation}
-with
+where
 \begin{equation*}
 \resizebox{1.0\hsize}{!}{$
 a^{l,m}= \sqrt{\frac{\left(l-m+1\right)\left(l+m+1\right)}{\left(2l+1\right)\left(2l-1\right)}} \qquad

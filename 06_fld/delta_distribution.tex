@@ -5,7 +5,7 @@ In the previous section, the transport measure $R$ was introduced, which contain
 \begin{align}
 \hat{L}\left(\omega\right)=\delta_{\Omega}\left(\omega,\vec{n}\right).
 \end{align}
-where $\delta_{\Omega}$ is the angular Dirac delta distribution into direction $\vec{n}$. Spatial dependency is omitted and not relevant for this discussion. The moments of this distribution are:
+where $\delta_{\Omega}$ is the angular Dirac delta distribution into direction $\vec{n}$. The spatial dependency is omitted and not relevant for this discussion. The moments of this distribution are:
 \begin{align}
 \label{eq:zero_moment_Lhat}
 \hat{L}_0\left(\omega\right)&=\int_{\Omega}{\delta_{\Omega}\left(\omega,\vec{n}\right)\ud\omega} = 1\\
@@ -33,7 +33,7 @@ Inserting the approximation $T\phi$ into the flux-vector definition (equation~\r
 \begin{align*}
 \vec{E}&= -\frac{1}{\sigma_t'}\operatorname{div}\left (T\phi\right )
 \end{align*}
-The key assumption used is that the spatial variations of $T$ can be neglected. Fundamentaly, the approach is to assume, that the radiance field $L$ can be separated into a product of two functions. One depending on angle and another function depending on position. This allows to express the divergence of the second moment as a matrix product with a gradient vector:
+The key assumption used is that the spatial variations of $T$ can be neglected. Fundamentally, the approach is to assume, that the radiance field $L$ can be separated into a product of two functions: one depending on angle and another function depending on position. This allows to express the divergence of the second moment as a matrix product with a gradient vector:
 \begin{align}
 \vec{E}&= -T\left(\frac{1}{\sigma_t'}\nabla\phi\right )
 \label{eq:second_moment_iso2}
@@ -43,12 +43,12 @@ For the derivation the normalized flux will be addressed, which is given by scal
 \widehat{\vec{E}} = \frac{\vec{E}}{\phi}= -T\underbrace{\left(\frac{\nabla\phi}{\sigma_t'\phi}\right )}_{=\vec{R}}
 \label{eq:second_moment_iso3}
 \end{align}
-Equation~\ref{eq:first_moment_Lhat} showed, that $\vec{n}$ points into the same direction as the flux-vector $\vec{E}$. This means, that the result of the transformation $T$ will be a vector, which is parallel to $\vec{n}$. Since the Eddington tensor has been constructed with $T_{ij}=\vec{n}_i\vec{n}_j$, it is known that $\vec{n}$ is the only eigenvector of $T$, with an eigenvalue greater than zero. It can be concluded that (under the assumption of negligible spatial variation of $T$) the transformation $T$ is applying a scaling operation and the dimensionless gradient $\vec{R}$ is parallel to $E$. Therefore the product of tensor $T$ is expressed with $\vec{R}$ as a scaling operation and equation~\ref{eq:second_moment_iso3} then becomes:
+Equation~\ref{eq:first_moment_Lhat} showed, that $\vec{n}$ points into the same direction as the flux-vector $\vec{E}$. This means that the result of the transformation $T$ will be a vector, that is parallel to $\vec{n}$. Since the Eddington tensor has been constructed with $T_{ij}=\vec{n}_i\vec{n}_j$, it is known that $\vec{n}$ is the only eigenvector of $T$, with an eigenvalue greater than zero. It can be concluded that (under the assumption of negligible spatial variation of $T$) the transformation $T$ is applying a scaling operation and the dimensionless gradient $\vec{R}$ is parallel to $E$. Therefore the product of tensor $T$ is expressed with $\vec{R}$ as a scaling operation and equation~\ref{eq:second_moment_iso3} then becomes:
 \begin{align}
 \widehat{\vec{E}} = -\lambda\left(\frac{\nabla\phi}{\sigma_t'\phi}\right )
 \label{eq:second_moment_iso4}
 \end{align}
-With an assumption about the spatial variation of $T$, the normalized flux-vector $\hat{L}_1$ could be expressed with respect to the zero moment $\phi$ and its spatial derivatives. What remains to be done is to find an expression for the eigenvalue $\lambda$. Then an expression for $\vec{E}$ (by using $\vec{E}=\hat{L}_1\phi$) would be found, which does not depend on itsself in anyway and therefore can be used to substitute $\vec{E}$ into the zero moment equation.
+With an assumption about the spatial variation of $T$, the normalized flux-vector $\hat{L}_1$ could be expressed with respect to the zero moment $\phi$ and its spatial derivatives. What remains to be done is to find an expression for the eigenvalue $\lambda$. Then an expression for $\vec{E}$ (by using $\vec{E}=\hat{L}_1\phi$) would be found, which has no self-dependence and therefore can be used to substitute $\vec{E}$ into the zero moment equation.
 
 Apparently, finding $\lambda$ is easy in the case of a delta distribution of radiance. In that case it is known from equation~\ref{eq:iso_delta_normE}, that $\norm{\vec{E}}=\phi$ and therefore $\norm{\vec{E}/\phi}=1$. This requires that:
 \begin{align*}
@@ -69,6 +69,12 @@ which states that the flux-vector is the unit vector pointing into the direction
 \label{eq:iso_delta_advection_equation}
 \nabla\cdot\left(\frac{\nabla\phi}{\norm{\nabla\phi}}\phi\right) &= \sigma_a\phi - Q_0
 \end{align}
-In case of a delta distribution of radiance in angular domain and with the assumption of negligible spatial variation of $T$, the moment equation turns into an advection equation, where the zero moment quantity $\phi$ is moved around by its normalized gradient.
+If we consider a purely scattering medium without emission ($\omega_a=0$ and $Q_0=0$) and define $\vec{u}=\frac{\nabla\phi}{\norm{\nabla\phi}}$ to be the unit fluence gradient vector field, then it becomes apparent that this equation resembles some form of a steady state advection equation:
+\begin{align}
+\label{eq:iso_delta_advection_equation2}
+\nabla\cdot\left(\vec{u}\phi\right) &= 0
+\end{align}
+
+In case of a radiance delta distribution in angular domain and with the assumption of negligible spatial variation of $T$, the moment equation expresses how the zero moment quantity $\phi$ is moved around by its normalized gradient.
 
 This section highlights that the streaming transport is best represented by advection in case of the two term expansion of the radiative transfer equations. The core idea behind flux-limited diffusion is, to mix diffusive transport and advective transport, depending on local properties at $\vec{x}$. This is developed in the next section.

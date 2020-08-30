@@ -154,7 +154,7 @@ The quantity $\sigma_t'$ is called the reduced extinction coefficient and it is 
 \begin{align*}
 \sigma_t' = \sigma_t - g\sigma_s
 \end{align*}
-With that the two term expansion of the radiative transfer equation is provided:
+We obtain the two term expansion of the radiative transfer equation:
 \begin{align}
 \label{eq:me_zero}
 \nabla\vec{E}\left(\vec{x}\right)&=
@@ -167,7 +167,7 @@ With that the two term expansion of the radiative transfer equation is provided:
 \end{align}
 These equations are the direct counterpart to the $P_1$-equations in the moment expansion form. The diffusion approximation can be derived by taking the first moment equations and inserting them into the zero moment equations by substituting $\vec{E}$. The same procedure can be carried out for the $P_1$-equations (using spherical harmonics coefficients). However, the notation of the moment expansion is more expressive, which is the reason for its popularity in the literature.
 
-Equation~\ref{eq:me_first} is resolved for $\vec{E}$ as follows:
+Equation~\ref{eq:me_first} is solved for $\vec{E}$ as follows:
 \begin{align}
 \label{eq:me_first_resolved_E}
 \vec{E}\left(\vec{x}\right) =
@@ -177,7 +177,7 @@ Equation~\ref{eq:me_first} is resolved for $\vec{E}$ as follows:
 -Q_1\left(\vec{x}\right)
 \right)
 \end{align}
-Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way the unknown $\vec{E}$ is eliminated and a single scalar partial differential equation provided:
+Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way the unknown $\vec{E}$ is eliminated and we arrive at a single scalar partial differential equation:
 \begin{align}
 \nabla
 \left(
@@ -189,6 +189,7 @@ Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in eq
 \right)&=
 -\phi(\vec{x})\sigma_a(\vec{x})
 +Q_0\left(\vec{x}\right)
+\ ,
 \end{align}
 which can be further rearranged into:
 \begin{align}

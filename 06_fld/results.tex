@@ -22,7 +22,7 @@ In comparison to the results from $P_N$-method and $P_5$ in particular, the $P_N
 
 \begin{table}[!h]
 	\centering
-	\caption{Performance characteristics of flux-limited diffusion for the pointsource problem.}
+	\caption{Performance characteristics of flux-limited diffusion for the point source problem.}
 	\label{tab:results_pointsource}
 	% \flushleft
 	\begin{tabular}{l r}
@@ -71,13 +71,13 @@ In comparison to the results from $P_N$-method and $P_5$ in particular, the $P_N
 
 Finally the flux-limited diffusion is run on the procedural cloud dataset described in section~\ref{sec:pn_results_clouds} to assess how it performs in a more practical setting. As seen in figure~\ref{fig:fld_results_nebulae}, flux-limited diffusion does a significantly better job at conserving energy than classical diffusion or $P_5$. This is explained by the fact that the dataset contains very strong density gradients and close-to vacuum regions in which diffusive transport is not able to capture light transport well. While $P_5$ produces better results than classical diffusion, it is somehow surprising to see how much better flux-limited diffusion is able to capture the directly lit regions of the cloud.
 
-Further flux-limited diffusion well captures the indirectly illuminated parts at the bottom of the dataset. Here flux-limited diffusion also offers a signficiant improvement over classical diffusion approximation. Upon close inspection and comparison with $P_5$, it can be seen that the flux-limited diffusion solution appears very flat while the $P_5$ solution exhibits finer variations which closer resemble the path-traced resuls. This is explained by the fact that the angular domain is better resolved with $P_5$. The energy conserving nature of flux-limited diffusion still produced a result, which much closer resembles the path-traced result than $P_5$.
+Further flux-limited diffusion captures the indirectly illuminated parts at the bottom of the dataset well. Here, flux-limited diffusion also offers a signficiant improvement over classical diffusion approximation. Upon close inspection and comparison with $P_5$, it can be seen that the flux-limited diffusion solution appears very flat while the $P_5$ solution exhibits finer variations which closer resemble the path-traced resuls. This is explained by the fact that the angular domain is better resolved with $P_5$. The energy-conserving nature of flux-limited diffusion still produced a result, which more closely resembles the path-traced result than $P_5$.
 
 \begin{figure}[h]
 \centering
 \begin{subfigure}[t]{0.48\columnwidth}
 \includegraphics[width=\columnwidth]{06_fld/results/nebulae_ms_groundtruth.png}
-\caption{Pathtraced}
+\caption{Path-traced}
 \label{fig:fld_results_nebulae_1}
 \end{subfigure}
 \hspace{0.01\columnwidth}
@@ -104,7 +104,7 @@ Further flux-limited diffusion well captures the indirectly illuminated parts at
 \label{fig:fld_results_nebulae}
 \end{figure}
 
-In terms of performance chacteristics it is to be expected that flux-limited diffusion requires more computational effort than the diffusion approximation, due to the non-linear nature of flux-limited diffusion coefficient, which requires to be updated for every voxel in each Gauss-Seidel iteration. This impact appears moderate when compared to the visual improvement it brings. When compared to $P_N$ it can be concluded that flux-limited diffusion offers a much better result at a significantly lower computational cost.
+In terms of performance chacteristics it is to be expected that flux-limited diffusion requires more computational effort than the diffusion approximation, due to the non-linear nature of flux-limited diffusion coefficient, which must be updated for every voxel in each Gauss-Seidel iteration. This impact appears moderate when compared to the visual improvement it brings. When compared to $P_N$ it can be concluded that flux-limited diffusion offers a much better result at a significantly lower computational cost.
 
 %\TD{complete table maybe table showing the performance characteristic for all three datasets}
 %\TD{mention how the performance of FLD allows aplication of transfer function and solve for different color channels}

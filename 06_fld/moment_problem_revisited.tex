@@ -1,7 +1,7 @@
 \section{Moment Closure Problem Revisited}
 \label{sec:moment_problem_revisited}
 
-In section~\ref{sec:moment_closure}, it was established that a choice for the second moment of the radiance distribution was required to close the system of equations, which was found by collapsing the moment expansion of the radiative transfer equation, truncated after the first moment. The classical diffusion approximation was derived by assuming an isotropic radiance distribution for the second moment. In this section, a closer look is taken at the moments and an important feature is carved out, which explains the inaccuracy of classical diffusion approximation in certain scenarios.
+In section~\ref{sec:moment_closure}, it was established that a choice for the second moment of the radiance distribution was required to close the system of equations, which was found by collapsing the moment expansion of the radiative transfer equation truncated after the first moment. The classical diffusion approximation was derived by assuming an isotropic radiance distribution for the second moment. In this section, we take a closer look at the moments and carve out an important feature, which explains the inaccuracy of classical diffusion approximation in certain scenarios.
 
 The distribution of power $\phi$ over solid angle was given by the normalized radiance $\widehat{L}$. Since it is a probability distribution, it has to integrate to one, which is verified by
 \begin{align*}
@@ -15,6 +15,7 @@ The distribution of power $\phi$ over solid angle was given by the normalized ra
 Further, the normalized radiance $\widehat{L}$ has to be non-negative to be a probability distribution:
 \begin{align*}
 \hat{L}(\vec{x}, \omega)\ge 0 \qquad \text{for all unit directions } \omega
+\ ,
 \end{align*}
 which is verified by the fact, that the radiance field is non-negative by definition:
 \begin{align*}
@@ -36,18 +37,22 @@ Akhiezer~\cite{Akhiezer65} established, that the probability distribution contra
 which can be rearranged into:
 \begin{align*}
 \int_{\Omega}{\left(1-\omega'\cdot\omega\right)L\left(\vec{x}, \omega\right)\ud\omega} &\ge 0
+\Leftrightarrow
 \\
 \int_{\Omega}{L\left(\vec{x}, \omega\right)\ud\omega}
 -\int_{\Omega}{\omega'\cdot\omega L\left(\vec{x}, \omega\right)\ud\omega}
 &\ge 0
+\Leftrightarrow
 \\
 \int_{\Omega}{L\left(\vec{x}, \omega\right)\ud\omega}
 -\omega'\cdot\int_{\Omega}{L\left(\vec{x}, \omega\right)\omega\ud\omega}
 &\ge 0
+\Leftrightarrow
 \\
 \phi\left(\vec{x}\right)
 -\norm{\vec{E}\left(\vec{x}\right)}
 &\ge 0
+\Leftrightarrow
 \\
 \phi\left(\vec{x}\right)
 &\ge \norm{\vec{E}\left(\vec{x}\right)}

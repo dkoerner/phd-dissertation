@@ -3,7 +3,7 @@
 
 Working with three-dimensional problems is computationally demanding and makes debugging and visualization difficult. In other fields it is common practice to study and validate ideas on two-dimensional problems. The derivation of the two-dimensional $P_N$-equation is straightforward and will be presented in this section.
 
-A domain in the two-dimensional space $\mathbb{R}^2$ is considered, which is extruded infinitely along the $z-axis$ in both directions into $\mathbb{R}^3$. It shall be further assumed that input fields, such as $\sigma_t$, and boundary conditions, also do not change along the $z$-axis.
+A domain in the two-dimensional space $\mathbb{R}^2$ is considered, which is extruded infinitely along the $z$-axis in both directions into $\mathbb{R}^3$. It shall be further assumed that input fields, such as $\sigma_t$, and boundary conditions, also do not change along the $z$-axis.
 
 Since the domain has infinite extent in $z$-direction and radiative quantities do not vary along that axis, the radiance field $L$ will also not change along the $z$-axis at any position within the domain. Further, the upper hemisphere of the spherical radiance function will be a mirrored version of the lower hemisphere, with the equator being the mirror plane. In mathematical terms this is expressed as $L$, being an even function in the polar angle $\theta$.
 
@@ -18,5 +18,6 @@ If $l+m$ is odd, then $P^{l,m}$ is odd. This means that it integrates to zero ov
 
 The spherical harmonics projection of the radiance field multiplies the radiance field with the spherical harmonics basis function and integrates it over solid angle. This is done for each spherical harmonics coefficient ($l,m$-pair) that is required. It has been established that if $l+m$ is odd, the basis function will be odd in $\theta$. Since the radiance field is even in $\theta$, this means that their product will be odd. This implies that the integral of their product over the polar angle range will be zero.
 
-This in turn leads to the spherical harmonics coffeficients of $L$ to be zero for all coefficients where $l+m$ is odd. Further, all occurances of $\partial_z$ in the $P_N$-equations can be set to zero.
+This in turn leads to the spherical harmonics coefficients of $L$ to be zero for all coefficients where $l+m$ is odd. Further, all occurances of $\partial_z$ in the $P_N$-equations can be set to zero.
 
+Another way of coming up with two-dimensional equations would be to define the logical equivalent of the RTE for a two-dimensional domain and then transform that with a lower-dimensional fourier transform. It is not necessarily clear that this would give the same answer.

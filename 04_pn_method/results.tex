@@ -6,7 +6,7 @@ After outlining the $P_N$-solver in section~\ref{sec:pn_solver} and its integrat
 \subsection{Point Source Problem}
 \label{sec:pn_results_pointsource}
 
-The point source problem is a canonical problem, which is well suited to validate the method and assess its accuracy. The problem is simple and an analytical solution exists to allow comparison against the ground truth (section~\ref{sec:foundations_analytical}). The medium is homogeneous with infinite extent. This is approximated for the solver by a unit cube. The emission term is an ideal unit power point light with isotropic emission in angular domain and a delta function in spatial domain. This delta function is discretized into the finite difference grid by distributing its unit power over the volume of a single voxel:
+The point source problem is a canonical problem, which is well-suited to validate the method and assess its accuracy. The problem is simple, and an analytical solution exists to allow comparison against the ground truth (section~\ref{sec:foundations_analytical}). The medium is homogeneous with infinite extent. This is approximated for the solver by a unit cube. The emission term is an ideal unit power point light with isotropic emission in angular domain and a delta function in spatial domain. This delta function is discretized into the finite difference grid by distributing its unit power over the volume of a single voxel:
 \begin{align}
 Q_{ijk} = \frac{1}{h_xh_yh_z}
 \end{align}
@@ -14,7 +14,7 @@ The index {ijk} refers to the voxel, in which the point light is located.
 
 Note that here the radiance field is not seperated as outlined in section~\ref{sec:pn_rendering_integration}. The emission field represents only the discretized light source and therefore, the resulting discretized radiance field represents all light transport, including single scattered light.
 
-For this problem an analytical solution exists for the fluence, that is the integral of the radiance field over solid angle. The correct analytical solution is given by D'Eon et al.~\cite{dEon11}. The authors also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$), which shall be can compared directly with the Grosjean solution.
+The correct analytical solution for fluence is given by D'Eon et al.~\cite{dEon11}. The authors also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$), which shall be can compared directly with the Grosjean solution.
 \begin{figure}[h]
 \centering
 %\missingfigure{pointsource plots PN}
@@ -26,7 +26,7 @@ Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$
 
 \begin{table}[!h]
 	\centering
-	\caption{Performance characteristics of the $P_N$-method for the pointsource problem.}
+	\caption{Performance characteristics of the $P_N$-method for the point source problem.}
 	\label{tab:results_pointsource}
 	% \flushleft
 	\begin{tabular}{l r r r}
@@ -75,11 +75,11 @@ Running the $P_N$-method on the checkerboard problem, allows to compare it again
 \subsection{Procedural Cloud}
 \label{sec:pn_results_clouds}
 
-In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset, which is being illuminated by a directional cloud. The radiance field is seperated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward pathtracer (section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
+In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset, which is being illuminated by a directional cloud. The radiance field is separated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward path tracer (section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
 
 Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction), which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behaviour of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular, when regions of pure vacuum exist in the dataset.
 
-The $P_N$-method for $N={1,2,3,4,5}$ has been run using a minimum threshold of $\sigma_{min}=1.0e^{-3}$. The resolution of the finite difference grid used by the $P_N$-metod is $64\times 64\times 64$. Seperating the multiple scattered light from the single scattered light has the benefit that the multiple scattered light has lower frequencies, which allows using a coarser finite difference grid without a significant loss of accuracy.
+The $P_N$-method for $N={1,2,3,4,5}$ has been run using a minimum threshold of $\sigma_{min}=1.0e^{-3}$. The resolution of the finite difference grid used by the $P_N$-method is $64\times 64\times 64$. Separating the multiple scattered light from the single scattered light has the benefit that the multiple scattered light has lower frequencies, which allows using a coarser finite difference grid without a significant loss of accuracy.
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.49\columnwidth}
