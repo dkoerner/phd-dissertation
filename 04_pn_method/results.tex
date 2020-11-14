@@ -19,14 +19,14 @@ The correct analytical solution for fluence is given by D'Eon et al.~\cite{dEon1
 \centering
 %\missingfigure{pointsource plots PN}
 \includegraphics[width=0.7\textwidth]{04_pn_method/results/pointsource_pn.pdf}
-\caption{Comparison of $P_N$-results for the pointsource problem with different truncation order $N$ against groundtruth solution (Grosjean).}
+\caption{Comparison of $P_N$-results for the pointsource problem with different truncation order $N$ against groundtruth solution (Grosjean). The disagreement on the right comes from zero dirichlet boundary conditions.}
 \label{fig:pn_results_pointsource_1}
 \end{figure}
 Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$, $P_3$, $P_4$, $P_5$ against the Grosjean solution. The figure shows that with higher $N$, the $P_N$-solution increases in accuracy. Also noticeable is that with increasing truncation order $N$, the $P_N$-solution oscillates around the exact solution and approaches it with alternating under- and overestimation, especially near the point source. Even truncation order will overestimate and odd truncation order will produce an underestimate. The performance characteristics are given in table~\ref{tab:results_pointsource}
 
 \begin{table}[!h]
 	\centering
-	\caption{Performance characteristics of the $P_N$-method for the point source problem.}
+	\caption{Performance characteristics of the $P_N$-method for the point source problem for a $64\times64\times64$ sized grid.}
 	\label{tab:results_pointsource}
 	% \flushleft
 	\begin{tabular}{l r r r}
@@ -118,7 +118,30 @@ The $P_N$-method for $N={1,2,3,4,5}$ has been run using a minimum threshold of $
 
 The results for the procedural cloud problem are shown in figure~\ref{fig:pn_results_nebulae1}. As expected, the increase of the truncation order improves the accuracy of the solution. Especially the regions at the bottom of the cloud, which only receive indirect light are better resolved with higher $N$. However, with the increase of the truncation order, the size of the system increases and requires longer time to converge.
 
-In figure~\ref{fig:pn_results_convergence} the convergence behaviour for solving the normal form using the conjugate-gradient method is being compared for different choices of the threshold $\sigma_{min}$.
+\begin{table}[!h]
+	\centering
+	\caption{Performance characteristics of the $P_N$-method for the procedural cloud problem for a $64\times64\times64$ sized grid with a minimum extinction coefficient threshold of $4$.}
+	\label{tab:results_cloud}
+	% \flushleft
+	\begin{tabular}{l r r r}
+    \hline
+	Truncation order \textbf{N}
+    & 1 & 3 & 5
+    \\
+    \hline
+    Number of rows/columns in $A$
+    & 1.048.576 & 4.194.304 & $9.437.184$
+    \\
+    Size of linear system (in MB)
+    & $8.4$ & $33.5$ & $75.5$
+    \\
+    Solve time (in s)
+    & 9 & 14 & 20
+	\end{tabular}
+\end{table}
+
+The performance characteristics shown in table 
+~\ref{tab:results_cloud} are heavily driven by the presence of low density or vacuum regions. In case of vacuum regions specifically, the condition number is singular. In that case the residual flattens and the solver actually never really converges below a certain error value. Therefore application of a minimum threshold for the extinction coefficient $\sigma_t$ becomes necessary. With a sufficiently high threshold (relative to the length scale of the problem), computation times can be reduced drastically while compromising on the discrepancy to the original problem containing vacuum regions. In figure~\ref{fig:pn_results_convergence} the convergence behaviour for solving the normal form using the conjugate-gradient method is being compared for different choices of the threshold $\sigma_{min}$.
 \begin{figure}[h]
 \centering
 %\missingfigure{convergence}
@@ -126,6 +149,10 @@ In figure~\ref{fig:pn_results_convergence} the convergence behaviour for solving
 \caption{Convergence of $P_5$ for different choices of minimum threshold $\sigma_{min}$ and its effect on the conditional number for the coefficient matrix $A$.}
 \label{fig:pn_results_convergence}
 \end{figure}
+
+For rendering of clouds and other participating media in computer graphics, vacuum or low density regions are of great importance. In these scenarios, the $P_N$-method is not competitive when compared to other techniques.
+
+
 
 
 

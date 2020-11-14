@@ -1,7 +1,7 @@
 \chapter{Foundations of Light Transport Simulation}
 \label{sec:foundations}
 
-This chapter gives an overview on light transport simulation in the context of rendering in computer graphics and specifically reviews the family of deterministic spherical harmonics based methods. Following the introduction and explanation of the physical background and important terminology, a brief overview over the landscape of methods for solving light transport problems is given. This is divided into three sections as per the following categorization: analytical methods (section~\ref{sec:foundations_analytical}), non-deterministic methods (section~\ref{sec:foundations_mc}) and deterministic methods (section~\ref{sec:foundations_deterministic}).
+This chapter gives an overview on light transport simulation in the context of rendering in computer graphics and specifically reviews the family of deterministic spherical harmonics based methods. Following the introduction and explanation of the physical background and important terminology, a brief overview over the landscape of methods for solving light transport problems is given. This is divided into three sections as per the following categorization: analytical methods (section~\ref{sec:foundations_analytical}), stochastic methods (section~\ref{sec:foundations_mc}) and deterministic methods (section~\ref{sec:foundations_deterministic}).
 
 The field of computer graphics is primarily concerned with the generation of images from virtual scenes as seen by a virtual camera. This requires to reproduce the emission of light and its interaction with the scene and the sensor. The study of the behaviour of light is subject to optics, a seperate branch of physics. Due to the intricate nature of light, a series of increasingly complex models exist, which can account for various properties. Fundamental to light is its particle-wave duality, which states that light can be described both, as individual particles (photons) or waves. Challenging to the subject is, that not all properties of light can be described by solely the particle nor the wave perspective. To account for all properties, both have to be considered and require quantum mechanics. The field of wave optics is a simpler model that can account for optical effects, caused by the wave property, such as interference and diffraction. The simplest is provided by geometric optics, which models light as particle trajectories or rays and is referred to as ray optics. This model works well, when the wavelength is small compared to the scene the light propagates. 
 
@@ -64,7 +64,7 @@ Scattering describes collision of medium particles. Rather than being absorbed, 
 
 Secondly, scattering affects the way the radiance field changes along $\omega$ in that photons arriving from all directions will collide with the volume and scatter into the direction $\omega$. This is called inscattering:
 \begin{align}
-\left(\omega\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}p\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\left(\omega\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
 \label{eq:rte_inscattering}
 \end{align}
 The quantity $p$ is the phase function, a medium parameter, which determines how light is redistributed from an incident direction $\omega'$ to the outgoing direction $\omega$. Since medium particles are assumed to either be spherical or randomly oriented, this function does not change as both vectors $\omega_i$ and $\omega$ are rotated, and therefore the cosine of the angle between the two vectors suffices as a parameter.
@@ -91,7 +91,7 @@ All terms combined produce the radiative transfer equation (RTE), which expresse
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \label{eq:rte}
 \\
@@ -121,14 +121,14 @@ For notational convenience and for developing the theory for deterministic metho
 \mathcal{C}\left(L\right) &= \sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
 \nonumber
 \\
-\mathcal{S}\left(L\right) &= \sigma_s \int_{\Omega'}p\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\mathcal{S}\left(L\right) &= \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
 \nonumber
 \\
 Q_e &= Q_e\left(\vec{x}, \omega\right)
 \nonumber
 \end{align}
 
-Light transport simulation is the process for finding the solutions to $L$, either for specific values of $\vec{x}$ and $\omega$ or globally. The following section gives an overview of the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subject of this thesis. The next section briefly covers analytical solutions which are popular and have been used to great effect. Section~\ref{sec:foundations_mc} covers non-deterministic methods, such as the Monte Carlo method. These methods will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of non-deterministic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
+Light transport simulation is the process for finding the solutions to $L$, either for specific values of $\vec{x}$ and $\omega$ or globally. The following section gives an overview of the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subject of this thesis. The next section briefly covers analytical solutions which are popular and have been used to great effect. Section~\ref{sec:foundations_mc} covers stochastic methods, such as the Monte Carlo method. These methods will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of stochastic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
 
 % ============================================================
 \section{Analytical Solutions}
@@ -143,14 +143,14 @@ Jensen et al.~\cite{Jensen01} introduced the diffusion theory and in particular 
 The main drawback of analytical models is their restriction to simple problems and homogeneous media in particular. In addition, they introduce in some cases significant error, when the canonical problem is used on geometry that violates the plane-parallel assumption. Further dipole methods are based on the diffusion theory, which has poor directional resolution and complications with energy conservation (see section~\ref{sec:moment_problem_revisited}).
 
 % ============================================================
-\section{Non-deterministic Methods}
+\section{Stochastic Methods}
 \label{sec:foundations_mc}
 
 For most practical applications, analytical solutions do not exist, and numerical integration is required. The key challenge with solving the radiative transfer equation using numerical integration is the global nature of $L$. Changing a scene parameter in one place will affect all other parts in the scene. This gobal dependency is introduced by the integral over the radiance field in the scattering term. 
 
-Naivley integrating the scattering term by using common quadrature rules that are based on interpolation functions on a regular grid (e.g. Riemann integration) becomes prohibitively expensive with one or two recursion levels already as the function evaluations grow exponentially with the number of recursions, known as the \emph{curse of dimensionality}. An alternative to interpolation based-quadrature is Monte Carlo integration based on random samples. This is the core principle behind all non-deterministic methods.
+Naivley integrating the scattering term by using common quadrature rules that are based on interpolation functions on a regular grid (e.g. Riemann integration) becomes prohibitively expensive with one or two recursion levels already as the function evaluations grow exponentially with the number of recursions, known as the \emph{curse of dimensionality}. An alternative to interpolation based-quadrature is Monte Carlo integration based on random samples. This is the core principle behind all stochastic methods.
 
-The following sections provide a very brief overview over standard Monte Carlo methods for various reasons: First, it will help to differentiate deterministic methods, which are introduced later. Second, it explains how the ground truth images used in the result sections of chapter~\ref{sec:pnmethod}, chapter~\ref{sec:diffusion_approximation} and chapter~\ref{sec:fld} were generated. Furthermore, the introduced methods in this thesis require computation of the single scattered light contribution, for which non-deterministic methods are used. Last, this section intends to inspire research in combining non-deterministic methods with deterministic methods into hybrid approaches, combining the benefits of both worlds and by this motivates research into deterministic methods in general.
+The following sections provide a very brief overview over standard Monte Carlo methods for various reasons: First, it will help to differentiate deterministic methods, which are introduced later. Second, it explains how the ground truth images used in the result sections of chapter~\ref{sec:pnmethod}, chapter~\ref{sec:diffusion_approximation} and chapter~\ref{sec:fld} were generated. Furthermore, the introduced methods in this thesis require computation of the single scattered light contribution, for which stochastic methods are used. Last, this section intends to inspire research in combining stochastic methods with deterministic methods into hybrid approaches, combining the benefits of both worlds and by this motivates research into deterministic methods in general.
 
 \subsubsection*{Distributed Ray Tracing}
 
@@ -192,7 +192,8 @@ Naively using the Monte-Carlo integration technique with the inscattering integr
 % path tracing --------------------------------------------
 \subsubsection*{Path Tracing}
 
-Instead of applying Monte-Carlo directly to the in-scattering integral of the radiative transfer equation and integrating over solid angle, Kajiya~\cite{Kajiya86} proposed to reformulate the solution of the radiative transfer equation as an integral over all possible paths of photons which start from the place of emission (light sources) and arrive at position $\vec{x}$ from direction $\omega$ to contribute to $L(\vec{x}, \omega)$. This laid the foundation of the path integral formulation which is the underlying framework used by all Monte-Carlo techniques today.
+The rendering equation is an integral equation which describes the propagation of light in scenes without any participating medium. Instead of applying Monte-Carlo directly to the in-scattering integral of the rendering equation and integrating over solid angle, Veach~\cite{VeachThesis97} proposed to reformulate the equation as an integral over all possible paths of photons which start from the place of emission (light sources) and arrive at position $\vec{x}$ from direction $\omega$ to contribute to $L(\vec{x}, \omega)$. This laid the foundation of the path integral formulation which is the underlying framework used by all Monte-Carlo techniques in rendering today. Pauly et al.~\cite{Pauly00} then later applied this to the radiative transfer equation which opened up the use of Monte Carlo techniques for light transport simulation in participating media.
+
 
 The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ which represents the trajectory a photon can make by traveling from where it was emitted to some position $\vec{x}$ with some incident direction $\omega$. The path $\bar{\mathrm{x}}$ consists of $N$ vertices $\vec{x}_i$ at which interaction events occur. The function $f\left(\bar{\mathrm{x}}\right)$ takes such a single path as input and returns the contribution which a photon makes to $L(\vec{x}, \omega)$ after being emitted with initial energy $L_e$ from the light source and traveling along the path trajectory represented by $\bar{\mathrm{x}}$ accounting for all the terms in the radiative transfer equation~\ref{eq:rte} which reduce energy along the way.
 \begin{figure}[t]
@@ -203,8 +204,9 @@ The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ 
 \label{fig:mc_path_sample_contributions}
 \end{figure}
 
-Energy is reduced for each segment $\vec{x}_i \vec{x}_{i+1}$ by the geometry term $G$ which results from the change in projected area, the transmittance term $T$ which accounts for absorption and outscattering and the visibility term $V$ which accounts for geometry obstructing the path alltogether. At each interior path vertex $\vec{x}_i$, scattering is accounted for by multiplying with $p(\vec{x}_i)$. Finally an importance weight $W_e$ accounts for sensor sensitivity.
+Energy is reduced for each segment $\vec{x}_i \vec{x}_{i+1}$ by the geometry term $G$ which results from the change in projected area, the transmittance term $T$ which accounts for absorption and outscattering and the visibility term $V$ which accounts for geometry obstructing the path alltogether. At each interior path vertex $\vec{x}_i$, scattering is accounted for by multiplying with phase function term $P(\vec{x}_{i-1}, \vec{x}_i, \vec{x}_{i+1})$. Finally an importance weight $W_e$ accounts for sensor sensitivity.
 \begin{align}
+\hspace{-.3in}
 f\left(\bar{\mathrm{x}}\right) =
 L_e\left(\vec{x}_0\right)
 W_e\left(\vec{x}_N\right)
@@ -213,7 +215,7 @@ G\left(\vec{x}_i, \vec{x}_{i+1}\right)
 T\left(\vec{x}_i, \vec{x}_{i+1}\right)
 V\left(\vec{x}_i, \vec{x}_{i+1}\right)
 \prod_{i=1}^{i=N-1}
-p\left(\vec{x}_i\right)
+P\left(\vec{x}_{i-1}, \vec{x}_i, \vec{x}_{i+1}\right)
 \label{eq:foundations_mc_pathintegral}
 \end{align}
 The transmittance is defined as
@@ -240,13 +242,13 @@ D\left(\vec{a}, \vec{b}\right) =
 \end{align}
 Here $\vec{n}_a$ is the normal at the surface vertex $\vec{a}$ and $\omega_{ab}$ is the normalized direction vector pointing from vertex $\vec{a}$ to vertex $\vec{b}$.
 
-Lastly the scattering term $p(\vec{x}_i)$ is defined in terms of the phase function $p$ and the function $p_s$ which is accounting for surface scattering.
+The last term is defined in terms of the volume phase function $\phase$ and the surface scattering function $\phase_s$:
 \begin{align}
-p\left(\vec{x}_i\right) =
+P\left(\vec{x}_{i-1}, \vec{x}_i, \vec{x}_{i+1}\right) =
 \begin{cases}
-p_s\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}, \vec{n}_i\right), & \text{if $\vec{x}_i$ is a surface vertex}
+\phase_s\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}, \vec{n}_i\right), & \text{if $\vec{x}_i$ is a surface vertex}
 \\
-p\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}\right), & \text{if $\vec{x}_i$ is a volume vertex}
+\phase\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}\right), & \text{if $\vec{x}_i$ is a volume vertex}
 \end{cases}
 \end{align}
 This thesis exclusively deals with participating media and therefore surface scattering is of no concern.
@@ -268,7 +270,7 @@ As mentioned above, the estimation error shows up as image noise (if random samp
 
 \subsubsection*{Variance Reduction}
 
-Reducing the variance of Monte-Carlo estimators and therefore improving the convergence behaviour is the goal of most of the research on non-deterministic rendering methods. The primary strategy for variance reduction is to reduce the deflection or range of values under the integral sign. This is because the variance is driven by the amount the integrated function deviates from its mean over the integrated range.
+Reducing the variance of Monte-Carlo estimators and therefore improving the convergence behaviour is the goal of most of the research on stochastic rendering methods. The primary strategy for variance reduction is to reduce the deflection or range of values under the integral sign. This is because the variance is driven by the amount the integrated function deviates from its mean over the integrated range.
 
 There are two ways to reduce the amount of variation of the integrand around its mean value. The first is to adjust the sampling strategy such that the probability density function $p\left(x\right)$ correlates with $f\left(x\right)$ as closely as possible. Ideally the probability density function is identical to $f$ up to a normalization factor $c$. This approach is called importance sampling:
 \begin{align}
@@ -401,7 +403,7 @@ The purpose of this thesis is to introduce the class of spherical harmonics meth
 
 \subsubsection*{Discrete Ordinate Method ($S_N$-Method)}
 % SN
-Instead of using the continuous spherical harmonics basis functions, an alternative approach for the discretization $\mathcal{P}_\omega$ is to replace the continuous variable $\omega$ by a discrete set of direction vectors $\omega_i$ (e.g. using Gaussian quadrature points) which causes the inscattering integral (equation~\ref{eq:rte_inscattering}) to turn into a sum and in the end produces a system of linear equations. Usually in other fields, the variable $s$ is used to identify the direction vector, and the discrete directions are denoted $s_i$. This is why the method is also referred to as $S_N$-method (where $N$ is the number of directions). Development of the method is mostly attributed to Wick~\cite{Wick43} and Chandrasekhar~\cite{Chandrasekhar60}, who derived the $S_N$-method in one dimension. Later, Carlson et al.~\cite{Carlson61} extended the method to two and three dimensions. For the one-dimensional case, it has been shown, that $S_{N+1}$-theory is equivalent to $P_N$-theory if Gaussian quadrature points are used (see~\cite{Cullen01}). In this case, the discrete $S_N$-directions correspond to the zero crossings of the Legendre polynomials used in $P_N$. In two or three dimensions however, this correspondence is broken and causes non-physical results, such as the ray effects for which the $S_N$-method is known for.
+Instead of using the continuous spherical harmonics basis functions, an alternative approach for the discretization $\mathcal{P}_\omega$ is to replace the continuous variable $\omega$ by a discrete set of direction vectors $\omega_i$ (e.g. using Gaussian quadrature points) which causes the inscattering integral (equation~\ref{eq:rte_inscattering}) to turn into a sum and in the end produces a system of linear equations. Usually in other fields, the variable $s$ is used to identify the direction vector, and the discrete directions are denoted $s_i$. This is why the method is also referred to as $S_N$-method (where $N$ is the number of directions). Development of the method is mostly attributed to Wick~\cite{Wick43} and Chandrasekhar~\cite{Chandrasekhar60}, who derived the $S_N$-method in one dimension. Later, Carlson et al.~\cite{Carlson61} extended the method to two and three dimensions. For the one-dimensional case, it has been shown, that $S_{N+1}$-theory is equivalent to $P_N$-theory if Gaussian quadrature points are used (see~\cite{Cullen01}). In this case, the discrete $S_N$-directions correspond to the zero crossings of the Legendre polynomials used in $P_N$. In two or three dimensions however, this correspondence is broken and causes non-physical results, such as the ray effects for which the $S_N$-method is known for. These are discretization artifacts of the angular variable and appear as unphysical concentrated beams of light within the volume. 
 
 Like the $P_N$-method, the $S_N$ method also has not been fully explored in the context of rendering in computer graphics yet. Most related is work by Max~\cite{Max95}, who introduced a method for computing light propagation in participating media based on directional bins in a regular grid which resembles the method of discrete ordinates.
 

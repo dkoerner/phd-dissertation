@@ -43,14 +43,14 @@ When replacing the radiance field $L$ with the decomposition above in the radiat
 {
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
 }
 }_{L_s}
 \nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber
 \\
@@ -68,7 +68,7 @@ By using equation~\ref{eq:restricted_rte}, the extinction terms for the unscatte
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber
 \\
@@ -97,7 +97,7 @@ Volume rendering frameworks are concerned with solving the radiative transfer eq
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)\left(L_u\left(\vec{x}, \omega' \right)+\widehat{L}_m\left(\vec{x}, \omega' \right)\right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)\left(L_u\left(\vec{x}, \omega' \right)+\widehat{L}_m\left(\vec{x}, \omega' \right)\right)\ud\omega'
 }
 \nonumber
 \\
@@ -111,13 +111,13 @@ p\left(\omega'\cdot\omega\right)\left(L_u\left(\vec{x}, \omega' \right)+\widehat
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber\\
 &
@@ -133,7 +133,7 @@ If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integrati
 -\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber\\
 &
@@ -150,7 +150,7 @@ p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
 -\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-p\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
 }
 \nonumber\\
 &

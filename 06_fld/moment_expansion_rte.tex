@@ -1,14 +1,12 @@
 \section{Moment Expansion of the Radiative Transfer Equation}
 \label{sec:da_moment_expansion_RTE}
 
-%In the previous section, we learned about the moment expansion of the radiance field $L$, which is closely related to the spherical harmonics expansion. It differs in that it uses coordinate free tensor notation, instead of spherical harmonics basis functions. It is much better for notation and therefore useful for the discussion and presentation of the theory. This is particularily true when working with lower order moments. 
-
 As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the difference that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the replacement is done as a second step.
 
 The $n$-th moment of the RTE is found by applying the moment projection operator $\mu_n$ to all the terms of the RTE:
 \begin{align*}
 \mu_n\left[(\omega\cdot\nabla)L(\vec{x}, \omega)\right]=&\\
-\mu_n\left[-\sigma_t(\vec{x})L(\vec{x}, \omega) + \sigma_s(\vec{x})\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega' + Q(\vec{x}, \omega)\right]
+\mu_n\left[-\sigma_t(\vec{x})L(\vec{x}, \omega) + \sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega' + Q(\vec{x}, \omega)\right]
 %\label{eq:rte_ani}
 \end{align*}
 Since $\mu_n$ is linear, the LHS gives:
@@ -23,7 +21,7 @@ The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation o
 \nabla\mu_{n+1}\left[L\right] =&
 -\sigma_t(\vec{x})\mu_n\left[L(\vec{x}, \omega)\right]\\
 \label{eq:gme}
-&+\sigma_s(\vec{x})\mu_n\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega) L(\vec{x}, \omega')\ud\omega'\right]\\
+&+\sigma_s(\vec{x})\mu_n\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega) L(\vec{x}, \omega')\ud\omega'\right]\\
 \nonumber
 &+\mu_n\left[Q(\vec{x}, \omega)\right]
 \end{align}
@@ -36,7 +34,7 @@ For the derivation of the diffusion approximation in this chapter, the moment ex
 -\sigma_t(\vec{x})\mu_0\left[L(\vec{x}, \omega)\right]
 \\
 \label{eq:p1_zero}
-&+ \sigma_s(\vec{x})\mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right] 
+&+ \sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right] 
 \\
 \nonumber
 &+ \mu_0\left[Q(\vec{x}, \omega)\right]
@@ -48,7 +46,7 @@ The first moment equation is likewise found by using $n=1$ in equation~\ref{eq:g
 -\sigma_t(\vec{x})\mu_1\left[L(\vec{x}, \omega)\right]
 \\ &
 \label{eq:p1_firstme}
-+\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right]
++\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right]
 \\ &
 \nonumber
 + \mu_1\left[Q(\vec{x}, \omega)\right]
@@ -62,10 +60,10 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\sigma_t(\vec{x})\mu_0\left[\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\
 &
-+\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\frac{1}{4\pi}\phi(\vec{x})\ud\omega'\right]
++\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\frac{1}{4\pi}\phi(\vec{x})\ud\omega'\right]
 \\
 &
-+\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\frac{3}{4\pi}\vec{E}(\vec{x})\ud\omega'\right]
++\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\frac{3}{4\pi}\vec{E}(\vec{x})\ud\omega'\right]
 \\
 &
 \nonumber
@@ -75,10 +73,10 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\frac{1}{4\pi}\phi\sigma_t(\vec{x})\mu_0\left[1\right] - \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_t(\vec{x})\mu_1\left[1\right]
 \\
 &
-+\frac{1}{4\pi}\phi(\vec{x})\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
++\frac{1}{4\pi}\phi(\vec{x})\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
 \\
 &
-+\frac{3}{4\pi}\vec{E}(\vec{x})\sigma_s(\vec{x})\mu_1\left[1\right]\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\omega'\ud\omega'
++\frac{3}{4\pi}\vec{E}(\vec{x})\sigma_s(\vec{x})\mu_1\left[1\right]\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\omega'\ud\omega'
 \\
 &
 + Q_0\left(\vec{x}\right)
@@ -94,14 +92,14 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 \end{align*}
 Using $\mu_1[1] = 0$ and normalized phase function results in:
 \begin{align*}
-\mu_0\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right] = \mu_0\left[1\right] = 4\pi
+\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right] = \mu_0\left[1\right] = 4\pi
 \end{align*}
 Likewise the radiance field is replaced with its two moment expansion in the first moment expansion of the RTE (equation~\ref{eq:p1_firstme}):
 \begin{align*}
 \nabla P =&
 -\sigma_t(\vec{x})\mu_1\left[\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\&
-+\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\left(\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right)\ud\omega'\right]
++\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\left(\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right)\ud\omega'\right]
 \\&
 \nonumber
 + Q_1\left(\vec{x}\right)
@@ -111,10 +109,10 @@ Likewise the radiance field is replaced with its two moment expansion in the fir
 -\sigma_t(\vec{x})\mu_1\left[\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\
 &
-+\frac{1}{4\pi}\phi\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
++\frac{1}{4\pi}\phi\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
 \\
 &
-+\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\omega\ud\omega'\right]
++\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\omega\ud\omega'\right]
 \\
 &
 +Q_1\left(\vec{x}\right)
@@ -204,13 +202,4 @@ which can be further rearranged into:
 +\nabla Q_1\left(\vec{x}\right)
 .
 \end{align}
-The result is similar to the popular diffusion approximation equation. A single unknown remains: the second moment of the radiance field $P$, which is called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including flux-limited diffusion, which will be introduced in chapter~\ref{sec:fld}.
-
-
-
-
-
-%\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)
-%
-
-%+\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}f_p(\vec{x}, \omega'\rightarrow\omega)\frac{3}{4\pi}\sigma_t(\vec{x})\vec{E}\left(\vec{x}\right)\right)\ud\omega'\right]
+A single unknown remains: the second moment of the radiance field $P$, which is called the radiative pressure tensor. Resolving, or better approximating, this unknown is what leads to a rich variety of methods and theories, including the diffusion approximation and flux-limited diffusion.

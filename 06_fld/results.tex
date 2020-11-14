@@ -3,7 +3,7 @@
 
 With the solver introduced in the previous section it can now be run for comparison on the problems, which were used for the $P_N$-method in chapter~\ref{sec:pnmethod} and the diffusion approximation in chapter~\ref{sec:diffusion_approximation}.
 
-The rendering integration aspects to be considered are identical to the diffusion approximation (section~\ref{sec:da_results}). As with the diffusion approximation, flux-limited diffusion will give a solution for the zero moment $\phi$ from which the second moment can be recovered using equation~\ref{eq:diffusion_ficks_law}. Both moments can be used to reconstruct the truncated spherical harmonics expansion of the radiance field by using equation~\ref{eq:moment_expansion_L}. The difference to the diffusion approximation solution is that the fluence should be more accurate as the flux-limit constraint had been accounted for.
+The rendering integration aspects to be considered are identical to the diffusion approximation (section~\ref{sec:diffusion_approximation}). As with the diffusion approximation, flux-limited diffusion will give a solution for the zero moment $\phi$ from which the second moment can be recovered using equation~\ref{eq:diffusion_ficks_law}. Both moments can be used to reconstruct the truncated spherical harmonics expansion of the radiance field by using equation~\ref{eq:moment_expansion_L}. The difference to the diffusion approximation solution is that the fluence should be more accurate as the flux-limit constraint had been accounted for.
 
 \subsection{Point Source Problem}
 \label{sec:pn_results_pointsource}
@@ -22,23 +22,23 @@ In comparison to the results from $P_N$-method and $P_5$ in particular, the $P_N
 
 \begin{table}[!h]
 	\centering
-	\caption{Performance characteristics of flux-limited diffusion for the point source problem.}
+	\caption{Performance characteristics of flux-limited diffusion and $P_1$ for the point source problem.}
 	\label{tab:results_pointsource}
 	% \flushleft
-	\begin{tabular}{l r}
+	\begin{tabular}{l r r}
     \hline
-	\textbf{N}
-    & 1
+	\textbf{Method}
+    & FLD & $P_1$
     \\
     \hline
     Number of rows/columns in $A$
-    & 262.144
+    & 262.144 & 1.048.576
     \\
     Size of linear system (in MB)
-    & 1.3
+    & 1.3 & 8.4
     \\
-    Solve time (in s)
-    & 34
+    Solve time
+    & 9\si{\second} & 10\si{\minute}
 	\end{tabular}
 \end{table}
 

@@ -123,31 +123,31 @@ a^{l-1, m}\partial_z L^{l-1,m}+b^{l+1, m}\partial_z L^{l+1,m}
 
 The scattering term in the RTE is given as:
 \begin{align*}
-\sigma_s(\vec{x})\int_{\Omega}p(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
 \end{align*}
 The phase function, used in isotropic scattering medium, only depends on the angle between incident and outgoing direction, and therefore is rotationally symmetric around the pole defining axis. This property allows to define a rotation $R(\omega)$, which rotates the phase function, such that the pole axis aligns with the outgoing direction vector $\omega$. This rotation is expressed as:
 \begin{align*}
-\rho_{R(\omega)}(p)
+\rho_{R(\omega)}(\phase)
 \ ,
 \end{align*}
-where $\rho$ is the rotation operator, which can be implemented by applying the inverse rotation $R(\omega)^{-1}$ to the arguments of $p$. With this rotated phase function, the integral of the scattering operator can be expressed as a convolution:
+which can be implemented by applying the inverse rotation $R(\omega)^{-1}$ to the arguments of $\phase$. With this rotated phase function, the integral of the scattering operator can be expressed as a convolution:
 \begin{align}
-\int_{\Omega'}p(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\int_{\Omega'}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
 &=
-\int_{\Omega'}{\rho_{R(\omega)}(p)(\operatorname{cos}\theta')L(\vec{x}, \omega')\ud\omega'}
+\int_{\Omega'}{\rho_{R(\omega)}(\phase)(\operatorname{cos}\theta')L(\vec{x}, \omega')\ud\omega'}
 \nonumber\\
-&= \langle L,  \rho_{R(\omega)}(p)\rangle
+&= \langle L,  \rho_{R(\omega)}(\phase)\rangle
 \label{eq:complex_scatt_conv}
 \end{align}
 As the inner product integral of the convolution is evaluated, the phase function rotates along with the argument $\omega$.
 
-Now, the spherical harmonics expansions of $L$ and $p$ (equation~\ref{eq:sh_exp_phase}) in the definition for the inner product of the convolution (equation~\ref{eq:complex_scatt_conv}) is used:
+Now, the spherical harmonics expansions of $L$ and $\phase$ (equation~\ref{eq:sh_exp_phase}) in the definition for the inner product of the convolution (equation~\ref{eq:complex_scatt_conv}) is used:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(p)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\omega)}\left ( \sum_{l}{p^{l0}\SHBC^{l0}} \right )\right>
+\langle L,  \rho_{R(\omega)}(\phase)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\omega)}\left ( \sum_{l}{\phase^{l0}\SHBC^{l0}} \right )\right>
 \end{align*}
 Due to linearity of the inner product operator, the non-angular dependent parts of the expansions can be pulled out:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(p)\rangle
+\langle L,  \rho_{R(\omega)}(\phase)\rangle
 &=
 \sum_{l,m}
 {
@@ -155,19 +155,19 @@ L^{l,m}(\vec{x})
 \left<
 \SHBC^{l,m},
 \rho_{R(\omega)}
-\left(\sum_l{p^{l0} \SHBC^{l0}}\right)
+\left(\sum_l{\phase^{l0} \SHBC^{l0}}\right)
 \right>
 }
 \end{align*}
 and further:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(p)\rangle
+\langle L,  \rho_{R(\omega)}(\phase)\rangle
 &=
 \sum_{l'}
 {
 \sum_{l,m}
 {
-p^{l'0}L^{l,m}(\vec{x})
+\phase^{l'0}L^{l,m}(\vec{x})
 \left<\SHBC^{l,m}, \rho_{R(\omega)}\left( \SHBC^{l'0} \right)\right>
 }
 }
@@ -180,11 +180,11 @@ The rotation $\rho_{R(\omega)}$ of a function with frequency $l$ results in a fu
 \end{align*}
 which further simplifies the inner product integral to:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(p)\rangle
+\langle L,  \rho_{R(\omega)}(\phase)\rangle
 &=
 \sum_{l,m}
 {
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \left<
 \SHBC^{l,m}, \rho_{R(\omega)}\left(\SHBC^{l0} \right )
 \right>
@@ -206,13 +206,13 @@ Replacing the inner product leads to:
 \sum_{l,m}
 {
 \lambda_l
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \SHBC^{l,m}
 }
 \end{align*}
 This allows to express the scattering term using SH expansions of phase function $p$ and radiance field $L$:
 \begin{align*}
-\sigma_s(\vec{x})\int_{\Omega}p(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
 &=
 \sigma_s(\vec{x})\langle L,  \rho_{R(\omega)}(p)\rangle
 \\
@@ -221,7 +221,7 @@ This allows to express the scattering term using SH expansions of phase function
 \sum_{l,m}
 {
 \lambda_l
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \SHBC^{l,m}
 }
 \end{align*}
@@ -235,7 +235,7 @@ However, a spherical harmonics expansion of the term itsself has not been done y
 \sum_{l,m}
 {
 \lambda_l
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \SHBC^{l,m}\left(\omega\right)
 }
 \ud\omega
@@ -244,7 +244,7 @@ p^{l0}L^{l,m}(\vec{x})
 =&
 \lambda_l
 \sigma_s(\vec{x})
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \sum_{l,m}
 {
 \int_{\Omega}
@@ -258,7 +258,7 @@ p^{l0}L^{l,m}(\vec{x})
 =&
 \lambda_l
 \sigma_s(\vec{x})
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \sum_{l,m}
 {
 \delta_{ll'}\delta_{mm'}
@@ -267,7 +267,7 @@ p^{l0}L^{l,m}(\vec{x})
 =&
 \lambda_l
 \sigma_s(\vec{x})
-p^{l0}L^{l,m}(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \label{eq:sh_complex_scattering}
 \end{align}
 
@@ -336,6 +336,6 @@ The results are the complex-valued $P_N$-equations, after putting all the projec
 +
 \lambda_l
 \sigma_s(\vec{x})
-p^{l0}L^{l,m}(\vec{x}) + Q^{l,m}\left(\vec{x}, \omega\right)
+\phase^{l0}L^{l,m}(\vec{x}) + Q^{l,m}\left(\vec{x}, \omega\right)
 \label{eq:sh_pne_complex}
 \end{align}
