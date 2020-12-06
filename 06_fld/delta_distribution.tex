@@ -3,16 +3,16 @@
 
 In the previous section, the transport measure $R$ was introduced, which contains the factor $\norm{\nabla\phi}/\phi$. This factor approaches one as transport becomes less diffusive and enters the streaming regime. In the case of $\norm{\nabla\phi}/\phi=1$, the length of the flux-vector matches the amount of total power. In this case, light is coming from a single direction. The radiance distribution of this configuration is given as
 \begin{align}
-\hat{L}\left(\omega\right)=\delta_{\Omega}\left(\omega,\vec{n}\right).
+\hat{L}\left(\vec{\omega}\right)=\delta_{\Omega}\left(\vec{\omega},\vec{n}\right).
 \end{align}
 where $\delta_{\Omega}$ is the angular Dirac delta distribution into direction $\vec{n}$. The spatial dependency is omitted and not relevant for this discussion. The moments of this distribution are:
 \begin{align}
 \label{eq:zero_moment_Lhat}
-\hat{L}_0\left(\omega\right)&=\int_{\Omega}{\delta_{\Omega}\left(\omega,\vec{n}\right)\ud\omega} = 1\\
+\hat{L}_0\left(\vec{\omega}\right)&=\int_{\Omega}{\delta_{\Omega}\left(\vec{\omega},\vec{n}\right)\ud\vec{\omega}} = 1\\
 \label{eq:first_moment_Lhat}
-\hat{L}_1\left(\omega\right)&=\int_{\Omega}{\delta_{\Omega}\left(\omega,\vec{n}\right)\omega\ud\omega} = \vec{n}\\
+\hat{L}_1\left(\vec{\omega}\right)&=\int_{\Omega}{\delta_{\Omega}\left(\vec{\omega},\vec{n}\right)\vec{\omega}\ud\vec{\omega}} = \vec{n}\\
 \label{eq:second_moment_Lhat}
-\hat{L}_2\left(\omega\right)&=\int_{\Omega}{\delta_{\Omega}\left(\omega,\vec{n}\right)\omega_i\omega_j\ud\omega} = \vec{n}_i\vec{n}_j
+\hat{L}_2\left(\vec{\omega}\right)&=\int_{\Omega}{\delta_{\Omega}\left(\vec{\omega},\vec{n}\right)\vec{\omega}_i\vec{\omega}_j\ud\vec{\omega}} = \vec{n}_i\vec{n}_j
 \end{align}
 The zero moment expresses that all power given by $\phi$ comes from a single direction. The second equation shows, that the first moment of a delta distribution is identical to the vector which defines that distribution ($\vec{n}$ in our case). It shall be concluded that the length of the flux-vector equals the zero moment and its direction is $\vec{n}$ (all under the assumption of a delta radiance distribution):
 \begin{align}
@@ -69,7 +69,7 @@ which states that the flux-vector is the unit vector pointing into the direction
 \label{eq:iso_delta_advection_equation}
 \nabla\cdot\left(\frac{\nabla\phi}{\norm{\nabla\phi}}\phi\right) &= \sigma_a\phi - Q_0
 \end{align}
-If we consider a purely scattering medium without emission ($\omega_a=0$ and $Q_0=0$) and define $\vec{u}=\frac{\nabla\phi}{\norm{\nabla\phi}}$ to be the unit fluence gradient vector field, then it becomes apparent that this equation resembles some form of a steady state advection equation:
+If we consider a purely scattering medium without emission ($\vec{\omega}_a=0$ and $Q_0=0$) and define $\vec{u}=\frac{\nabla\phi}{\norm{\nabla\phi}}$ to be the unit fluence gradient vector field, then it becomes apparent that this equation resembles some form of a steady state advection equation:
 \begin{align}
 \label{eq:iso_delta_advection_equation2}
 \nabla\cdot\left(\vec{u}\phi\right) &= 0

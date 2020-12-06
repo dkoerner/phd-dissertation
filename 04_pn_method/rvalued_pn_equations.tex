@@ -26,17 +26,17 @@ Being real-valued implies that no complex-conjugate is needed for the inner prod
 \begin{align}
 \label{eq:sh_projection}
 f^{l, m} = \left<f,\SHBR^{l, m}\right> = 
-\int_\Omega f\left(\omega\right)\SHBR^{l,m}\left(\omega\right)\ud\omega
+\int_\Omega f\left(\vec{\omega}\right)\SHBR^{l,m}\left(\vec{\omega}\right)\ud\vec{\omega}
 \ .
 \end{align}
 Similarly the reconstruction is done by using the real-valued spherical harmonics basis function
 \begin{align}
-f\left(\omega\right) = 
+f\left(\vec{\omega}\right) = 
 \sum_{l=0}^{N}
 {
 \sum_{m=-l}^{l}
 {
-f^{l,m}\left(\vec{x}\right)\SHBR^{l,m}\left(\omega\right)
+f^{l,m}\left(\vec{x}\right)\SHBR^{l,m}\left(\vec{\omega}\right)
 }
 }
 \ .
@@ -46,7 +46,7 @@ All properties of the complex-valued spherical harmonics basis functions, except
 \begin{align}
 \label{eq:sh_orthogonality_real}
 \left<\SHBR^{l_1, m_1},\SHBR^{l_2, m_2}\right>=
-\int_{\Omega} \SHBR^{l_1m_1}\left(\omega\right) \SHBR^{l_2m_2}\left(\omega\right) \mathbf{d}\omega = \delta_{l_1m_1}\delta_{l_2m_2}
+\int_{\Omega} \SHBR^{l_1m_1}\left(\vec{\omega}\right) \SHBR^{l_2m_2}\left(\vec{\omega}\right) \mathbf{d}\vec{\omega} = \delta_{l_1m_1}\delta_{l_2m_2}
 \ .
 \end{align}
 

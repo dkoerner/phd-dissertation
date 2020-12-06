@@ -16,7 +16,7 @@
 
 % l: mean freepath
 % delta distribution
-% \omega
+% \vec{\omega}
 
 % notation
 % || parallel lines
@@ -45,21 +45,21 @@
 	\\
 	$\bar{\mathrm{x}}$	&  path sample
 	\\
-	$\omega$	&  unit length direction vector
+	$\vec{\omega}$	&  unit length direction vector
 	\\
 	$D\left(\vec{x}\right)$	&  diffusion coefficient $\left[\si{\meter}\right]$
 	\\
 	$R\left(\vec{x}\right)$	&  transport regime measure
 	\\
-	$L\left(\vec{x}, \omega\right)$	&  radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$L\left(\vec{x}, \vec{\omega}\right)$	&  radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
-	$L_u\left(\vec{x}, \omega\right)$	&  unscattered light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$L_u\left(\vec{x}, \vec{\omega}\right)$	&  unscattered light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
-	$L_s\left(\vec{x}, \omega\right)$	&  single scattered light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$L_s\left(\vec{x}, \vec{\omega}\right)$	&  single scattered light radiance field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
-	$L_m\left(\vec{x}, \omega\right)$	&  medium radiance field (single and multiple scattered light) $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$L_m\left(\vec{x}, \vec{\vec{\omega}}\right)$	&  medium radiance field (single and multiple scattered light) $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
-	$\widehat{L}\left(\vec{x}, \omega\right)$	&  radiance field truncated spherical harmonics reconstruction $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$\widehat{L}\left(\vec{x}, \vec{\omega}\right)$	&  radiance field truncated spherical harmonics reconstruction $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
 	$\phi\left(\vec{x}\right)$	&  fluence (zero moment of the radiance field) $\left[\frac{\si{\watt}}{\si{\meter}^2}\right]$
 	\\
@@ -67,9 +67,9 @@
 	\\
 	$P\left(\vec{x}\right)$	&  radiative pressure tensor (second moment of the radiance field)
 	\\
-	$\phase\left(\vec{x}, \omega'\cdot\omega\right)$	&  phase function $\left[\si{\steradian}\right]$
+	$\phase\left(\vec{x}, \vec{\omega}'\cdot\vec{\omega}\right)$	&  phase function $\left[\si{\steradian}\right]$
 	\\
-	$Q_e\left(\vec{x}, \omega\right)$	&  emission field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
+	$Q_e\left(\vec{x}, \vec{\omega}\right)$	&  emission field $\left[\frac{\si{\watt}}{\si{\steradian} \si{\meter}^2}\right]$
 	\\
 	$E\left[f\right]$	&  expected value of random variable f
 	\\
@@ -79,7 +79,7 @@
 	\\
 	$L^{l,m}$	&  radiance field spherical harmonics coefficients
 	\\
-	$\rho_{R\left(\omega\right)}\left(f\right)$	&  operator for rotating radial functions about vector $\omega$
+	$\rho_{R\left(\vec{\omega}\right)}\left(f\right)$	&  operator for rotating radial functions about vector $\vec{\omega}$
 	\\
 	$\Omega$	&  solid angle domain of the unit sphere
 	\\

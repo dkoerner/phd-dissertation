@@ -5,24 +5,24 @@ The diffusion approximation theories are derived from truncating the moment expa
 
 When trying to establish an educated guess for $P$, there is some information available that could be used, namely the lower moments. The zero moment $\phi$ expresses the power at $\vec{x}$. That is, the total amount of energy arriving from all directions. With that, the radiance field can be factorized into the total power $\phi$, and its distribution over solid angle $\hat{L}$:
 \begin{align*}
-L(\vec{x}, \omega) = \hat{L}(\vec{x}, \omega)\phi(\vec{x})
+L(\vec{x}, \vec{\omega}) = \hat{L}(\vec{x}, \vec{\omega})\phi(\vec{x})
 \end{align*}
 
 The total power $\phi$ is an unknown, which shall not be eliminated. Therefore, an educated guess for how this power is distributed over solid angle will be made. This is given by the normalized radiance field $\hat{L}$. It is a probability distribution and its first moment is called the normalized flux $\widehat{\vec{E}}$ which is important with more advanced diffusion theories:
 \begin{align*}
-\widehat{\vec{E}}(\vec{x}) = \hat{L}_1(\vec{x}) = \int_{\Omega}\frac{L(\vec{x}, \omega)}{\phi(\vec{x})}\omega\ud\omega = \frac{1}{\phi(\vec{x})}\int_{\Omega}L(\vec{x}, \omega)\omega\ud\omega = \frac{\vec{E}(\vec{x})}{\phi(\vec{x})}
+\widehat{\vec{E}}(\vec{x}) = \hat{L}_1(\vec{x}) = \int_{\Omega}\frac{L(\vec{x}, \vec{\omega})}{\phi(\vec{x})}\vec{\omega}\ud\vec{\omega} = \frac{1}{\phi(\vec{x})}\int_{\Omega}L(\vec{x}, \vec{\omega})\vec{\omega}\ud\vec{\omega} = \frac{\vec{E}(\vec{x})}{\phi(\vec{x})}
 \end{align*}
 Seperating the radiance field into power and its distribution over solid angle, allows us to factorize its second moment, the unknown $P$, in the same fashion:
 \begin{align*}
 P(\vec{x}) &=
-\int_{\Omega}{\hat{L}(\vec{x}, \omega)\phi(\vec{x})N_2\ud\omega}\\
-&= \int_{\Omega}{\hat{L}(\vec{x}, \omega)N_2\ud\omega}\phi(\vec{x})\\
-&= \hat{L}_2(\vec{x}, \omega)\phi(\vec{x})
+\int_{\Omega}{\hat{L}(\vec{x}, \vec{\omega})\phi(\vec{x})N_2\ud\vec{\omega}}\\
+&= \int_{\Omega}{\hat{L}(\vec{x}, \vec{\omega})N_2\ud\vec{\omega}}\phi(\vec{x})\\
+&= \hat{L}_2(\vec{x}, \vec{\omega})\phi(\vec{x})
 \end{align*}
 The second moment of the radiance field is expressed as the second moment of the angular radiance distribution, multiplied by the power $\phi$ at $\vec{x}$. This means, that finding a closure at the end results in finding or estimating a spherical distribution function. The second moment of that estimated distribution is called the Eddington tensor~$T$:
 \begin{align}
 \label{eq:eddington_tensor}
-T(\vec{x}) \approx \hat{L}_2(\vec{x}, \omega) =
+T(\vec{x}) \approx \hat{L}_2(\vec{x}, \vec{\omega}) =
 \frac{P(\vec{x})}{\phi(\vec{x})} =
 \widehat{P}(\vec{x})
 \end{align}
@@ -31,23 +31,23 @@ The Eddington tensor is used to distribute the known power $\phi$ over angle and
 T(\vec{x})\phi(\vec{x}) \approx 
 P(\vec{x})
 \end{align*}
-The key assumption behind the classical diffusion approximation is that the radiance field $L$ is constant and does not change for different angles $\omega$:
+The key assumption behind the classical diffusion approximation is that the radiance field $L$ is constant and does not change for different angles $\vec{\omega}$:
 \begin{align*}
-L(\vec{x}, \omega) = L(\vec{x})
+L(\vec{x}, \vec{\omega}) = L(\vec{x})
 \end{align*}
 This assumption allows finding an estimate $T$ for the second moment of the radiance distribution. Unit power $\phi = 1$ is assumed:
 \begin{align*}
-1 = \phi\left(\vec{x}\right) = \int_\Omega{L\left(\vec{x}, \omega\right)\ud\omega}
+1 = \phi\left(\vec{x}\right) = \int_\Omega{L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
 \end{align*}
-Since $L$ is constant over solid angle ($L(\vec{x}, \omega)=L(\vec{x})$), it can be extracted out of the integral to get:
+Since $L$ is constant over solid angle ($L(\vec{x}, \vec{\omega})=L(\vec{x})$), it can be extracted out of the integral to get:
 \begin{align*}
-1 = \phi\left(\vec{x}\right) = L\left(\vec{x}\right)\int_\Omega{\ud\omega}\implies L\left(\vec{x}\right) = \frac{1}{4\pi}
+1 = \phi\left(\vec{x}\right) = L\left(\vec{x}\right)\int_\Omega{\ud\vec{\omega}}\implies L\left(\vec{x}\right) = \frac{1}{4\pi}
 \end{align*}
 The constant radiance field is used to compute the components of the radiative pressure tensor:
 \begin{align*}
 P\left(\vec{x}\right) 
-= \int_\Omega{L\left(\vec{x}\right)N_2\ud\omega}
-= \frac{1}{4\pi}\int_\Omega{N_2\ud\omega}
+= \int_\Omega{L\left(\vec{x}\right)N_2\ud\vec{\omega}}
+= \frac{1}{4\pi}\int_\Omega{N_2\ud\vec{\omega}}
 = \frac{1}{4\pi}\frac{4\pi}{3}\mathbf{I}
 = \frac{1}{3}\mathbf{I}
 \end{align*}

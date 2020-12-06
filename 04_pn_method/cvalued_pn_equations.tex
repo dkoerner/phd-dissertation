@@ -6,16 +6,16 @@ Equipped with key properties of the spherical harmonics expansion, the complex-v
 \subsubsection*{Transport Term}
 The transport term of the RTE is given as
 \begin{align*}
-(\omega\cdot\nabla)L(\vec{x}, \omega)
+(\vec{\omega}\cdot\nabla)L(\vec{x}, \vec{\omega})
 \end{align*}
 Replacing $L$ with its spherical harmonics expansion results in:
 \begin{align*}
-\left(\omega\cdot\nabla\right)
+\left(\vec{\omega}\cdot\nabla\right)
 \left(
 \sum_{l,m}
 {
 L^{l,m}\left(\vec{x}\right )
-\SHBC^{l,m}\left(\omega\right)
+\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 \right)
 \end{align*}
@@ -23,26 +23,26 @@ Next, the whole term is projected into spherical harmonics, which means a multip
 \begin{align*}
 \int_\Omega
 {
-\overline{Y^{l'm'}}(\omega\cdot\nabla)
+\overline{Y^{l'm'}}(\vec{\omega}\cdot\nabla)
 \sum_{l,m}
 {
 L^{l,m}\left(\vec{x}\right)
-\SHBC^{l,m}\left(\omega\right)
+\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 }
-\ud\omega
+\ud\vec{\omega}
 \end{align*}
 The spatial derivative can be extracted to get:
 \begin{align*}
 \nabla\cdot\int_\Omega
 {
-\omega\overline{\SHBC^{l'm'}}
+\vec{\omega}\overline{\SHBC^{l'm'}}
 \sum_{l,m}
 {
 L^{l,m}\left(\vec{x}\right)
-\SHBC^{l,m}\left(\omega\right)
+\SHBC^{l,m}\left(\vec{\omega}\right)
 }
-\ud\omega
+\ud\vec{\omega}
 }
 \end{align*}
 When applying the recursion relation (equation~\ref{eq:recursive_relation}) the following will be shown:
@@ -61,9 +61,9 @@ When applying the recursion relation (equation~\ref{eq:recursive_relation}) the 
 a^{l'-1, m'}\overline{\SHBC^{l'-1,m'}}+b^{l'+1, m'}\overline{\SHBC^{l'+1,m'}}
 \end{pmatrix}
 \sum_{l,m}{
-L^{l,m}\left(\vec{x}\right )\SHBC^{l,m}\left(\omega\right)
+L^{l,m}\left(\vec{x}\right )\SHBC^{l,m}\left(\vec{\omega}\right)
 }
-\ud\omega
+\ud\vec{\omega}
 $}
 \end{equation*}
 Integrating the vector term over solid angle, can be expressed as seperate solid angle integrals over each component. These integrals over a sum of terms are split into seperate integrals:
@@ -75,9 +75,9 @@ Integrating the vector term over solid angle, can be expressed as seperate solid
 \end{pmatrix}
 \cdot
 \begin{pmatrix}
-\ c^{l'-1, m'-1}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'-1}}\left(\omega\right)\SHBC^{l,m}\left(\omega\right)\ud\omega}} \quad - \quad ...\\
--c^{l'-1, m'-1}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'-1}}\left(\omega\right)\SHBC^{l,m}\left(\omega\right)\ud\omega}} \quad + \quad ... \\
-a^{l'-1, m'}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'}}\left(\omega\right)\SHBC^{l,m}\left(\omega\right)\ud\omega}} \quad + \quad ...
+\ c^{l'-1, m'-1}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'-1}}\left(\vec{\omega}\right)\SHBC^{l,m}\left(\vec{\omega}\right)\ud\vec{\omega}}} \quad - \quad ...\\
+-c^{l'-1, m'-1}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'-1}}\left(\vec{\omega}\right)\SHBC^{l,m}\left(\vec{\omega}\right)\ud\vec{\omega}}} \quad + \quad ... \\
+a^{l'-1, m'}\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega{\overline{\SHBC^{l'-1,m'}}\left(\vec{\omega}\right)\SHBC^{l,m}\left(\vec{\omega}\right)\ud\vec{\omega}}} \quad + \quad ...
 \end{pmatrix}
 \end{align*}
 Applying the orthogonality property to the solid angle integrals will select specific $l,m$ in each term:
@@ -123,77 +123,77 @@ a^{l-1, m}\partial_z L^{l-1,m}+b^{l+1, m}\partial_z L^{l+1,m}
 
 The scattering term in the RTE is given as:
 \begin{align*}
-\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\cdot\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'
 \end{align*}
-The phase function, used in isotropic scattering medium, only depends on the angle between incident and outgoing direction, and therefore is rotationally symmetric around the pole defining axis. This property allows to define a rotation $R(\omega)$, which rotates the phase function, such that the pole axis aligns with the outgoing direction vector $\omega$. This rotation is expressed as:
+The phase function, used in isotropic scattering medium, only depends on the angle between incident and outgoing direction, and therefore is rotationally symmetric around the pole defining axis. This property allows to define a rotation $R(\vec{\omega})$, which rotates the phase function, such that the pole axis aligns with the outgoing direction vector $\vec{\omega}$. This rotation is expressed as:
 \begin{align*}
-\rho_{R(\omega)}(\phase)
+\rho_{R(\vec{\omega})}(\phase)
 \ ,
 \end{align*}
-which can be implemented by applying the inverse rotation $R(\omega)^{-1}$ to the arguments of $\phase$. With this rotated phase function, the integral of the scattering operator can be expressed as a convolution:
+which can be implemented by applying the inverse rotation $R(\vec{\omega})^{-1}$ to the arguments of $\phase$. With this rotated phase function, the integral of the scattering operator can be expressed as a convolution:
 \begin{align}
-\int_{\Omega'}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\int_{\Omega'}\phase(\vec{x}, \vec{\omega}'\cdot\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'
 &=
-\int_{\Omega'}{\rho_{R(\omega)}(\phase)(\operatorname{cos}\theta')L(\vec{x}, \omega')\ud\omega'}
+\int_{\Omega'}{\rho_{R(\vec{\omega})}(\phase)(\operatorname{cos}\theta')L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'}
 \nonumber\\
-&= \langle L,  \rho_{R(\omega)}(\phase)\rangle
+&= \langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle
 \label{eq:complex_scatt_conv}
 \end{align}
-As the inner product integral of the convolution is evaluated, the phase function rotates along with the argument $\omega$.
+As the inner product integral of the convolution is evaluated, the phase function rotates along with the argument $\vec{\omega}$.
 
 Now, the spherical harmonics expansions of $L$ and $\phase$ (equation~\ref{eq:sh_exp_phase}) in the definition for the inner product of the convolution (equation~\ref{eq:complex_scatt_conv}) is used:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(\phase)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\omega)}\left ( \sum_{l}{\phase^{l0}\SHBC^{l0}} \right )\right>
+\langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\vec{\omega})}\left ( \sum_{l}{\phase^{l0}\SHBC^{l0}} \right )\right>
 \end{align*}
 Due to linearity of the inner product operator, the non-angular dependent parts of the expansions can be pulled out:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(\phase)\rangle
+\langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle
 &=
 \sum_{l,m}
 {
 L^{l,m}(\vec{x})
 \left<
 \SHBC^{l,m},
-\rho_{R(\omega)}
+\rho_{R(\vec{\omega})}
 \left(\sum_l{\phase^{l0} \SHBC^{l0}}\right)
 \right>
 }
 \end{align*}
 and further:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(\phase)\rangle
+\langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle
 &=
 \sum_{l'}
 {
 \sum_{l,m}
 {
 \phase^{l'0}L^{l,m}(\vec{x})
-\left<\SHBC^{l,m}, \rho_{R(\omega)}\left( \SHBC^{l'0} \right)\right>
+\left<\SHBC^{l,m}, \rho_{R(\vec{\omega})}\left( \SHBC^{l'0} \right)\right>
 }
 }
 \end{align*}
-The rotation $\rho_{R(\omega)}$ of a function with frequency $l$ results in a function of frequency $l$ (equation~\ref{eq:sh_rotation}). In addition the spherical harmonics basis functions $\SHBC^{l,m}$ are orthogonal. Therefore following applies:
+The rotation $\rho_{R(\vec{\omega})}$ of a function with frequency $l$ results in a function of frequency $l$ (equation~\ref{eq:sh_rotation}). In addition the spherical harmonics basis functions $\SHBC^{l,m}$ are orthogonal. Therefore following applies:
 \begin{align*}
 \left<
-\SHBC^{l,m}, \rho_{R(\omega)}\left(\SHBC^{l'm'}\right)
+\SHBC^{l,m}, \rho_{R(\vec{\omega})}\left(\SHBC^{l'm'}\right)
 \right> = 0       \qquad    \text{for all}\ \ l\ne l' 
 \end{align*}
 which further simplifies the inner product integral to:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(\phase)\rangle
+\langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle
 &=
 \sum_{l,m}
 {
 \phase^{l0}L^{l,m}(\vec{x})
 \left<
-\SHBC^{l,m}, \rho_{R(\omega)}\left(\SHBC^{l0} \right )
+\SHBC^{l,m}, \rho_{R(\vec{\omega})}\left(\SHBC^{l0} \right )
 \right>
 }
 \end{align*}
 What remains to be resolved is the inner product. The spherical harmonics basis functions $ \SHBC^{l,m}$ are eigenfunctions of the inner product integral operator in the equation above (Dai~\cite{Dai13}):
 \begin{align*}
 \left<
-\SHBC^{l,m}, \rho_{R(\omega)}\left ( \SHBC^{l0} \right )\right> = \lambda_l \SHBC^{l,m}
+\SHBC^{l,m}, \rho_{R(\vec{\omega})}\left ( \SHBC^{l0} \right )\right> = \lambda_l \SHBC^{l,m}
 \end{align*}
 with
 \begin{align*}
@@ -201,7 +201,7 @@ with
 \end{align*}
 Replacing the inner product leads to:
 \begin{align*}
-\langle L,  \rho_{R(\omega)}(p)\rangle
+\langle L,  \rho_{R(\vec{\omega})}(p)\rangle
 &=
 \sum_{l,m}
 {
@@ -212,9 +212,9 @@ Replacing the inner product leads to:
 \end{align*}
 This allows to express the scattering term using SH expansions of phase function $p$ and radiance field $L$:
 \begin{align*}
-\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\cdot\omega)L(\vec{x}, \omega')\ud\omega'
+\sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\cdot\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'
 &=
-\sigma_s(\vec{x})\langle L,  \rho_{R(\omega)}(p)\rangle
+\sigma_s(\vec{x})\langle L,  \rho_{R(\vec{\omega})}(p)\rangle
 \\
 &=
 \sigma_s(\vec{x})
@@ -225,20 +225,20 @@ This allows to express the scattering term using SH expansions of phase function
 \SHBC^{l,m}
 }
 \end{align*}
-However, a spherical harmonics expansion of the term itsself has not been done yet. It is still a scalar function that depends on direction $\omega$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\omega$. Further all factors will be pulled out, which do not depend on $\omega$ and apply the SH orthogonality property to arrive at the scattering term of the complex-valued $P_N$-equations:
+However, a spherical harmonics expansion of the term itsself has not been done yet. It is still a scalar function that depends on direction $\vec{\omega}$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\vec{\omega}$. Further all factors will be pulled out, which do not depend on $\vec{\omega}$ and apply the SH orthogonality property to arrive at the scattering term of the complex-valued $P_N$-equations:
 \begin{align}
 &
 \int_{\Omega}
 {
-\overline{\SHBC^{l'm'}}(\omega)
+\overline{\SHBC^{l'm'}}(\vec{\omega})
 \sigma_s(\vec{x})
 \sum_{l,m}
 {
 \lambda_l
 \phase^{l0}L^{l,m}(\vec{x})
-\SHBC^{l,m}\left(\omega\right)
+\SHBC^{l,m}\left(\vec{\omega}\right)
 }
-\ud\omega
+\ud\vec{\omega}
 }
 \nonumber\\
 =&
@@ -249,9 +249,9 @@ However, a spherical harmonics expansion of the term itsself has not been done y
 {
 \int_{\Omega}
 {
-\overline{\SHBC^{l'm'}}(\omega)
-\SHBC^{l,m}\left(\omega\right)
-\ud\omega
+\overline{\SHBC^{l'm'}}(\vec{\omega})
+\SHBC^{l,m}\left(\vec{\omega}\right)
+\ud\vec{\omega}
 }
 }
 \nonumber\\
@@ -278,19 +278,19 @@ However, a spherical harmonics expansion of the term itsself has not been done y
 
 The collision term of the RTE is given as:
 \begin{align*}
--\sigma_t\left(\vec{x}\right)L\left(\vec{x}, \omega\right)
+-\sigma_t\left(\vec{x}\right)L\left(\vec{x}, \vec{\omega}\right)
 \end{align*}
 The radiance field $L$ is replaced with its spherical harmonics expansion:
 \begin{align*}
 -\sigma_t\left(\vec{x}\right)
 \sum_{l,m}
 {
-L^{l,m}\left(\vec{x}\right )\SHBC^{l,m}\left(\omega\right)
+L^{l,m}\left(\vec{x}\right )\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 \end{align*}
 Multiplying with $\overline{\SHBC^{l'm'}}$ and integrating over solid angle, after pulling some factors out of the integral and applying the orthogonality identity (equation~\ref{eq:sh_orthogonality}) results in:
 \begin{align}
-&-\sigma_t\left(\vec{x}\right)\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega\overline{\SHBC^{l'm'}}\left(\omega\right)\SHBC^{l,m}\left(\omega\right)\ud\omega}
+&-\sigma_t\left(\vec{x}\right)\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\int_\Omega\overline{\SHBC^{l'm'}}\left(\vec{\omega}\right)\SHBC^{l,m}\left(\vec{\omega}\right)\ud\vec{\omega}}
 \nonumber
 \\
 &= -\sigma_t\left(\vec{x}\right)\sum_{l,m}{L^{l,m}\left(\vec{x}\right )\delta_{ll'}\delta_{mm'}}
@@ -301,7 +301,7 @@ Multiplying with $\overline{\SHBC^{l'm'}}$ and integrating over solid angle, aft
 \end{align}
 The derivation of the SH projected term is equal to the derivation of the projected collision term. After replacing the emission field with its SH projection and multiplying the term with the conjugate complex of $\SHBC$ results after application of the orthogonality property in:
 \begin{align}
-Q^{l,m}\left(\vec{x}, \omega\right)
+Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 \label{eq:sh_complex_emission}
 \end{align}
 
@@ -336,6 +336,6 @@ The results are the complex-valued $P_N$-equations, after putting all the projec
 +
 \lambda_l
 \sigma_s(\vec{x})
-\phase^{l0}L^{l,m}(\vec{x}) + Q^{l,m}\left(\vec{x}, \omega\right)
+\phase^{l0}L^{l,m}(\vec{x}) + Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 \label{eq:sh_pne_complex}
 \end{align}

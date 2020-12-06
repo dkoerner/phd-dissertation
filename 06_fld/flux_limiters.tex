@@ -4,7 +4,7 @@
 Levermore et. al~\cite{Levermore81} construct their theory by starting from the time-dependent form of the radiative transfer equation. They further assume a constant phase function $f_p=1/(4\pi)$:
 \begin{align}
 \label{eq:iso_var_fld_rte}
-\frac{1}{c}\frac{\partial (\phi\hat{L})}{\partial t} + \left(\omega\cdot\nabla\right)(\phi\hat{L})&=-\sigma_t\phi\hat{L} + \frac{1}{4\pi}\sigma_s\phi + Q
+\frac{1}{c}\frac{\partial (\phi\hat{L})}{\partial t} + \left(\vec{\omega}\cdot\nabla\right)(\phi\hat{L})&=-\sigma_t\phi\hat{L} + \frac{1}{4\pi}\sigma_s\phi + Q
 \end{align}
 After applying the moment expansion, for the first moment equations are as follows:
 \begin{align}
@@ -14,12 +14,12 @@ After applying the moment expansion, for the first moment equations are as follo
 As a next step, equation~\ref{eq:iso_var_fld_rte_zero} is resolved for $\partial \phi/\partial t$ on the left hand side and used to substitute $\partial\phi/\partial t$ in equation~\ref{eq:iso_var_fld_rte} (after applying the product rule to the time derivative term). By further assuming the absence of self-emission ($Q=0$) and that the space and time derivatives of the radiance distribution $\hat{L}$ can be neglected, the result is:
 \begin{align}
 \label{eq:iso_var_fld_eliminated_time}
-\left( \left(\omega\cdot\nabla\right)\phi -\vec{f}\cdot\nabla\phi + \sigma_t'\phi\right)\hat{L} = \frac{1}{4\pi}\sigma_t'\phi
+\left( \left(\vec{\omega}\cdot\nabla\right)\phi -\vec{f}\cdot\nabla\phi + \sigma_t'\phi\right)\hat{L} = \frac{1}{4\pi}\sigma_t'\phi
 \end{align}
 Solving equation~\ref{eq:iso_var_fld_eliminated_time} for $\hat{L}$ gives:
 \begin{align}
 \label{eq:iso_var_fld_Lhat}
-\hat{L} = \frac{1}{4\pi}\frac{1}{1+\widehat{\vec{E}}\cdot\vec{R}-\omega\cdot\vec{R}}
+\hat{L} = \frac{1}{4\pi}\frac{1}{1+\widehat{\vec{E}}\cdot\vec{R}-\vec{\omega}\cdot\vec{R}}
 \end{align}
 with
 \begin{align}
@@ -41,7 +41,7 @@ Following the same argument about the radial symmetry of $\hat{L}$ and its relat
 Using this in equation~\ref{eq:iso_var_fld_Lhat} gives:
 \begin{align}
 \label{eq:iso_var_fld_Lhat_R}
-\hat{L} = \frac{1}{4\pi}\frac{1}{1+\lambda(R)R^2-\omega\cdot\vec{R}}
+\hat{L} = \frac{1}{4\pi}\frac{1}{1+\lambda(R)R^2-\vec{\omega}\cdot\vec{R}}
 \end{align}
 
 By enforcing that $\hat{L}$ integrates to one over the solid angle of the unit sphere, the following expression for $\lambda(R)$ can be derived:

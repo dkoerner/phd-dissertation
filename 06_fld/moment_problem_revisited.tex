@@ -5,47 +5,47 @@ In section~\ref{sec:moment_closure}, it was established that a choice for the se
 
 The distribution of power $\phi$ over solid angle was given by the normalized radiance $\widehat{L}$. Since it is a probability distribution, it has to integrate to one, which is verified by
 \begin{align*}
-\int_{\Omega}{\hat{L}(\vec{x}, \omega)\ud\omega}=
-\int_{\Omega}{\frac{L\left(\vec{x}, \omega\right)}{\phi\left(\vec{x}\right)}\ud\omega}=
+\int_{\Omega}{\hat{L}(\vec{x}, \vec{\omega})\ud\vec{\omega}}=
+\int_{\Omega}{\frac{L\left(\vec{x}, \vec{\omega}\right)}{\phi\left(\vec{x}\right)}\ud\vec{\omega}}=
 \frac{1}{\phi\left(\vec{x}\right)}
-\int_{\Omega}{L\left(\vec{x}, \omega\right)\ud\omega}
+\int_{\Omega}{L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
 =1
 =\hat{L}_0
 \end{align*}
 Further, the normalized radiance $\widehat{L}$ has to be non-negative to be a probability distribution:
 \begin{align*}
-\hat{L}(\vec{x}, \omega)\ge 0 \qquad \text{for all unit directions } \omega
+\hat{L}(\vec{x}, \vec{\omega})\ge 0 \qquad \text{for all unit directions } \vec{\omega}
 \ ,
 \end{align*}
 which is verified by the fact, that the radiance field is non-negative by definition:
 \begin{align*}
-L\left(\vec{x}, \omega\right) \ge 0
+L\left(\vec{x}, \vec{\omega}\right) \ge 0
 \implies
-\int_{\Omega}{L(\vec{x}, \omega)\ud\omega}=\phi\left(\vec{x}\right)\ge 0
+\int_{\Omega}{L(\vec{x}, \vec{\omega})\ud\vec{\omega}}=\phi\left(\vec{x}\right)\ge 0
 \implies
-\frac{L\left(\vec{x}, \omega\right)}{\phi\left(\vec{x}\right)}=\widehat{L}(\vec{x}, \omega) \ge 0
+\frac{L\left(\vec{x}, \vec{\omega}\right)}{\phi\left(\vec{x}\right)}=\widehat{L}(\vec{x}, \vec{\omega}) \ge 0
 \end{align*}
 
-Akhiezer~\cite{Akhiezer65} established, that the probability distribution contraints on a function results in a set of inequalities between moments of this function. In particular, the non-negativity constraint on the radiance field $L$ and its normalized distribution impose a constraint between the zero moment and the first moment. In case of the radiance field, this constraint can be derived by considering the dot product between direction vectors $\omega'$ and $\omega$, both of unit length. This results in the equation:
+Akhiezer~\cite{Akhiezer65} established, that the probability distribution contraints on a function results in a set of inequalities between moments of this function. In particular, the non-negativity constraint on the radiance field $L$ and its normalized distribution impose a constraint between the zero moment and the first moment. In case of the radiance field, this constraint can be derived by considering the dot product between direction vectors $\vec{\omega}'$ and $\vec{\omega}$, both of unit length. This results in the equation:
 \begin{align*}
--1 \le \omega'\cdot\omega \le 1
+-1 \le \vec{\omega}'\cdot\vec{\omega} \le 1
 \implies
-0 \le 1 - \omega'\cdot\omega \le 1
+0 \le 1 - \vec{\omega}'\cdot\vec{\omega} \le 1
 \implies
-\int_{\Omega}{\left(1-\omega'\cdot\omega\right)L\left(\vec{x}, \omega\right)\ud\omega}\ge 0
+\int_{\Omega}{\left(1-\vec{\omega}'\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}\ge 0
 \end{align*}
 which can be rearranged into:
 \begin{align*}
-\int_{\Omega}{\left(1-\omega'\cdot\omega\right)L\left(\vec{x}, \omega\right)\ud\omega} &\ge 0
+\int_{\Omega}{\left(1-\vec{\omega}'\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}} &\ge 0
 \Leftrightarrow
 \\
-\int_{\Omega}{L\left(\vec{x}, \omega\right)\ud\omega}
--\int_{\Omega}{\omega'\cdot\omega L\left(\vec{x}, \omega\right)\ud\omega}
+\int_{\Omega}{L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
+-\int_{\Omega}{\vec{\omega}'\cdot\vec{\omega} L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
 &\ge 0
 \Leftrightarrow
 \\
-\int_{\Omega}{L\left(\vec{x}, \omega\right)\ud\omega}
--\omega'\cdot\int_{\Omega}{L\left(\vec{x}, \omega\right)\omega\ud\omega}
+\int_{\Omega}{L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
+-\vec{\omega}'\cdot\int_{\Omega}{L\left(\vec{x}, \vec{\omega}\right)\vec{\omega}\ud\vec{\omega}}
 &\ge 0
 \Leftrightarrow
 \\

@@ -5,25 +5,25 @@ As with the radiance field, the radiative transfer equation can be developed int
 
 The $n$-th moment of the RTE is found by applying the moment projection operator $\mu_n$ to all the terms of the RTE:
 \begin{align*}
-\mu_n\left[(\omega\cdot\nabla)L(\vec{x}, \omega)\right]=&\\
-\mu_n\left[-\sigma_t(\vec{x})L(\vec{x}, \omega) + \sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega' + Q(\vec{x}, \omega)\right]
+\mu_n\left[(\vec{\omega}\cdot\nabla)L(\vec{x}, \vec{\omega})\right]=&\\
+\mu_n\left[-\sigma_t(\vec{x})L(\vec{x}, \vec{\omega}) + \sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}' + Q(\vec{x}, \vec{\omega})\right]
 %\label{eq:rte_ani}
 \end{align*}
 Since $\mu_n$ is linear, the LHS gives:
 \begin{align*}
-\mu_n[(\omega \cdot \nabla)L(\vec{x}, \omega)] & = \int_{\Omega}{(\omega\cdot\nabla)L(\vec{x}, \omega)N_n\ud\omega}\\
-							     & =\nabla\int_{S^2}{L(\vec{x}, \omega)N_n\omega\ud\omega} \\
+\mu_n[(\vec{\omega} \cdot \nabla)L(\vec{x}, \vec{\omega})] & = \int_{\Omega}{(\vec{\omega}\cdot\nabla)L(\vec{x}, \vec{\omega})N_n\ud\vec{\omega}}\\
+							     & =\nabla\int_{S^2}{L(\vec{x}, \vec{\omega})N_n\vec{\omega}\ud\vec{\omega}} \\
 							     & =\nabla\mu_{n+1}\left[L\right]
 \end{align*}
 The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation of the RTE for the $n$-th moment is:
 \begin{align}
 \nonumber
 \nabla\mu_{n+1}\left[L\right] =&
--\sigma_t(\vec{x})\mu_n\left[L(\vec{x}, \omega)\right]\\
+-\sigma_t(\vec{x})\mu_n\left[L(\vec{x}, \vec{\omega})\right]\\
 \label{eq:gme}
-&+\sigma_s(\vec{x})\mu_n\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega) L(\vec{x}, \omega')\ud\omega'\right]\\
+&+\sigma_s(\vec{x})\mu_n\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega}) L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'\right]\\
 \nonumber
-&+\mu_n\left[Q(\vec{x}, \omega)\right]
+&+\mu_n\left[Q(\vec{x}, \vec{\omega})\right]
 \end{align}
 Generally, the moment equations of the RTE relate the divergence of the $n+1$ moment of the radiance field, to the $n$-th moment of changes to the radiance field due to inscattering, absorption and emission. The inscattering term convolves the radiance field with the phase function and applies the scattering coefficient as a weighting function on top. Each moment produces a number of equations, which are identical to the number of tensor components for a tensor of the rank associated with that moment.
 
@@ -31,25 +31,25 @@ For the derivation of the diffusion approximation in this chapter, the moment ex
 \begin{align}
 \nonumber
 \nabla\vec{E}(\vec{x})=&
--\sigma_t(\vec{x})\mu_0\left[L(\vec{x}, \omega)\right]
+-\sigma_t(\vec{x})\mu_0\left[L(\vec{x}, \vec{\omega})\right]
 \\
 \label{eq:p1_zero}
-&+ \sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right] 
+&+ \sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'\right] 
 \\
 \nonumber
-&+ \mu_0\left[Q(\vec{x}, \omega)\right]
+&+ \mu_0\left[Q(\vec{x}, \vec{\omega})\right]
 \end{align}
 The first moment equation is likewise found by using $n=1$ in equation~\ref{eq:gme}:
 \begin{align}
 \nonumber
 \nabla P =&
--\sigma_t(\vec{x})\mu_1\left[L(\vec{x}, \omega)\right]
+-\sigma_t(\vec{x})\mu_1\left[L(\vec{x}, \vec{\omega})\right]
 \\ &
 \label{eq:p1_firstme}
-+\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)L(\vec{x}, \omega')\ud\omega'\right]
++\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'\right]
 \\ &
 \nonumber
-+ \mu_1\left[Q(\vec{x}, \omega)\right]
++ \mu_1\left[Q(\vec{x}, \vec{\omega})\right]
 \end{align}
 $P=\mu_2[L]$ is the radiation pressure tensor, a $3\times3$ - matrix. The divergence of a second rank tensor is defined by tensor calculus to be the vector, containing the divergence of each single column vector of that tensor. Therefore, $\nabla P = \partial_i P_{ij}$.
 
@@ -60,10 +60,10 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\sigma_t(\vec{x})\mu_0\left[\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\
 &
-+\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\frac{1}{4\pi}\phi(\vec{x})\ud\omega'\right]
++\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\frac{1}{4\pi}\phi(\vec{x})\ud\vec{\omega}'\right]
 \\
 &
-+\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\frac{3}{4\pi}\vec{E}(\vec{x})\ud\omega'\right]
++\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\frac{3}{4\pi}\vec{E}(\vec{x})\ud\vec{\omega}'\right]
 \\
 &
 \nonumber
@@ -73,10 +73,10 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 -\frac{1}{4\pi}\phi\sigma_t(\vec{x})\mu_0\left[1\right] - \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_t(\vec{x})\mu_1\left[1\right]
 \\
 &
-+\frac{1}{4\pi}\phi(\vec{x})\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
++\frac{1}{4\pi}\phi(\vec{x})\sigma_s(\vec{x})\mu_0\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\ud\vec{\omega}'\right]
 \\
 &
-+\frac{3}{4\pi}\vec{E}(\vec{x})\sigma_s(\vec{x})\mu_1\left[1\right]\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\omega'\ud\omega'
++\frac{3}{4\pi}\vec{E}(\vec{x})\sigma_s(\vec{x})\mu_1\left[1\right]\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\vec{\omega}'\ud\vec{\omega}'
 \\
 &
 + Q_0\left(\vec{x}\right)
@@ -92,14 +92,14 @@ The next step is to replace the radiance field $L$ by its two term expansion (eq
 \end{align*}
 Using $\mu_1[1] = 0$ and normalized phase function results in:
 \begin{align*}
-\mu_0\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right] = \mu_0\left[1\right] = 4\pi
+\mu_0\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\ud\vec{\omega}'\right] = \mu_0\left[1\right] = 4\pi
 \end{align*}
 Likewise the radiance field is replaced with its two moment expansion in the first moment expansion of the RTE (equation~\ref{eq:p1_firstme}):
 \begin{align*}
 \nabla P =&
 -\sigma_t(\vec{x})\mu_1\left[\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\&
-+\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\left(\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right)\ud\omega'\right]
++\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\left(\frac{1}{4\pi}\phi\left(\vec{x}\right) + \frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right)\ud\vec{\omega}'\right]
 \\&
 \nonumber
 + Q_1\left(\vec{x}\right)
@@ -109,10 +109,10 @@ Likewise the radiance field is replaced with its two moment expansion in the fir
 -\sigma_t(\vec{x})\mu_1\left[\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\right]
 \\
 &
-+\frac{1}{4\pi}\phi\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\ud\omega'\right]
++\frac{1}{4\pi}\phi\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\ud\vec{\omega}'\right]
 \\
 &
-+\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \omega'\rightarrow\omega)\omega\ud\omega'\right]
++\frac{3}{4\pi}\vec{E}\left(\vec{x}\right)\sigma_s(\vec{x})\mu_1\left[\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\rightarrow\vec{\omega})\vec{\omega}\ud\vec{\omega}'\right]
 \\
 &
 +Q_1\left(\vec{x}\right)

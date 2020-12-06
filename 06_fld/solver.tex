@@ -115,10 +115,10 @@ Boundary conditions are accounted for by updating the values for $\phi_{ijk}$ an
 
 A criteria will decide when the algorithm ran enough Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here, convergence to machine precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
 
-To improve the rate of convergence, successive over-relaxation (SOR) is used (Hadjidimos~\cite{Hadjidimos00}). Defining the over-relaxation parameter $\omega$, where $0<\omega<2$, the update of $\phi_{ijk}$ at each stencil is modified to:
+To improve the rate of convergence, successive over-relaxation (SOR) is used (Hadjidimos~\cite{Hadjidimos00}). Defining the over-relaxation parameter $\vec{\omega}$, where $0<\vec{\omega}<2$, the update of $\phi_{ijk}$ at each stencil is modified to:
 \begin{equation}
 \label{eq:fld_solver_sor_update}
-\phi_{ijk} \leftarrow \omega \,\phi'_{ijk} + (1-\omega)\phi_{ijk} 
+\phi_{ijk} \leftarrow \vec{\omega} \,\phi'_{ijk} + (1-\vec{\omega})\phi_{ijk} 
 \end{equation}
 where $\phi'_{ijk}$ is the updated value from equation~\ref{eq:fld_solver_gs_phi_update}.
 

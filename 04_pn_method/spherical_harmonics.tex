@@ -93,7 +93,7 @@ The coefficient $C^{l,m}$ has been defined as such that the spherical harmonics 
 Other spherical harmonics definitions use a different constant (e.g. $4\pi$) and therefore arrive at different $C^{l,m}$. Since the spherical harmonics functions $\SHBC$ are complex-valued functions on the unit sphere, they are elements of the Hilbert space, for which the inner product is defined as:
 \begin{align}
 \label{eq:sh_inner_product}
-\left<f,g\right> = \int_\Omega f\left(\omega\right)\overline{g}\left(\omega\right)\ud\omega
+\left<f,g\right> = \int_\Omega f\left(\vec{\omega}\right)\overline{g}\left(\vec{\omega}\right)\ud\vec{\omega}
 \end{align}
 with $\overline{g}$ being defined as the complex conjugate of $g$ (Folland~\cite{Folland92}).
 
@@ -108,17 +108,17 @@ The properties of normalization (equation~\ref{eq:sh_normalization}) and orthogo
 \begin{align}
 \label{eq:sh_orthogonality}
 \left<\SHBC^{l_1, m_1},\SHBC^{l_2, m_2}\right>=
-\int_{\Omega} \SHBC^{l_1m_1}\left(\omega\right) \overline{\SHBC^{l_2m_2}}\left(\omega\right) \mathbf{d}\omega = \delta_{l_1m_1}\delta_{l_2m_2}
+\int_{\Omega} \SHBC^{l_1m_1}\left(\vec{\omega}\right) \overline{\SHBC^{l_2m_2}}\left(\vec{\omega}\right) \mathbf{d}\vec{\omega} = \delta_{l_1m_1}\delta_{l_2m_2}
 \ .
 \end{align}
 
 \subsubsection*{Projection and Reconstruction}
 
-Because the spherical harmonics are orthonormal, a spherical functional $f\left(\omega\right)$ can be projected into scalar spherical harmonics basis function coefficients $f^{l,m}$, using the inner product from equation~\ref{eq:sh_inner_product}. For notational convenience the projection operator $\mathcal{P}$ shall be defined, which takes a spherical functional and returns its spherical harmonics projection for a given pair of spherical harmonics coefficients $l,m$:
+Because the spherical harmonics are orthonormal, a spherical functional $f\left(\vec{\omega}\right)$ can be projected into scalar spherical harmonics basis function coefficients $f^{l,m}$, using the inner product from equation~\ref{eq:sh_inner_product}. For notational convenience the projection operator $\mathcal{P}$ shall be defined, which takes a spherical functional and returns its spherical harmonics projection for a given pair of spherical harmonics coefficients $l,m$:
 \begin{align}
 \label{eq:sh_projection}
 \mathcal{P}^{l, m}(f) =  \left<f,\SHBC^{l, m}\right> = 
-\int_\Omega f\left(\omega\right)\overline{\SHBC^{l,m}}\left(\omega\right)\ud\omega
+\int_\Omega f\left(\vec{\omega}\right)\overline{\SHBC^{l,m}}\left(\vec{\omega}\right)\ud\vec{\omega}
 \ .
 \end{align}
 Note, the use of the complex conjugate $\overline{\SHBC}$ for computing the coefficients $f^{l,m}$. This comes from the definition of the inner product (equation~\ref{eq:sh_inner_product}), which is a result of Hilbert space theory. 
@@ -126,12 +126,12 @@ Note, the use of the complex conjugate $\overline{\SHBC}$ for computing the coef
 Given the coefficients $f^{l, m} = \mathcal{P}^{l, m}(f)$, the function $f$ can be fully reconstructed by summing up the weighted contributions from the spherical harmonics basis functions
 \begin{align}
 \label{eq:sh_reconstruction}
-f\left(\omega\right) = 
+f\left(\vec{\omega}\right) = 
 \sum_{l=0}^{N}
 {
 \sum_{m=-l}^{l}
 {
-f^{l,m}\left(\vec{x}\right)\SHBC^{l,m}\left(\omega\right)
+f^{l,m}\left(\vec{x}\right)\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 }
 \ .
@@ -143,12 +143,12 @@ The function can be fully reconstructed if $N=\infty$. However, as with the Four
 Applying a rotation to the argument of a spherical harmonics basis function of band $l$ can be expressed as a linear combination of spherical harmonics basis functions of the same order:
 \begin{align}
 \label{eq:sh_rotation}
-\SHBC^{l,m}\left(R\omega\right)=\sum_{j=-l}^{l}r^{l,j}\SHBC^{l,j}\left(\omega\right)
+\SHBC^{l,m}\left(R\vec{\omega}\right)=\sum_{j=-l}^{l}r^{l,j}\SHBC^{l,j}\left(\vec{\omega}\right)
 \ .
 \end{align}
 This is derived from the fact that the spherical harmonics basis functions of order $l$ form an irreducible basis for the group of 3D-rotations (see Corollary $17.17$ in \cite{Hall13}). Equation~\ref{eq:sh_rotation} implies that a rotation of a function represented in spherical harmonics, does not introduce or loose any frequencies from or to other spherical harmonic bands and therefore is not subject to aliasing.
 
-The spherical harmonics projection of a rotationally symmetric function $f$ simplifies to Zonal Spherical Harmonics, which are characterized by the fact that only coefficients with $f^{l,0}$ are needed for reconstruction. This property is needed for the derivation of the $P_N$-equations. In particular, the phase function depends only on the angle between incident direction $\omega_i$ and outgoing direction $\omega_o$, which means that the phase function will be rotationally symmetric around the outgoing direction, if it is fixed. 
+The spherical harmonics projection of a rotationally symmetric function $f$ simplifies to Zonal Spherical Harmonics, which are characterized by the fact that only coefficients with $f^{l,0}$ are needed for reconstruction. This property is needed for the derivation of the $P_N$-equations. In particular, the phase function depends only on the angle between incident direction $\vec{\omega}_i$ and outgoing direction $\vec{\omega}_o$, which means that the phase function will be rotationally symmetric around the outgoing direction, if it is fixed. 
 
 A rotation $R(\alpha)$ of angle $\alpha$ around the pole axis is expressed in spherical harmonics as:
 \begin{align*}
@@ -165,12 +165,12 @@ and in spherical harmonics this would be:
 {
 e^{-i m\alpha}
 f^{l,m}
-\SHBC^{l,m} }\left(\omega\right)
+\SHBC^{l,m} }\left(\vec{\omega}\right)
 =
 \sum_{l,m}
 {
 \phase^{l,m}
-\SHBC^{l,m}\left(\omega\right)
+\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 \end{align*}
 By equating coefficients this yields:
@@ -179,14 +179,14 @@ f^{l,m} = f^{l,m}e^{-i m\alpha}
 \end{align*}
 Since $e^{-i m\alpha}=1$ for all $\alpha$ only when $m=0$, the conclusion is that $f^{l,m} = 0$ for all $m\ne0$. For a function, which is rotationally symmetric around the pole axis, only the $m=0$ coefficients will be valid.
 
-As mentioned earlier, this will be useful during the derivation of the $P_N$-equation and its scattering term in particular. If the outgoing direction $\omega_o$ of the phase function at the north pole ($\omega_o=\vec{e}_3$) is fixed, then the reconstruction requires exclusively the spherical harmonics coefficients with $m=0$:
+As mentioned earlier, this will be useful during the derivation of the $P_N$-equation and its scattering term in particular. If the outgoing direction $\vec{\omega}_o$ of the phase function at the north pole ($\vec{\omega}_o=\vec{e}_3$) is fixed, then the reconstruction requires exclusively the spherical harmonics coefficients with $m=0$:
 \begin{align}
 \label{eq:sh_exp_phase}
-\phase(\omega_i) =
+\phase(\vec{\omega}_i) =
 \sum_l
 {
 \phase^{l0}
-\SHBC^{l0}(\omega_i)
+\SHBC^{l0}(\vec{\omega}_i)
 }
 \end{align}
 
@@ -195,7 +195,7 @@ As mentioned earlier, this will be useful during the derivation of the $P_N$-equ
 Another property, which will be important for the derivation of the $P_N$-equations and its derivative term in particular is the following recursive relation
 \begin{equation}
 \label{eq:recursive_relation}
-\resizebox{1.0\hsize}{!}{$\omega\overline{\SHBC^{l,m}} = \frac{1}{2}
+\resizebox{1.0\hsize}{!}{$\vec{\omega}\overline{\SHBC^{l,m}} = \frac{1}{2}
 \begin{pmatrix}
 \ c^{l-1, m-1}\overline{\SHBC^{l-1,m-1}} - d^{l+1, m-1}\overline{\SHBC^{l+1,m-1}} - e^{l-1, m+1}\overline{\SHBC^{l-1,m+1}} + f^{l+1, m+1}\overline{\SHBC^{l+1,m+1}}\\
 i\left(-c^{l-1, m-1}\overline{\SHBC^{l-1,m-1}} + d^{l+1, m-1}\overline{\SHBC^{l+1,m-1}} - e^{l-1, m+1}\overline{\SHBC^{l-1,m+1}} + f^{l+1, m+1}\overline{\SHBC^{l+1,m+1}}\right) \\
@@ -218,4 +218,4 @@ e^{l,m}= \sqrt{\frac{\left(l-m+1\right)\left(l-m+2\right)}{\left(2l+3\right)\lef
 f^{l,m}= \sqrt{\frac{\left(l+m\right)\left(l+m-1\right)}{\left(2l+1\right)\left(2l-1\right)}}
 $}
 \end{equation*}
-This relation implies that a direction vector $\omega$ scaled by a complex SH basis function $\SHBC$ of order $lm$ can be expressed as a vector of complex values basis functions of higher and lower order. Such recursion relations seem to be hard to find in the standard literature and are preserved through citations in relevant articles\footnote{according to email exchange with experts from nuclear sciences}, such as Seibold et al.~\cite{Seibold14} or Brunner et al.~\cite{Brunner05}. The signs for the $x$- and $y$- component depend on the handedness of the coordinate system, in which the spherical harmonics basis functions are defined.
+This relation implies that a direction vector $\vec{\omega}$ scaled by a complex SH basis function $\SHBC$ of order $lm$ can be expressed as a vector of complex values basis functions of higher and lower order. Such recursion relations seem to be hard to find in the standard literature and are preserved through citations in relevant articles\footnote{according to email exchange with experts from nuclear sciences}, such as Seibold et al.~\cite{Seibold14} or Brunner et al.~\cite{Brunner05}. The signs for the $x$- and $y$- component depend on the handedness of the coordinate system, in which the spherical harmonics basis functions are defined.

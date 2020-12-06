@@ -15,68 +15,68 @@ To alleviate the challenges of light sources with strong directionality, the ren
 
 Following this idea by Grosjean, the radiance field $L$ is separated into unscattered light $L_{u}$ and multiple scattered light $L_m$:
 \begin{align}
-L\left(\vec{x}, \omega\right) = 
-L_u\left(\vec{x}, \omega\right)
-+L_m\left(\vec{x}, \omega\right)
+L\left(\vec{x}, \vec{\omega}\right) = 
+L_u\left(\vec{x}, \vec{\omega}\right)
++L_m\left(\vec{x}, \vec{\omega}\right)
 \end{align}
 
 The unscattered light is the contribution of the radiance field, which did not undergo any scattering events. Therefore, it satisfies the following restricted radiative transfer equation, where the scattering term vanished:
 \begin{align}
-\left(\nabla\cdot\omega\right)L_u\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega} \right)
 =
--\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \omega \right)
+-\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \vec{\omega} \right)
 \label{eq:restricted_rte}
 \end{align}
 
 
 When replacing the radiance field $L$ with the decomposition above in the radiative transfer equation (equation~\ref{eq:rte}) the result is:
 \begin{align}
-\left(\nabla\cdot\omega\right)L_u\left(\vec{x}, \omega \right)
-+\left(\nabla\cdot\omega\right)L_m\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega} \right)
++\left(\nabla\cdot\vec{\omega}\right)L_m\left(\vec{x}, \vec{\omega} \right)
 =&
--\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \omega \right)
+-\sigma_t\left(\vec{x}\right) L_u\left(\vec{x}, \vec{\omega} \right)
 \nonumber\\
 &
--\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \omega \right)\nonumber\\
+-\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \vec{\omega} \right)\nonumber\\
 &
 \underbrace
 {
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 }_{L_s}
 \nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_m\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber
 \\
 &
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \nonumber
 \  .
 \end{align}
 
 By using equation~\ref{eq:restricted_rte}, the extinction terms for the unscattered light can be cancelled out, producing the medium radiative transfer equation:
 \begin{align}
-\left(\nabla\cdot\omega\right)L_m\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L_m\left(\vec{x}, \vec{\omega} \right)
 =&
--\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \omega \right)\nonumber\\
+-\sigma_t\left(\vec{x}\right) L_m\left(\vec{x}, \vec{\omega} \right)\nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_m\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber
 \\
 &
 \underbrace
 {
-+L_s\left(\vec{x}, \omega\right)
-+Q_e\left(\vec{x}, \omega\right)
++L_s\left(\vec{x}, \vec{\omega}\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 }_{Q}
 \nonumber
 \  .
@@ -91,49 +91,49 @@ In this thesis, images will be rendered from the solution directly. An alternati
 
 Volume rendering frameworks are concerned with solving the radiative transfer equation~\ref{eq:rte}. In order to integrate the solution of the medium radiative transfer equation, the inscattering term in the radiative transfer equation has to be split and the medium radiance $L_m$ is replaced by its truncated spherical harmonics reconstruction $\widehat{L}_m$:
 \begin{align}
-\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega} \right)
 =&
--\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)\nonumber\\
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)\nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)\left(L_u\left(\vec{x}, \omega' \right)+\widehat{L}_m\left(\vec{x}, \omega' \right)\right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)\left(L_u\left(\vec{x}, \vec{\omega}' \right)+\widehat{L}_m\left(\vec{x}, \vec{\omega}' \right)\right)\ud\vec{\omega}'
 }
 \nonumber
 \\
 &
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \nonumber
 \\
 =&
--\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)
 \nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)\widehat{L}_m\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber\\
 &
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \label{eq:pn_rendering_integration1}
 \end{align}
 When seperating the radiance field and using the single scattered light as emission term for the $P_N$-method, this equation needs to be solved to fully account for the radiance field. Any Monte-Carlo method would need to integrate the single scattered light (e.g. by doing next event estimation). The indirect or multiple scattered light is accounted for by integrating over the angular dependent $P_N$-solution and weighting it by the phase function and scattering term to account for the inscattering of indirect illumination.
 
 If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integration1} further simplifies to
 \begin{align}
-\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega} \right)
 =&
--\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber\\
 &
@@ -142,15 +142,15 @@ If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integrati
 \sigma_s\left(\vec{x}\right)
 \int_{\Omega}
 {
-\widehat{L}_m\left(\vec{x}, \omega' \right)\ud\omega'
+\widehat{L}_m\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \nonumber\\
 =&
--\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L_u\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L_u\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \nonumber\\
 &
@@ -158,11 +158,11 @@ If the phase function is isotropic, then equation~\ref{eq:pn_rendering_integrati
 \frac{1}{4\pi}
 \sigma_s\left(\vec{x}\right)
 L_m^{0,0}\left(\vec{x}\right)
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \ ,
 \label{eq:pn_rendering_integration2}
 \end{align}
-due to zero moment property of the radiance field $\int_{\Omega}\widehat{L}_m\ud\omega'=L_m^{0,0}$.
+due to zero moment property of the radiance field $\int_{\Omega}\widehat{L}_m\ud\vec{\omega}'=L_m^{0,0}$.
 
 Figure~\ref{fig:pn_rendering_integration_overview} gives a schematic overview over how the method is integrated into a rendering framework. The single scattered light is precomputed and projected into the emission term for the $P_N$-solver. Together with the other discretized radiative transfer parameters, the $P_N$-solution is obtained. The final image is generated by path tracing to the first bounce into the volume, and by computing the inscattered uncollided light (either by using Monte Carlo integration or by using the precomputed single scattered light, which was used as emission term for the $P_N$-solver). Instead of continuing tracing the path to account for indirect illumination, a separate inscattering integral is computed over the multiple scattered light from the $P_N$-solution.
 

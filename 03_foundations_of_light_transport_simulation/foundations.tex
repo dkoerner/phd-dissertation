@@ -1,40 +1,40 @@
 \chapter{Foundations of Light Transport Simulation}
 \label{sec:foundations}
 
-This chapter gives an overview on light transport simulation in the context of rendering in computer graphics and specifically reviews the family of deterministic spherical harmonics based methods. Following the introduction and explanation of the physical background and important terminology, a brief overview over the landscape of methods for solving light transport problems is given. This is divided into three sections as per the following categorization: analytical methods (section~\ref{sec:foundations_analytical}), stochastic methods (section~\ref{sec:foundations_mc}) and deterministic methods (section~\ref{sec:foundations_deterministic}).
+This chapter gives an overview of light transport simulation in the context of rendering in computer graphics and specifically reviews the family of deterministic spherical harmonics based methods. After the introduction of the physical background and important terminology, a brief overview over the landscape of methods for solving light transport problems is given. This is divided into three sections as per the following categorization: analytical methods (section~\ref{sec:foundations_analytical}), stochastic methods (section~\ref{sec:foundations_mc}) and deterministic methods (section~\ref{sec:foundations_deterministic}).
 
-The field of computer graphics is primarily concerned with the generation of images from virtual scenes as seen by a virtual camera. This requires to reproduce the emission of light and its interaction with the scene and the sensor. The study of the behaviour of light is subject to optics, a seperate branch of physics. Due to the intricate nature of light, a series of increasingly complex models exist, which can account for various properties. Fundamental to light is its particle-wave duality, which states that light can be described both, as individual particles (photons) or waves. Challenging to the subject is, that not all properties of light can be described by solely the particle nor the wave perspective. To account for all properties, both have to be considered and require quantum mechanics. The field of wave optics is a simpler model that can account for optical effects, caused by the wave property, such as interference and diffraction. The simplest is provided by geometric optics, which models light as particle trajectories or rays and is referred to as ray optics. This model works well, when the wavelength is small compared to the scene the light propagates. 
+The field of computer graphics is primarily concerned with the generation of images from virtual scenes as seen by a virtual camera. This requires to reproduce the emission of light and its interaction with the scene and the sensor. The study of the behaviour of light is subject to optics, a separate branch of physics. Due to the intricate nature of light, a series of increasingly complex models exist, which can account for various properties. Fundamental to light is its particle-wave duality, which states that light can be described both, as individual particles (photons) or waves. Challenging to the subject is, that not all properties of light can be described by solely the particle nor the wave perspective. To account for all properties, both have to be considered and require quantum mechanics. The field of wave optics is based on a simpler model that can account for optical effects, caused by the wave property, such as interference and diffraction. The simplest model for light transport is provided by geometric optics, which models light as particle trajectories or rays and is referred to as ray optics. This model works well when the wavelength is small compared to the scene in which the light propagates. 
 
-As the virtual (and real) camera is supposed to capture the image as closely as possible to human perception, the simulated wavelength of light is limited to the visible range of a human being (380 to 740 nanometers). Because this is very small compared to distances encountered in real world scenes, wave effects are of less importance and geometric optics are sufficient most of the time. It is the basis for light transport simulation in graphics. This thesis is exclusively concerned with light transport in participating media i.a. clouds, smoke, fire and water.
+As the virtual (and real) camera is supposed to capture the image as closely as possible to human perception, the simulated wavelength of light is limited to the visible range of a human being (380 to 740 nanometers). Because this is very small compared to distances encountered in real world scenes, wave effects are of less importance and the model of geometric optics is sufficient most of the time. It is the basis for light transport simulation in graphics. This thesis is exclusively concerned with light transport in participating media i.a. clouds, smoke, fire, and water.
 
 
 % ============================================================
 \section{The Radiative Transfer Equation}
 
-Geometric optics describes light as particles, that travel through the scene along straight lines between single interactions. At each interaction, the particle may change its course and continue to travel along another straight segment. When interacting with a medium, such as a cloud, each particle undergoes numerous interactions and creates complex overall trajectories based on medium properties.
+Geometric optics describes light as particles, that travel through the scene along straight lines between single interactions. At each interaction, the particle may change its course and continue to travel along another straight segment. When interacting with a medium, such as a cloud, each particle undergoes numerous interactions and creates long trajectories based on medium properties.
 
-To derive a model that can explain this complex system of many particles interacting with the scene, a statistical approach is taken. Since photons carry energy, a collection of photons can be described by their collective energy. To express the propagation of photons, time is required. This is captured by the quantity flux $\psi$: it gives the amount of energy from all photons going through a surface within a time interval and changes position and direction in space. It is given in Watts, which is specified in Joule (Energy) per second:
+To derive a model that can explain this complex system of many particles interacting with the scene, a statistical approach is taken. Since photons carry energy, a collection of photons can be described by their collective energy. To express the propagation of photons, time is required. This is captured by the quantity flux $\psi$: it gives the amount of energy from all photons going through a surface within a time interval. It is given in Watts, which is specified in Joule (Energy) per second and depends on position $\vec{x}$ and direction $\vec{\omega}$:
 \begin{align*}
-\psi\left(\vec{x}, \omega\right)
+\psi\left(\vec{x}, \vec{\omega}\right)
 \quad
 \left[\si{\watt} = \frac{\si{\joule}}{\si{\second}}\right]
 \end{align*}
 
-To find the flux for arbitrary surfaces (e.g. the camera sensor) and directions (e.g. the viewing direction of an observer), the radiance field $L$ is required. It captures the amount of light going through an infinitesimal small area and arriving from an infinitesimal small opening angle around a given direction $\omega$. More precisely, it specifies the change of flux according to a change in direction $\omega$ and a change in surface area that is projected onto a plane perpendicular to direction $\omega$:
+To find the flux for arbitrary surfaces (e.g. the camera sensor) and directions (e.g. the viewing direction of an observer), the radiance field $L$ is required. It captures the amount of light going through an infinitesimal small area and arriving from an infinitesimal small opening angle around a given direction $\vec{\omega}$. More precisely, it specifies the change of flux according to a change in direction $\vec{\omega}$ and a change in surface area that is projected onto a plane perpendicular to direction $\vec{\omega}$:
 \begin{align*}
-L\left(\vec{x}, \omega\right) = \frac{\partial\partial\psi\left(\vec{x}, \omega\right)}{\partial\omega\partial A^\perp\left(\vec{x}\right)}
+L\left(\vec{x}, \vec{\omega}\right) = \frac{\partial\partial\psi\left(\vec{x}, \vec{\omega}\right)}{\partial\vec{\omega}\partial A^\perp\left(\vec{x}\right)}
 \quad
 \left[\frac{\si{\watt}}{\si{\steradian}\, \si{\meter}^2}\right]
 \end{align*}
 The radiance field allows to find the amount of energy going through arbitrary surfaces and arbitrary angles by integration. This yields additional derivative quantities such as the fluence $\phi$, which integrates the radiance field over solid angle of the unit sphere at position $\vec{x}$:
 \begin{align*}
-\phi\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \omega\right) \ud\omega
+\phi\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \vec{\omega}\right) \ud\vec{\omega}
 \quad
 \left[\frac{\si{\watt}}{\si{\meter}^2}\right]
 \end{align*}
 It gives the total power of radiant energy arriving at position $\vec{x}$ from all directions. Integrating the radiance field after projecting it onto the planes of the cartesian coordinate system, gives rise to the flux vector $\vec{E}$:
 \begin{align*}
-\vec{E}\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \omega\right)\omega \ud\omega
+\vec{E}\left(\vec{x}\right) = \int_\Omega L\left(\vec{x}, \vec{\omega}\right)\vec{\omega} \ud\vec{\omega}
 \end{align*}
 The direction of the vector specifies the direction of bulk or dominant energy flow and the magnitude the net flux through an infinitesimal small surface, which is aligned to the direction.
 
@@ -42,32 +42,32 @@ The radiance field $L$ describes the distribution of photon densities in the sce
 
 %\TD{pixel color as integral over sensor surface}
 
-However, the model needs to describe changes in the radiance field $L$ through changes in position. For this purpose, using the directional derivative $\left(\omega\cdot\nabla\right)L$ is used. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\omega$.
+However, the model needs to describe changes in the radiance field $L$ through changes in position. For this purpose, using the directional derivative $\left(\vec{\omega}\cdot\nabla\right)L$ is used. It describes the rate of change of the radiance field $L$, when changing the position an infinitesimal step into direction $\vec{\omega}$.
 
 \begin{figure}[h]
 \centering
 %\missingfigure{visualization of inscattering, outscattering and absorption.}
 \includegraphics[width=1.0\textwidth]{03_foundations_of_light_transport_simulation/figures/fig_rte_terms.pdf}
-\caption{Directional derivatives of the radiance $L$ along direction $\omega$ model the interaction of light with participating media and constitue the radiative transfer equation.}
+\caption{Directional derivatives of the radiance $L$ along direction $\vec{\omega}$ model the interaction of light with participating media and constitue the radiative transfer equation.}
 \label{fig:rte_change_L_all}
 \end{figure}
 
-The radiance field $L$ changes along direction $\omega$ due to different optical phenomena, such as absorption, scattering and emission. Absorption models the effect of radiative energy being transformed into heat or kinetic energy. The amount of absorption depends on the medium and is controlled by the absorption coefficient $\sigma_a$. This value combines the number of absorbing particles in the medium as well as the collective surface area of their intersection with a hypothetical plane, which is oriented into the direction of change. The particles are assumed to be spherical or to have a random distribution of orientation. The coefficient controls the loss of energy due to absorption, when making an infinitesimal step into direction $\omega$:
+The radiance field $L$ changes along direction $\vec{\omega}$ due to different optical phenomena, such as absorption, scattering and emission. Absorption models the effect of radiative energy being transformed into heat or kinetic energy. The amount of absorption depends on the medium and is controlled by the absorption coefficient $\sigma_a$. This value combines the number of absorbing particles in the medium as well as the collective surface area of their intersection with a hypothetical plane, which is oriented into the direction of change. The particles are assumed to be spherical or to have a random distribution of orientation. The coefficient controls the loss of energy due to absorption, when making an infinitesimal step into direction $\vec{\omega}$:
 \begin{align}
-\left(\omega\cdot\nabla_{a}\right)L = -\sigma_a L\left(\vec{x}, \omega \right)
+\left(\vec{\omega}\cdot\nabla_{a}\right)L = -\sigma_a L\left(\vec{x}, \vec{\omega} \right)
 \end{align}
 
 Scattering describes collision of medium particles. Rather than being absorbed, they change their direction. This is controlled similarly to absorption by the scattering coefficient $\sigma_s$. Scattering has an effect on $L$ in two ways. Firstly, most of the scattering photons will change their direction away from the direction along which the rate of change of $L$, namely outscattering is measured:
 \begin{align}
-\left(\omega\cdot\nabla_{s-}\right)L = -\sigma_s L\left(\vec{x}, \omega \right)
+\left(\vec{\omega}\cdot\nabla_{s-}\right)L = -\sigma_s L\left(\vec{x}, \vec{\omega} \right)
 \end{align}
 
-Secondly, scattering affects the way the radiance field changes along $\omega$ in that photons arriving from all directions will collide with the volume and scatter into the direction $\omega$. This is called inscattering:
+Secondly, scattering affects the way the radiance field changes along $\vec{\omega}$ in that photons arriving from all directions will collide with the volume and scatter into the direction $\vec{\omega}$. This is called inscattering:
 \begin{align}
-\left(\omega\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\left(\vec{\omega}\cdot\nabla_{s+}\right)L = \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \vec{\omega}'\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega} \right)\ud\vec{\omega}'
 \label{eq:rte_inscattering}
 \end{align}
-The quantity $p$ is the phase function, a medium parameter, which determines how light is redistributed from an incident direction $\omega'$ to the outgoing direction $\omega$. Since medium particles are assumed to either be spherical or randomly oriented, this function does not change as both vectors $\omega_i$ and $\omega$ are rotated, and therefore the cosine of the angle between the two vectors suffices as a parameter.
+The quantity $p$ is the phase function, a medium parameter, which determines how light is redistributed from an incident direction $\vec{\omega}'$ to the outgoing direction $\vec{\omega}$. Since medium particles are assumed to either be spherical or randomly oriented, this function does not change as both vectors $\vec{\omega}_i$ and $\vec{\omega}$ are rotated, and therefore the cosine of the angle between the two vectors suffices as a parameter.
 
 %\todo[inline]{phase function}
 %\todo[inline]{isotropic phase function}
@@ -78,25 +78,25 @@ The quantity $p$ is the phase function, a medium parameter, which determines how
 %X
 %\end{align}
 
-Finally, the radiance field changes along direction $\omega$, due to the medium emitting photons itsself into direction $\omega$. This is modelled by a source term $Q_e$:
+Finally, the radiance field changes along direction $\vec{\omega}$, due to the medium emitting photons itsself into direction $\vec{\omega}$. This is modelled by a source term $Q_e$:
 \begin{align}
-\left(\omega\cdot\nabla_{e}\right)L = Q_e\left(\vec{x}, \omega\right)
+\left(\vec{\omega}\cdot\nabla_{e}\right)L = Q_e\left(\vec{x}, \vec{\omega}\right)
 \end{align}
 
-All terms combined produce the radiative transfer equation (RTE), which expresses the change of the radiance field $L$, with respect to an infinitesimal change of position in direction $\omega$ at point $\vec{x}$ due to absorption, scattering and emission:
+All terms combined produce the radiative transfer equation (RTE), which expresses the change of the radiance field $L$, with respect to an infinitesimal change of position in direction $\vec{\omega}$ at point $\vec{x}$ due to absorption, scattering and emission:
 \begin{align}
-\left(\nabla\cdot\omega\right)L\left(\vec{x}, \omega \right)
+\left(\nabla\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega} \right)
 =&
--\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)\nonumber\\
+-\sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)\nonumber\\
 &
 +\sigma_s\left(\vec{x}\right) \int_{\Omega}
 {
-\phase\left(\omega'\cdot\omega\right)L\left(\vec{x}, \omega' \right)\ud\omega'
+\phase\left(\vec{\omega}'\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega}' \right)\ud\vec{\omega}'
 }
 \label{eq:rte}
 \\
 &
-+Q_e\left(\vec{x}, \omega\right)
++Q_e\left(\vec{x}, \vec{\omega}\right)
 \nonumber
 \  .
 \end{align}
@@ -118,17 +118,17 @@ For notational convenience and for developing the theory for deterministic metho
 \mathcal{T}\left(L\right) &= -\mathcal{C}\left(L\right) + \mathcal{S}\left(L\right) + Q_e
 \label{eq:rte_operator_notation}
 \\
-\mathcal{C}\left(L\right) &= \sigma_t\left(\vec{x}\right) L\left(\vec{x}, \omega \right)
+\mathcal{C}\left(L\right) &= \sigma_t\left(\vec{x}\right) L\left(\vec{x}, \vec{\omega} \right)
 \nonumber
 \\
-\mathcal{S}\left(L\right) &= \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \omega'\cdot\omega\right)L\left(\vec{x}, \omega \right)\ud\omega'
+\mathcal{S}\left(L\right) &= \sigma_s \int_{\Omega'}\phase\left(\vec{x}, \vec{\omega}'\cdot\vec{\omega}\right)L\left(\vec{x}, \vec{\omega} \right)\ud\vec{\omega}'
 \nonumber
 \\
-Q_e &= Q_e\left(\vec{x}, \omega\right)
+Q_e &= Q_e\left(\vec{x}, \vec{\omega}\right)
 \nonumber
 \end{align}
 
-Light transport simulation is the process for finding the solutions to $L$, either for specific values of $\vec{x}$ and $\omega$ or globally. The following section gives an overview of the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subject of this thesis. The next section briefly covers analytical solutions which are popular and have been used to great effect. Section~\ref{sec:foundations_mc} covers stochastic methods, such as the Monte Carlo method. These methods will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of stochastic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
+Light transport simulation is the process for finding the solutions to $L$, either for specific values of $\vec{x}$ and $\vec{\omega}$ or globally. The following section gives an overview of the three main categories of methods for solving the radiative transfer equation, of which the last covers deterministic methods and leads into the subject of this thesis. The next section briefly covers analytical solutions which are popular and have been used to great effect. Section~\ref{sec:foundations_mc} covers stochastic methods, such as the Monte Carlo method. These methods will be introduced to motivate the need for deterministic methods as a potential means that boosts convergence of stochastic techniques. The last section introduces deterministic methods and covers how discretization of spatial and angular variable leads to a linear systems of equations.
 
 % ============================================================
 \section{Analytical Solutions}
@@ -138,7 +138,7 @@ Analytical solutions to the radiative transfer equation exist for some very basi
 
 Pegoraro et al.~\cite{Pegoraro11} introduced a method based on the analytical solution to the point source problem for application in realtime rendering of single scattered light in participating media (termed airlight integral).
 
-Jensen et al.~\cite{Jensen01} introduced the diffusion theory and in particular the analytical solution to the diffusion approximation for the point source problem (theoretical treatment in chapter~\ref{sec:diffusion_approximation}). In addition the authors introduced the method of images, which yielded an analytical solution to the half space problem. This problem consists of two different homogeneous media, which are seperated by a plane of infinite extend (creating a half space). A solution to the half space problem allowed to locally approximate light transport at the surface of a bounded participating media, using a dipole configuration(termed subsurface scattering). Dipole based analytical models gained popularity in academia and industry, and represented a rich and heavily researched branch within rendering. Further seminal work on this subject after Jensen was provided by D'Eon et al.~\cite{dEon11} and Habel et al.~\cite{Habel13}.
+Jensen et al.~\cite{Jensen01} introduced the diffusion theory and in particular the analytical solution to the diffusion approximation for the point source problem (theoretical treatment in chapter~\ref{sec:diffusion_approximation}). In addition the authors introduced the method of images, which yielded an analytical solution to the half space problem. This problem consists of two different homogeneous media, which are separated by a plane of infinite extend (creating a half space). A solution to the half space problem allowed to locally approximate light transport at the surface of a bounded participating media, using a dipole configuration(termed subsurface scattering). Dipole based analytical models gained popularity in academia and industry, and represented a rich and heavily researched branch within rendering. Further seminal work on this subject after Jensen was provided by D'Eon et al.~\cite{dEon11} and Habel et al.~\cite{Habel13}.
 
 The main drawback of analytical models is their restriction to simple problems and homogeneous media in particular. In addition, they introduce in some cases significant error, when the canonical problem is used on geometry that violates the plane-parallel assumption. Further dipole methods are based on the diffusion theory, which has poor directional resolution and complications with energy conservation (see section~\ref{sec:moment_problem_revisited}).
 
@@ -174,7 +174,7 @@ E\left[g\right]
 = \int_{\mu\left(x\right)} \frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\ud\mu\left(x\right)
 =\int f\left(x\right)\ud x
 \end{align}
-The power of Monte-Carlo integration as a numerical algorithm comes with that the expected value---and therefore the sought integral---can be estimated by the arithmetic mean over a set of $N$ random samples of $x$. This estimate is denoted by the operator $\left<\bullet\right>_N$:
+The power of Monte-Carlo integration as a numerical algorithm comes with that the expected value\mydash and therefore the sought integral\mydash can be estimated by the arithmetic mean over a set of $N$ random samples of $x$. This estimate is denoted by the operator $\left<\bullet\right>_N$:
 \begin{align}
 \left<E[g]\right>_N = 
 \frac{1}{N}\sum_{i=0}^{N}
@@ -192,10 +192,10 @@ Naively using the Monte-Carlo integration technique with the inscattering integr
 % path tracing --------------------------------------------
 \subsubsection*{Path Tracing}
 
-The rendering equation is an integral equation which describes the propagation of light in scenes without any participating medium. Instead of applying Monte-Carlo directly to the in-scattering integral of the rendering equation and integrating over solid angle, Veach~\cite{VeachThesis97} proposed to reformulate the equation as an integral over all possible paths of photons which start from the place of emission (light sources) and arrive at position $\vec{x}$ from direction $\omega$ to contribute to $L(\vec{x}, \omega)$. This laid the foundation of the path integral formulation which is the underlying framework used by all Monte-Carlo techniques in rendering today. Pauly et al.~\cite{Pauly00} then later applied this to the radiative transfer equation which opened up the use of Monte Carlo techniques for light transport simulation in participating media.
+The rendering equation is an integral equation which describes the propagation of light in scenes without any participating medium. Instead of applying Monte-Carlo directly to the in-scattering integral of the rendering equation and integrating over solid angle, Veach~\cite{VeachThesis97} proposed to reformulate the equation as an integral over all possible paths of photons which start from the place of emission (light sources) and arrive at position $\vec{x}$ from direction $\vec{\omega}$ to contribute to $L(\vec{x}, \vec{\omega})$. This laid the foundation of the path integral formulation which is the underlying framework used by all Monte-Carlo techniques in rendering today. Pauly et al.~\cite{Pauly00} then later applied this to the radiative transfer equation which opened up the use of Monte Carlo techniques for light transport simulation in participating media.
 
 
-The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ which represents the trajectory a photon can make by traveling from where it was emitted to some position $\vec{x}$ with some incident direction $\omega$. The path $\bar{\mathrm{x}}$ consists of $N$ vertices $\vec{x}_i$ at which interaction events occur. The function $f\left(\bar{\mathrm{x}}\right)$ takes such a single path as input and returns the contribution which a photon makes to $L(\vec{x}, \omega)$ after being emitted with initial energy $L_e$ from the light source and traveling along the path trajectory represented by $\bar{\mathrm{x}}$ accounting for all the terms in the radiative transfer equation~\ref{eq:rte} which reduce energy along the way.
+The path integral framework introduces the concept of a path $\bar{\mathrm{x}}$ which represents the trajectory a photon can make by traveling from where it was emitted to some position $\vec{x}$ with some incident direction $\vec{\omega}$. The path $\bar{\mathrm{x}}$ consists of $N$ vertices $\vec{x}_i$ at which interaction events occur. The function $f\left(\bar{\mathrm{x}}\right)$ takes such a single path as input and returns the contribution which a photon makes to $L(\vec{x}, \vec{\omega})$ after being emitted with initial energy $L_e$ from the light source and traveling along the path trajectory represented by $\bar{\mathrm{x}}$ accounting for all the terms in the radiative transfer equation~\ref{eq:rte} which reduce energy along the way.
 \begin{figure}[t]
 \centering
 %\missingfigure{path sample and contribution factors}
@@ -235,27 +235,27 @@ where
 \begin{align}
 D\left(\vec{a}, \vec{b}\right) =
 \begin{cases}
-\abs{\vec{n}_a\cdot\omega_{ab}}, & \text{if $\vec{a}$ is a surface vertex}
+\abs{\vec{n}_a\cdot\vec{\omega}_{ab}}, & \text{if $\vec{a}$ is a surface vertex}
 \\
 1, & \text{if $\vec{a}$ is a volume vertex}
 \end{cases}
 \end{align}
-Here $\vec{n}_a$ is the normal at the surface vertex $\vec{a}$ and $\omega_{ab}$ is the normalized direction vector pointing from vertex $\vec{a}$ to vertex $\vec{b}$.
+Here $\vec{n}_a$ is the normal at the surface vertex $\vec{a}$ and $\vec{\omega}_{ab}$ is the normalized direction vector pointing from vertex $\vec{a}$ to vertex $\vec{b}$.
 
 The last term is defined in terms of the volume phase function $\phase$ and the surface scattering function $\phase_s$:
 \begin{align}
 P\left(\vec{x}_{i-1}, \vec{x}_i, \vec{x}_{i+1}\right) =
 \begin{cases}
-\phase_s\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}, \vec{n}_i\right), & \text{if $\vec{x}_i$ is a surface vertex}
+\phase_s\left(\vec{\omega}_{x_ix_{i-1}}\cdot\vec{\omega}_{x_ix_{i+1}}, \vec{n}_i\right), & \text{if $\vec{x}_i$ is a surface vertex}
 \\
-\phase\left(\omega_{x_ix_{i-1}}\cdot\omega_{x_ix_{i+1}}\right), & \text{if $\vec{x}_i$ is a volume vertex}
+\phase\left(\vec{\omega}_{x_ix_{i-1}}\cdot\vec{\omega}_{x_ix_{i+1}}\right), & \text{if $\vec{x}_i$ is a volume vertex}
 \end{cases}
 \end{align}
 This thesis exclusively deals with participating media and therefore surface scattering is of no concern.
 
-The set $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photon trajectories which arrive at $\vec{x}$ from direction $\omega$ and start at any light source in the scene. Each sample is assigned a probability density $p\left(\bar{\mathrm{x}}\right)$ according to a sampling method. The aim of light transport simulation is to find a solution for $L(\vec{x}, \omega)$. With the path integral formulation this can be expressed as a Monte-Carlo integral over path space:
+The set $\mu\left(\bar{\mathrm{x}}\right)$ is the set of all possible photon trajectories which arrive at $\vec{x}$ from direction $\vec{\omega}$ and start at any light source in the scene. Each sample is assigned a probability density $p\left(\bar{\mathrm{x}}\right)$ according to a sampling method. The aim of light transport simulation is to find a solution for $L(\vec{x}, \vec{\omega})$. With the path integral formulation this can be expressed as a Monte-Carlo integral over path space:
 \begin{align}
-L\left(\vec{x},\omega\right) = E[g] = \int_{\mu\left(\bar{\mathrm{x}}\right)} \frac{f\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
+L\left(\vec{x},\vec{\omega}\right) = E[g] = \int_{\mu\left(\bar{\mathrm{x}}\right)} \frac{f\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
 \ud\mu\left(\bar{\mathrm{x}}\right)
 \end{align}
 This can be estimated using a finite number of samples $X_i$:
@@ -264,13 +264,13 @@ This can be estimated using a finite number of samples $X_i$:
 \frac{1}{N}\sum_{i=0}^{N}
 g\left(X_i\right)
 \approx
-L\left(\vec{x},\omega\right)
+L\left(\vec{x},\vec{\omega}\right)
 \end{align}
-As mentioned above, the estimation error shows up as image noise (if random samples are independent). It can be shown formally that in order to reduce the amount of noise in half, four times the number of samples is needed (see Veach~\cite{VeachThesis97}). This means that for noise-free results a huge number of samples are needed---a significant drawback of Monte-Carlo methods.
+As mentioned above, the estimation error shows up as image noise (if random samples are independent). It can be shown formally that in order to reduce the amount of noise in half, four times the number of samples is needed (see Veach~\cite{VeachThesis97}). This means that for noise-free results a huge number of samples are needed\mydash a significant drawback of Monte-Carlo methods.
 
 \subsubsection*{Variance Reduction}
 
-Reducing the variance of Monte-Carlo estimators and therefore improving the convergence behaviour is the goal of most of the research on stochastic rendering methods. The primary strategy for variance reduction is to reduce the deflection or range of values under the integral sign. This is because the variance is driven by the amount the integrated function deviates from its mean over the integrated range.
+Reducing the variance of Monte-Carlo estimators and therefore improving the convergence behavior is the goal of most of the research on stochastic rendering methods. The primary strategy for variance reduction is to reduce the deflection or range of values under the integral sign. This is because the variance is driven by the amount the integrated function deviates from its mean over the integrated range.
 
 There are two ways to reduce the amount of variation of the integrand around its mean value. The first is to adjust the sampling strategy such that the probability density function $p\left(x\right)$ correlates with $f\left(x\right)$ as closely as possible. Ideally the probability density function is identical to $f$ up to a normalization factor $c$. This approach is called importance sampling:
 \begin{align}
@@ -293,9 +293,9 @@ L &= E[g] =
 \int_{\mu\left(\bar{\mathrm{x}}\right)}
 \frac{f\left(\bar{\mathrm{x}}\right)-c\left(\bar{\mathrm{x}}\right)}{p\left(\bar{\mathrm{x}}\right)}p\left(\bar{\mathrm{x}}\right)
 \ud\mu\left(\bar{\mathrm{x}}\right)
-+C\left(\vec{x}, \omega\right)
++C\left(\vec{x}, \vec{\omega}\right)
 \\
-C\left(\vec{x}, \omega\right) &= 
+C\left(\vec{x}, \vec{\omega}\right) &= 
 \int_{\mu\left(\bar{\mathrm{x}}\right)}
 c\left(\bar{\mathrm{x}}\right)
 \ud\mu\left(\bar{\mathrm{x}}\right)
@@ -348,27 +348,27 @@ The variance reduction techniques have been presented in this section because th
 \section{Deterministic Methods}
 \label{sec:foundations_deterministic}
 
-Deterministic methods are based on the discretization of functions which depend on the continuous variables $\vec{x}$ and $\omega$ into a discrete set of scalar values, that are flattened into a column vector $\vec{u}$. The discretization operator in the angular domain is denoted $\mathcal{P}_\omega$ and the spatial discretization operator is expressed as $\mathcal{P}_{\vec{x}}$
+Deterministic methods are based on the discretization of functions which depend on the continuous variables $\vec{x}$ and $\vec{\omega}$ into a discrete set of scalar values, that are flattened into a column vector $\vec{u}$. The discretization operator in the angular domain is denoted $\mathcal{P}_{\vec{\omega}}$ and the spatial discretization operator is expressed as $\mathcal{P}_{\vec{x}}$
 \begin{align*}
-L\left(\vec{x}, \omega\right)
-\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+L\left(\vec{x}, \vec{\omega}\right)
+\xrightarrow[\mathcal{P}_{\vec{\omega}}]{\makebox[1cm]{}}
 \xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
 \vec{u}
 \end{align*}
 The discretization operators are also applied to the individual operators $\mathcal{T}$, $\mathcal{C}$ and $\mathcal{S}$, which constitute the radiative transfer equation, producing operator matrices $T$, $C$ and $S$ respectively:
 \begin{align*}
 \mathcal{T}
-\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{\omega}}]{\makebox[1cm]{}}
 \xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
 T
 \\
 \mathcal{C}
-\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{\omega}}]{\makebox[1cm]{}}
 \xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
 C
 \\
 \mathcal{S}
-\xrightarrow[\mathcal{P}_\omega]{\makebox[1cm]{}}
+\xrightarrow[\mathcal{P}_{\vec{\omega}}]{\makebox[1cm]{}}
 \xrightarrow[\mathcal{P}_{\vec{x}}]{\makebox[1cm]{}}
 S
 \end{align*}
@@ -384,7 +384,7 @@ A\vec{u}&=Q
 \end{align*}
 Deterministic methods turn the problem of solving the radiative transfer equation into the problem of solving a system of linear equations with the solution vector being a discretized version of the radiance field $L$.
 
-The particular choice of $\mathcal{P}_{\vec{x}}$ and $\mathcal{P}_\omega$ determines the concrete method used. For the spatial discretization $\mathcal{P}_{\vec{x}}$ a common choice in nuclear sciences are finite elements and hexagonal meshes in particular, because it allows to best approximate solid geometry (e.g. from reactors) for boundary conditions. However, finite element discretization is unwieldy and difficult to setup. Throughout this theses we use a finite difference discretization which is very common in graphics and also easy to work with in a practical context.
+The particular choice of $\mathcal{P}_{\vec{x}}$ and $\mathcal{P}_{\vec{\omega}}$ determines the concrete method used. For the spatial discretization $\mathcal{P}_{\vec{x}}$ a common choice in nuclear sciences are finite elements and hexagonal meshes in particular, because it allows to best approximate solid geometry (e.g. from reactors) for boundary conditions. However, finite element discretization is unwieldy and difficult to setup. Throughout this theses we use a finite difference discretization which is very common in graphics and also easy to work with in a practical context.
 %https://en.wikipedia.org/wiki/Types_of_mesh
 %\TD{talk about discretization and meshing}
 %\todo[inline]{Spatial Discretization}
@@ -403,7 +403,7 @@ The purpose of this thesis is to introduce the class of spherical harmonics meth
 
 \subsubsection*{Discrete Ordinate Method ($S_N$-Method)}
 % SN
-Instead of using the continuous spherical harmonics basis functions, an alternative approach for the discretization $\mathcal{P}_\omega$ is to replace the continuous variable $\omega$ by a discrete set of direction vectors $\omega_i$ (e.g. using Gaussian quadrature points) which causes the inscattering integral (equation~\ref{eq:rte_inscattering}) to turn into a sum and in the end produces a system of linear equations. Usually in other fields, the variable $s$ is used to identify the direction vector, and the discrete directions are denoted $s_i$. This is why the method is also referred to as $S_N$-method (where $N$ is the number of directions). Development of the method is mostly attributed to Wick~\cite{Wick43} and Chandrasekhar~\cite{Chandrasekhar60}, who derived the $S_N$-method in one dimension. Later, Carlson et al.~\cite{Carlson61} extended the method to two and three dimensions. For the one-dimensional case, it has been shown, that $S_{N+1}$-theory is equivalent to $P_N$-theory if Gaussian quadrature points are used (see~\cite{Cullen01}). In this case, the discrete $S_N$-directions correspond to the zero crossings of the Legendre polynomials used in $P_N$. In two or three dimensions however, this correspondence is broken and causes non-physical results, such as the ray effects for which the $S_N$-method is known for. These are discretization artifacts of the angular variable and appear as unphysical concentrated beams of light within the volume. 
+Instead of using the continuous spherical harmonics basis functions, an alternative approach for the discretization $\mathcal{P}_{\vec{\omega}}$ is to replace the continuous variable $\vec{\omega}$ by a discrete set of direction vectors $\vec{\omega}_i$ (e.g. using Gaussian quadrature points) which causes the inscattering integral (equation~\ref{eq:rte_inscattering}) to turn into a sum and in the end produces a system of linear equations. Usually in other fields, the variable $s$ is used to identify the direction vector, and the discrete directions are denoted $s_i$. This is why the method is also referred to as $S_N$-method (where $N$ is the number of directions). Development of the method is mostly attributed to Wick~\cite{Wick43} and Chandrasekhar~\cite{Chandrasekhar60}, who derived the $S_N$-method in one dimension. Later, Carlson et al.~\cite{Carlson61} extended the method to two and three dimensions. For the one-dimensional case, it has been shown, that $S_{N+1}$-theory is equivalent to $P_N$-theory if Gaussian quadrature points are used (see~\cite{Cullen01}). In this case, the discrete $S_N$-directions correspond to the zero crossings of the Legendre polynomials used in $P_N$. In two or three dimensions however, this correspondence is broken and causes non-physical results, such as the ray effects for which the $S_N$-method is known for. These are discretization artifacts of the angular variable and appear as unphysical concentrated beams of light within the volume. 
 
 Like the $P_N$-method, the $S_N$ method also has not been fully explored in the context of rendering in computer graphics yet. Most related is work by Max~\cite{Max95}, who introduced a method for computing light propagation in participating media based on directional bins in a regular grid which resembles the method of discrete ordinates.
 
@@ -416,7 +416,7 @@ The Lattice-Boltzmann method was introduced by Geist et al.~\cite{Geist04} as an
 
 Given the very limited computation budget and the need for realtime performance in graphics gave rise to methods which have not been derived formally from radiative transfer and which take additional assumptions to allow further simplification.
 
-Miller et al.~\cite{Miller12} present a method for computing multiple scattering in clouds which seperates the cloud into directly illuminated boundary parts facing the lightsource and a remaining indirectly illuminated part. The method operates in two steps: It first computes the distance function to the directly illuminated part for the whole dataset. This requires solving the Eikonal equation using the fast marching method (see~\cite{Tsitsiklis95}). Then it computes the amount of light reaching each point within the medium as a function of distance. While being a crude simplification, the method allows for art-directability through customizeable radiance-distance profiles.
+Miller et al.~\cite{Miller12} present a method for computing multiple scattering in clouds which separates the cloud into directly illuminated boundary parts facing the lightsource and a remaining indirectly illuminated part. The method operates in two steps: It first computes the distance function to the directly illuminated part for the whole dataset. This requires solving the Eikonal equation using the fast marching method (see~\cite{Tsitsiklis95}). Then it computes the amount of light reaching each point within the medium as a function of distance. While being a crude simplification, the method allows for art-directability through customizeable radiance-distance profiles.
 
 Light Propagation Volumes by Kaplanyan et al.~\cite{Kaplanyan10} were orginally developed for surface geometry only and have later been extended to participating media by Billeter et al.~\cite{Billeter12}. The scene is aligned with a regular grid where each voxels contains a truncated spherical harmonics expansions of the radiance field (similar to $P_N$). Light emission is computed from single scattered light using reflective shadow maps by Dachsbacher et al.~\cite{Dachsbacher05}. Indirect light is computed by an iterative method. For each iteration, the light at every voxel is distributed to all voxels in a local neighbourhood. The exchange of light is computed for each neighbouring voxel taking the projected surface area of voxel faces into acconut. The process of updating all neighbouring voxels within a certain radius using the light at the center voxel has some resemblance of wavefronts being emitted from the voxel. Although the technique is not derived directly from radiative transfer, it became very popular with realtime rendering for its convincing results.
 
