@@ -28,12 +28,10 @@ Computer hardware is ever-evolving\mydash while for a long time most of the incr
 
 This thesis seeks to address these problems by following a trend which has been spurred by the so called physical based rendering revolution in graphics (see Keller et al.~\cite{Keller15}). In the early days of computer graphics, limitations in computing power required the use of cheap ad-hoc methods and other tricks to facilitate efficient image generation algorithms. With the growth in computational power, techniques and methods based on accurate physical models have become increasingly feasible and started replacing older heuristical approaches. Rendering became concerned with energy conservation, the use of correct physical quantities for describing the virtual scene and quantifiable error to physically correct ground truth results. Consistently adopting the framework provided by optical physics allowed rendering researchers to much better investigate and compare with work in other fields attacking very similar problems. While graphics research has always drawn inspiration and methods from other scientific domains, the emergence of physical based rendering caused a significant increase in research work which is based on findings and theories from other domains. Physics provided a common language allowing much easier to talk across disciplines.
 
-In this spirit, this thesis investigates theories and methods from the astrophysics domain and nuclear sciences and adopts them for application in rendering. The resulting work presented in this thesis addresses all the three challenges mentioned above. Specifically, methods are presented which allow to reduce the computational cost for the demanding problem of rendering participating media such as clouds, smoke, fire, etc. and even allows\mydash with some compromise in accuracy\mydash applications at interactive rates. The methods devised in this thesis turn the rendering problem into the problem of solving a linear system of equations, exactly what high performance computing clusters (large scale many-core systems) have been designed for (see Koerner et al.~\cite{Koerner17}). This thesis constitutes a significant effort in putting forward an alternative approach to light transport simulation which has not seen a lot of attention lately but might have the potential to answer some of the research challenges in rendering today and tomorrow.
+In this spirit, this thesis investigates theories and methods from the astrophysics domain and nuclear physics and adopts them for application in rendering. The resulting work presented in this thesis addresses all the three challenges mentioned above. Specifically, methods are presented which allow to reduce the computational cost for the demanding problem of rendering participating media such as clouds, smoke, fire, etc. and even allows\mydash with some compromise in accuracy\mydash applications at interactive rates. The methods devised in this thesis turn the rendering problem into the problem of solving a linear system of equations, exactly what high performance computing clusters (large scale many-core systems) have been designed for (see Koerner et al.~\cite{Koerner17}). This thesis constitutes a significant effort in putting forward an alternative approach to light transport simulation which has not seen a lot of attention lately but might have the potential to answer some of the research challenges in rendering today and tomorrow.
 
 %\TD{visualization}
 %\TD{inverse rendering}
-
-\section{Research Questions}
 
 This thesis is concerned with rendering volumetric media such as clouds, fire, milk, and fog which interacts with light. These participating media elements are ubiquitous in the real world and therefore also common in rendering. Today's standard methods in rendering operate by tracing particles of light (photons) through a given scene. These particles interact with the scene and form complex trajectories from light sources to the sensor of the virtual camera which captures the image. Participating media such as clouds or milk cause very long trajectories for light particles and therefore are computationally very demanding.
 
@@ -51,11 +49,52 @@ Common to all the problems mentioned above is the migration and interaction of p
 
 Now astrophysics and nuclear sciences have a much longer standing history than computer graphics and a lot of research was done before modern computers were widely available. This led to a large volume of work in those fields dealing with very similar problems in graphics from a very different perspective. As a result there are many interesting ideas, methods and techniques that can be adapted for applications in computer graphics.
 
-D'Eon~\cite{DEon14} in his work explains vividly the challenges this type of research comes with. Starting with notation and terminology which makes it difficult to read and understand papers from these fields. Further many seminal texts from those other domains are out of print, expensive to aquire, lack offical digital distribution formats and generally are hard to find. Since much of academic research was published before modern computers became a commodity, most publications focus exclusively on theoretical treatments and simple one-dimensional or two-dimensional problems. Practical computational methods are lacking and simply were not focus of research back then. New methods will have to be devised after going through the literature and putting the puzzle pieces together. However, doing this type of translational research can lead to powerful new tools in graphics. Significant recent advances, such as the work by D'Eon et al.~\cite{dEon11}, Vorba et al.~\cite{Vorba16}, or Krivanek et al.~\cite{Krivanek14} are based to a large degree on old methods which were invented in other scientific domains.
+D'Eon~\cite{DEon14} in his work explains vividly the challenges this type of research comes with. Starting with notation and terminology which makes it difficult to read and understand papers from these fields. Further many seminal texts from those other domains are out of print, expensive to aquire, lack offical digital distribution formats and generally are hard to find. Since much of academic research was published before modern computers became a commodity, most publications focus exclusively on theoretical treatments and simple one-dimensional or two-dimensional problems. Practical computational methods are lacking and simply were not focus of research back then. New methods will have to be devised after going through the literature and putting the puzzle pieces together. However, doing this type of translational research can lead to powerful new tools in graphics.
 
-Like the work mentioned above, this thesis follows the same spirit of adapting an existing method from another field for the application to image generation in computer graphics. The $P_N$-method (see Brunner~\cite{Brunner02}) is a very popular method in nuclear sciences. It allows to compute a global solution without using the computational demanding standard method of following particle trajectories. The classical diffusion approximation (see~Ishimaru~\cite{Ishimaru78}) is a method which is used in the astrophysics domain and actually has been introduced to graphics by Stam~\cite{Stam95}. However an extension to flux-limited diffusion was introduced in the astrophysics domain by Levermore et al.~\cite{Levermore81} and has not been introduced to graphics yet. What all these different methods have in common is the fact that they are based on a model that uses the same discretization in the angular domain.
+Significant recent advances in computer graphics are based to a large degree on methods which were invented in other scientific domains. For example methods for fast subsurface scattering like the one from D'Eon et al.~\cite{dEon11}, are based on a half-space approximation introduced by Brinkworth~\cite{Brinkworth64}. Vorba et al.~\cite{Vorba16} derived their adjoint-driven russian roulette from the weight window method introduced by Booth~\cite{Booth85}. And zero-variance sampling by Krivanek et al.~\cite{Krivanek14} came out of an investigation in sampling techniques introduced by Dwivedi~\cite{Dwivedi82}. All these inspirations came from other fields and were applied to great effect to rendering in computer graphics.
 
-The central research question this thesis will explore is whether these methods have merit for applications in computer graphics, and how they could be adopted to typical problems in rendering. This consists of two parts. First, the theory needs to be revisited and presented to a computer graphics audience. How is the theory derived from first order principles? Is it applicable for applications in rendering? What are the theoretical limitations and how do they affect the scope of applications? Second, modern and efficient methods need to be derived which allow application in a typical computer graphics context. How can the theoretical problem be solved for a typical application in rendering? How could a practical and efficient method look like? What shortcomings does it have and how could those be overcome?
+Like the work mentioned above, this thesis follows the same spirit of adapting an existing method from another field for the application to image generation in computer graphics. The $P_N$-method (see Brunner~\cite{Brunner02}) is a very popular method in nuclear sciences. It allows to compute a global solution without using the computational demanding standard method of following particle trajectories. The classical diffusion approximation (see~Ishimaru~\cite{Ishimaru78}) is a method which is used in the astrophysics domain and actually has been introduced to graphics by Stam~\cite{Stam95}. However an extension to flux-limited diffusion was introduced in the astrophysics domain by Levermore et al.~\cite{Levermore81} and has not been introduced to graphics yet. What all these different methods have in common is the fact that they are based on the discretization in angular domain using spherical harmonics.
+
+\newpage
+\subsubsection*{Research Questions}
+\vspace{-.125cm}
+This thesis explores whether advanced methods, based on the spherical harmonics discretization in angular domain, have merit for applications in computer graphics. More specifically, we seek to learn whether the $P_N$-method and flux-limited diffusion can be adopted for use in rendering. This endeavor can be formulate as a series of research questions: 
+
+\fbox{
+    \parbox{\textwidth}{
+        \vspace{.15cm}
+        \textbf{Research question 1}
+        \newline
+        \\
+        How can the theory behind the $P_N$-method and behind flux-limited diffusion be integrated into the theoretical framwork used in rendering. For this question, the theory needs to be revisited and presented in the context of computer graphics. How is the theory derived from first order principles? Is it applicable for applications in rendering? What are the theoretical limitations and how do they affect the scope of applications?
+        \vspace{.25cm}
+    }
+}
+
+\fbox{
+    \parbox{\textwidth}{
+        \vspace{.15cm}
+        \textbf{Research question 2}
+        \newline
+        \\
+        Following the theoretical treatment, we seek to find practical and efficient methods for integration into common rendering frameworks. How can the theoretical problem be solved for a typical application in rendering? How could a practical and efficient method look like? What shortcomings does it have and how could those be overcome?
+        \vspace{.25cm}
+    }
+}
+
+\fbox{
+    \parbox{\textwidth}{
+        \vspace{.15cm}
+        \textbf{Research question 3}
+        \newline
+        \\
+        Finally, we seek to understand how the $P_N$-method and flux-limited diffusion compare against classical diffusion and other families of rendering techniques. What are the benefits and what are the shortcomings? Which light transport effects are well suited for the new techniques and are there any effects for which the new techniques do not work well or even break down?
+        \vspace{.25cm}
+    }
+}
+\newpage
+
+
 
 \section{Summary of Original Contributions}
 

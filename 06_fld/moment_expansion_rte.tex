@@ -1,7 +1,7 @@
 \section{Moment Expansion of the Radiative Transfer Equation}
 \label{sec:da_moment_expansion_RTE}
 
-As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a concise representation of the $P_N$-equations, which are particularily expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar with the difference that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the replacement is done as a second step.
+As with the radiance field, the radiative transfer equation can be developed into its moments. The result is a concise representation of the $P_N$-equations, which are particularly expressive for lower truncation order, such as $P_1$. The derivation steps of the spherical harmonics expansion replaced the radiance field quantity in the RTE by its truncated expansion, followed by the expansion of the individual terms of the RTE. The derivation steps of the moment expansion are similar, with the difference, that the moment expansion (equation~\ref{eq:moment_expansion_mu}) is applied to the RTE terms (equation~\ref{eq:rte}) first and the, replacement is done as a second step.
 
 The $n$-th moment of the RTE is found by applying the moment projection operator $\mu_n$ to all the terms of the RTE:
 \begin{align*}
@@ -25,9 +25,9 @@ The term $\nabla\mu_{n+1}$ is a tensor divergence. The general moment equation o
 \nonumber
 &+\mu_n\left[Q(\vec{x}, \vec{\omega})\right]
 \end{align}
-Generally, the moment equations of the RTE relate the divergence of the $n+1$ moment of the radiance field, to the $n$-th moment of changes to the radiance field due to inscattering, absorption and emission. The inscattering term convolves the radiance field with the phase function and applies the scattering coefficient as a weighting function on top. Each moment produces a number of equations, which are identical to the number of tensor components for a tensor of the rank associated with that moment.
+Generally, the moment equations of the RTE relate the divergence of the $n+1$ moment of the radiance field, to the $n$-th moment of changes to the radiance field due to inscattering, absorption, and emission. The inscattering term convolves the radiance field with the phase function and applies the scattering coefficient as a weighting function on top. Each moment produces a number of equations, which are identical to the number of tensor components for a tensor of the rank associated with that moment.
 
-For the derivation of the diffusion approximation in this chapter, the moment expansion of the RTE into its first two moment will be expanded. Expanding equation~\ref{eq:gme} with $n=0$ gives the zero moment equation:
+For the derivation of the diffusion approximation in this chapter, the moment expansion of the RTE into its first two moments will be expanded. Expanding equation~\ref{eq:gme} with $n=0$ gives the zero moment equation:
 \begin{align}
 \nonumber
 \nabla\vec{E}(\vec{x})=&
@@ -142,7 +142,7 @@ Likewise the radiance field is replaced with its two moment expansion in the fir
 -\sigma_t'(\vec{x})\vec{E}\left(\vec{x}\right)
 +Q_1\left(\vec{x}\right)
 \end{align*}
-Here, following is used
+Here, the following is used
 \begin{align*}
 \mu_2[1] = \frac{4\pi}{3}\mathbf{I}
 \end{align*}
@@ -175,7 +175,7 @@ Equation~\ref{eq:me_first} is solved for $\vec{E}$ as follows:
 -Q_1\left(\vec{x}\right)
 \right)
 \end{align}
-Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way the unknown $\vec{E}$ is eliminated and we arrive at a single scalar partial differential equation:
+Then equation~\ref{eq:me_first_resolved_E} is used to substitute $\vec{E}$ in equation~\ref{eq:me_zero}. This way, the unknown $\vec{E}$ is eliminated and we arrive at a single scalar partial differential equation:
 \begin{align}
 \nabla
 \left(

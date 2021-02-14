@@ -2,9 +2,9 @@
 \section{Non-Linear Gauss-Seidel Solver with Successive Overrelaxation}
 \label{sec:fld_solver}
 
-In this section, a new method for solving the modified diffusion equation provided by flux-limited diffusion theory is introduced. Most prominent with the flux-limited diffusion equation is the non-linear diffusion coefficient. Unfortunately, this non-linearity prevents application of any components of the solver-framework that was developed in chapter~\ref{sec:pnmethod} and application of the multigrid solver developed in chapter~\ref{sec:diffusion_approximation}, as both are exclusively geared towards coupled systems of linear partial differential equations.
+We now introduce a new method for solving the modified diffusion equation, provided by flux-limited diffusion theory. Most prominent with the flux-limited diffusion equation is the non-linear diffusion coefficient. Unfortunately, this non-linearity prevents the application of any components of the solver-framework that was developed in chapter~\ref{sec:pnmethod} and application of the multigrid solver developed in chapter~\ref{sec:diffusion_approximation}, as both are exclusively geared towards coupled systems of linear partial differential equations.
 
-The equation, which has to be solved is the flux-limited diffusion equation (equation~\ref{eq:iso_var_fld_final}). The flux-limiter $\lambda$ by Levermore et al.~\cite{Levermore81} will be used (equation~\ref{eq:iso_var_fld_lambdaR}), which in term depends on the transport measure $R$ (equation~\ref{eq:fld_transport_measure_R}). In summary the solver developed in this section seeks out to find a solution for $\phi$, which satisfies the following set of equations:
+The equation, which has to be solved is the flux-limited diffusion equation (equation~\ref{eq:iso_var_fld_final}). The flux-limiter $\lambda$ by Levermore et al.~\cite{Levermore81} will be used (equation~\ref{eq:iso_var_fld_lambdaR}), which in term depends on the transport measure $R$ (equation~\ref{eq:fld_transport_measure_R}). In summary, the solver developed in this section tries to find a solution for $\phi$, which satisfies the following set of equations:
 \begin{align}
 \nabla\left(D_F\left(\vec{x}\right)\nabla\phi\right) &= -\sigma_a\phi + Q_0
 \quad \text{with}\quad
@@ -17,7 +17,7 @@ D_F\left(R\left(\vec{x}\right)\right) = -\frac{1}{\sigma_t'}\lambda\left(R\left(
 R\left(\vec{x}\right) &= \frac{\norm{\nabla\phi\left(\vec{x}\right)}}{\sigma_t\left(\vec{x}\right)\phi\left(\vec{x}\right)}
 \label{eq:fld_solver_transport_measure_R}
 \end{align}
-This is a diffusion equation with a non-linear diffusion coefficient $D_F$ which depends on the flux-limiter $\lambda$. The non-linearity arises from the fact that the flux-limiter depends on the solution, which after substitution will create non-linear terms in the partial differential equation.
+This is a diffusion equation with a non-linear diffusion coefficient $D_F$ depending on the flux-limiter $\lambda$. The non-linearity arises from the fact that the flux-limiter depends on the solution, which after substitution will create non-linear terms in the partial differential equation.
 
 \subsubsection*{Discretization}
 
@@ -51,7 +51,7 @@ The flux-limiter in equation~\ref{eq:fld_solver_flux_limiter} is simply discreti
 \lambda(R_{ijk}) &= \frac{1}{R_{ijk}}\left(\mathbf{\operatorname{coth}}R_{ijk} - \frac{1}{R_{ijk}}\right)
 \label{eq:fld_solver_discrete_flux_limiter}
 \end{align}
-Note that the transport measure $R$ will cause a division by zero if it becomes zero. This problem will be addressed by the way the transport measure $R$ in equation~\ref{eq:fld_solver_transport_measure_R} is discretized:
+Note, that the transport measure $R$ will cause a division by zero if it becomes zero. This problem will be addressed by the way the transport measure $R$ in equation~\ref{eq:fld_solver_transport_measure_R} is discretized:
 \begin{align}
 R_{ijk} = \frac{\operatorname{max}\left(\norm{\nabla\phi_{ijk}},\epsilon\right)}{\operatorname{max}\left(\sigma_{t,ijk}\phi_{ijk},\epsilon\right)}
 \quad
@@ -67,7 +67,7 @@ R_{ijk} = \frac{\operatorname{max}\left(\norm{\nabla\phi_{ijk}},\epsilon\right)}
 \right)
 \label{eq:fld_solver_discrete_R}
 \end{align}
-The introduction of a minimum threshold $\epsilon$ in the nominator and denominator will prevent $R$ from becoming zero or breaking down due to division by zero. Note that the minimum threshold $\sigma_{min}$ of the extinction coefficient will be applied on top.
+The introduction of a minimum threshold $\epsilon$ in the nominator and denominator will prevent $R$ from becoming zero or breaking down due to division by zero. The minimum threshold $\sigma_{min}$ of the extinction coefficient will be applied on top.
 
 
 \subsubsection*{Non-linear Gauss-Seidel Solver}
@@ -102,18 +102,18 @@ The Gauss-Seidel update step is found by isolating $\phi_{ijk}$ in the discretiz
 }
 $}
 \end{equation}
-Then the discrete transport measure $R_{jk}$ is updated, using the newly retrieved value for $\phi_{ijk}$. With this the new diffusion coefficient is computed:
+Then, the discrete transport measure $R_{jk}$ is updated, using the newly retrieved value for $\phi_{ijk}$. With this, the new diffusion coefficient is computed:
 \begin{align}
 D_{ijk} = \frac{\lambda\left(R_{ijk}\right)}{\sigma_t'}
 \label{eq:fld_solver_discrete_D}
 \end{align}
-This update step is executed for every voxel of the finite difference grid and values are updated in place.
+This updating step is executed for every voxel of the finite difference grid and values are updated in place.
 
-The values $\phi_{ijk}$ and $D_{ijk}$ are initialized to small tolerances $\phi_{ijk} = \epsilon \bar{j}\Delta l$ and $D_{ijk} = \epsilon \Delta l$ for all voxels. Initially, these grid values do not satisfy equation~\ref{eq:fld_solver_gs_phi_update} and equation~\ref{eq:fld_solver_discrete_D}, but over a number of iterations they converge to a consistent solution of both equations over the whole grid. 
+The values $\phi_{ijk}$ and $D_{ijk}$ are initialized to small tolerances $\phi_{ijk} = \epsilon \bar{j}\Delta l$ and $D_{ijk} = \epsilon \Delta l$ for all voxels. Initially, these grid values do not satisfy equation~\ref{eq:fld_solver_gs_phi_update} and equation~\ref{eq:fld_solver_discrete_D}, but over several iterations, they converge to a consistent solution of both equations over the whole grid. 
 
 Boundary conditions are accounted for by updating the values for $\phi_{ijk}$ and $D_{ijk}$ at the boundary voxels. For Dirichlet boundary conditions the values are set directly. For Neumann boundary conditions the boundary voxels are set according to the next inner voxel (section~\ref{sec:pn_bc}). This update is done at the beginning of each Gauss-Seidel iteration.
 
-A criteria will decide when the algorithm ran enough Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here, convergence to machine precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
+A criteria is set to stop the Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here, convergence to machine precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
 
 To improve the rate of convergence, successive over-relaxation (SOR) is used (Hadjidimos~\cite{Hadjidimos00}). Defining the over-relaxation parameter $\vec{\omega}$, where $0<\vec{\omega}<2$, the update of $\phi_{ijk}$ at each stencil is modified to:
 \begin{equation}
@@ -122,7 +122,7 @@ To improve the rate of convergence, successive over-relaxation (SOR) is used (Ha
 \end{equation}
 where $\phi'_{ijk}$ is the updated value from equation~\ref{eq:fld_solver_gs_phi_update}.
 
-To further speed up the computation time a Red-Black Gauss-Seidel update process is used. This allows to update half of the voxels in parallel (Olshanskii et al.~\cite{Olshanskii14}). The voxels are seperated into two disjunct groups according to a checkerboard pattern (hence the name Red-Black). Voxels within a group can be updated in parallel, because the stencil only requires information from the neighbouring voxels in each dimension and those always belong to the other voxel group. Firstly, all voxels of one group are processed in parallel and their $\phi_{ijk}$ and $D_{ijk}$ values are updated. Then all the voxels of the other group are updated in parallel. The two passes constitute one iteration. The full algorithm is outlined in listing~\ref{algorithm:fld_solver}.
+To further speed up the computation time a Red-Black Gauss-Seidel update process is used. This allows to update half of the voxels in parallel (Olshanskii et al.~\cite{Olshanskii14}). The voxels are separated into two disjunct groups according to a checkerboard pattern (hence the name Red-Black). Voxels within a group can be updated in parallel, because the stencil only requires information from the neighboring voxels in each dimension and those always belong to the other voxel group. Firstly, all voxels of one group are processed in parallel and their $\phi_{ijk}$ and $D_{ijk}$ values are updated. Then all the voxels of the other group are updated in parallel. The two passes constitute one iteration. The full algorithm is outlined in listing~\ref{algorithm:fld_solver}.
 
 
 

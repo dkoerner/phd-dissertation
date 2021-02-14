@@ -12,9 +12,9 @@ Q_{ijk} = \frac{1}{h_xh_yh_z}
 \end{align}
 The index {ijk} refers to the voxel, in which the point light is located.
 
-Note that here the radiance field is not seperated as outlined in section~\ref{sec:pn_rendering_integration}. The emission field represents only the discretized light source and therefore, the resulting discretized radiance field represents all light transport, including single scattered light.
+Note here, that the radiance field is not separated as outlined in section~\ref{sec:pn_rendering_integration}. The emission field represents only the discretized light source and therefore, the resulting discretized radiance field represents all light transport, including single scattered light.
 
-The correct analytical solution for fluence is given by D'Eon et al.~\cite{dEon11}. The authors also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$), which shall be can compared directly with the Grosjean solution.
+The correct analytical solution for fluence is given by D'Eon et al.~\cite{dEon11}. The authors also introduce a very accurate approximation, called the Grosjean solution, which is simpler to evaluate and always convergent. The fluence is identical to the zero coefficient of the spherical harmonics expansion of the radiance field ($L^{0,0}$), which can be compared directly with the Grosjean solution.
 \begin{figure}[h]
 \centering
 %\missingfigure{pointsource plots PN}
@@ -22,7 +22,7 @@ The correct analytical solution for fluence is given by D'Eon et al.~\cite{dEon1
 \caption{Comparison of $P_N$-results for the pointsource problem with different truncation order $N$ against groundtruth solution (Grosjean). The disagreement on the right comes from zero dirichlet boundary conditions.}
 \label{fig:pn_results_pointsource_1}
 \end{figure}
-Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$, $P_3$, $P_4$, $P_5$ against the Grosjean solution. The figure shows that with higher $N$, the $P_N$-solution increases in accuracy. Also noticeable is that with increasing truncation order $N$, the $P_N$-solution oscillates around the exact solution and approaches it with alternating under- and overestimation, especially near the point source. Even truncation order will overestimate and odd truncation order will produce an underestimate. The performance characteristics are given in table~\ref{tab:results_pointsource}
+Figure~\ref{fig:pn_results_pointsource_1} compares the solution for $P_1$, $P_2$, $P_3$, $P_4$, $P_5$ against the Grosjean solution. The figure shows that with higher $N$, the $P_N$-solution increases accuracy. Also noticeable, with increasing truncation order $N$, the $P_N$-solution oscillates around the exact solution and approaches it with alternating under- and overestimation, especially near the point source. Even truncation order will overestimate and odd truncation order will produce an underestimate. The performance characteristics are given in table~\ref{tab:results_pointsource}
 
 \begin{table}[!h]
 	\centering
@@ -75,9 +75,9 @@ Running the $P_N$-method on the checkerboard problem, allows to compare it again
 \subsection{Procedural Cloud}
 \label{sec:pn_results_clouds}
 
-In a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset, which is being illuminated by a directional cloud. The radiance field is separated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration} and a basic forward path tracer (section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
+For a more practical example the $P_N$-solver is used to compute the multiple scattered light in a procedurally generated cloud dataset, which is being illuminated by a directional light. The radiance field is separated into single scattered and multiple scattered light as explained in section~\ref{sec:pn_rendering_integration}. A basic forward path tracer (section~\ref{sec:foundations_mc}) is used to trace camera rays and integrate single scattered light according to equation~\ref{eq:pn_rendering_integration1}.
 
-Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction), which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behaviour of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular, when regions of pure vacuum exist in the dataset.
+Characteristic about the dataset is the presence of very dense media embedded in regions of very low density and vacuum (zero extinction), which exhibits very strong density gradients. The presence of vacuum has a signficiant effect on the convergence behavior of the $P_N$-method as explained in section~\ref{sec:pn_system_matrix}. The convergence deteriorates in the presence of very low density regions. The coefficient matrix $A$ becomes singular, when regions of pure vacuum exist in the dataset.
 
 The $P_N$-method for $N={1,2,3,4,5}$ has been run using a minimum threshold of $\sigma_{min}=1.0e^{-3}$. The resolution of the finite difference grid used by the $P_N$-method is $64\times 64\times 64$. Separating the multiple scattered light from the single scattered light has the benefit that the multiple scattered light has lower frequencies, which allows using a coarser finite difference grid without a significant loss of accuracy.
 \begin{figure}[h]
@@ -141,7 +141,7 @@ The results for the procedural cloud problem are shown in figure~\ref{fig:pn_res
 \end{table}
 
 The performance characteristics shown in table 
-~\ref{tab:results_cloud} are heavily driven by the presence of low density or vacuum regions. In case of vacuum regions specifically, the condition number is singular. In that case the residual flattens and the solver actually never really converges below a certain error value. Therefore application of a minimum threshold for the extinction coefficient $\sigma_t$ becomes necessary. With a sufficiently high threshold (relative to the length scale of the problem), computation times can be reduced drastically while compromising on the discrepancy to the original problem containing vacuum regions. In figure~\ref{fig:pn_results_convergence} the convergence behaviour for solving the normal form using the conjugate-gradient method is being compared for different choices of the threshold $\sigma_{min}$.
+~\ref{tab:results_cloud} are heavily driven by the presence of low density or vacuum regions. In case of vacuum regions specifically, the condition number is singular. In that case the residual flattens and the solver actually never really converges below a certain error value. Therefore application of a minimum threshold for the extinction coefficient $\sigma_t$ becomes necessary. With a sufficiently high threshold (relative to the length scale of the problem), computation times can be reduced drastically while compromising on the discrepancy to the original problem containing vacuum regions. In figure~\ref{fig:pn_results_convergence} the convergence behavior for solving the normal form using the conjugate-gradient method is being compared for different choices of the threshold $\sigma_{min}$.
 \begin{figure}[h]
 \centering
 %\missingfigure{convergence}

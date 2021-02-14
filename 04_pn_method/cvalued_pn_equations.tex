@@ -96,7 +96,7 @@ a^{l-1, m}L^{l-1,m}+b^{l+1, m}L^{l+1,m}
 \end{pmatrix}
 $}
 \end{equation*}
-Which gives the final moment equation for the transport term:
+Which gives the projected transport term:
 \begin{align}
 &
 \frac{1}{2}c^{l-1, m-1}\partial_x L^{l-1,m-1}
@@ -125,7 +125,7 @@ The scattering term in the RTE is given as:
 \begin{align*}
 \sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\cdot\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'
 \end{align*}
-The phase function, used in isotropic scattering medium, only depends on the angle between incident and outgoing direction, and therefore is rotationally symmetric around the pole defining axis. This property allows to define a rotation $R(\vec{\omega})$, which rotates the phase function, such that the pole axis aligns with the outgoing direction vector $\vec{\omega}$. This rotation is expressed as:
+The phase function, used in isotropic scattering medium, only depends on the angle between incident and outgoing direction, and therefore is rotationally symmetric around the pole defining axis. This property allows defining a rotation $R(\vec{\omega})$, which rotates the phase function, such that the pole axis aligns with the outgoing direction vector $\vec{\omega}$. This rotation is expressed as:
 \begin{align*}
 \rho_{R(\vec{\omega})}(\phase)
 \ ,
@@ -141,7 +141,7 @@ which can be implemented by applying the inverse rotation $R(\vec{\omega})^{-1}$
 \end{align}
 As the inner product integral of the convolution is evaluated, the phase function rotates along with the argument $\vec{\omega}$.
 
-Now, the spherical harmonics expansions of $L$ and $\phase$ (equation~\ref{eq:sh_exp_phase}) in the definition for the inner product of the convolution (equation~\ref{eq:complex_scatt_conv}) is used:
+Now, the spherical harmonics expansions of $L$ and $\phase$ (equation~\ref{eq:sh_exp_phase}) in the definition for the inner product of the convolution (equation~\ref{eq:complex_scatt_conv}) are used:
 \begin{align*}
 \langle L,  \rho_{R(\vec{\omega})}(\phase)\rangle = \left < \sum_{l,m}{L^{l,m}(\vec{x}) \SHBC^{l,m}}, \rho_{R(\vec{\omega})}\left ( \sum_{l}{\phase^{l0}\SHBC^{l0}} \right )\right>
 \end{align*}
@@ -172,7 +172,7 @@ and further:
 }
 }
 \end{align*}
-The rotation $\rho_{R(\vec{\omega})}$ of a function with frequency $l$ results in a function of frequency $l$ (equation~\ref{eq:sh_rotation}). In addition the spherical harmonics basis functions $\SHBC^{l,m}$ are orthogonal. Therefore following applies:
+The rotation $\rho_{R(\vec{\omega})}$ of a function with frequency $l$ results in a function of frequency $l$ (equation~\ref{eq:sh_rotation}). In addition the spherical harmonics basis functions $\SHBC^{l,m}$ are orthogonal. Therefore the following applies:
 \begin{align*}
 \left<
 \SHBC^{l,m}, \rho_{R(\vec{\omega})}\left(\SHBC^{l'm'}\right)
@@ -225,7 +225,7 @@ This allows to express the scattering term using SH expansions of phase function
 \SHBC^{l,m}
 }
 \end{align*}
-However, a spherical harmonics expansion of the term itsself has not been done yet. It is still a scalar function that depends on direction $\vec{\omega}$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\vec{\omega}$. Further all factors will be pulled out, which do not depend on $\vec{\omega}$ and apply the SH orthogonality property to arrive at the scattering term of the complex-valued $P_N$-equations:
+However, a spherical harmonics expansion of the term itsself has not been done yet. It is still a scalar function that depends on direction $\vec{\omega}$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\vec{\omega}$. All factors will be pulled out, that do not depend on $\vec{\omega}$, and apply the SH orthogonality property. Hence we optaion the scattering term of the complex-valued $P_N$-equations:
 \begin{align}
 &
 \int_{\Omega}
@@ -299,7 +299,7 @@ Multiplying with $\overline{\SHBC^{l'm'}}$ and integrating over solid angle, aft
 &= -\sigma_t\left(\vec{x}\right)L^{l,m}\left(\vec{x}\right )
 \label{eq:sh_complex_collision}
 \end{align}
-The derivation of the SH projected term is equal to the derivation of the projected collision term. After replacing the emission field with its SH projection and multiplying the term with the conjugate complex of $\SHBC$ results after application of the orthogonality property in:
+The derivation of the projected emission term $Q$ is identical to the derivation of the projected collision term. After replacing the emission field $Q$ with its SH projection and multiplying the term with the conjugate complex of $\SHBC$ results (after application of the orthogonality property) in:
 \begin{align}
 Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 \label{eq:sh_complex_emission}
@@ -309,7 +309,7 @@ Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 % --------------------------------------------------------------
 \subsubsection*{Final Equation}
 
-The results are the complex-valued $P_N$-equations, after putting all the projected terms together (equation~\ref{eq:sh_complex_transport},~\ref{eq:sh_complex_collision},~\ref{eq:sh_complex_scattering} and~\ref{eq:sh_complex_emission}):
+The results are the complex-valued $P_N$-equations, after putting the projected terms together (equation~\ref{eq:sh_complex_transport},~\ref{eq:sh_complex_collision},~\ref{eq:sh_complex_scattering} and~\ref{eq:sh_complex_emission}):
 \begin{align}
 &
 \frac{1}{2}c^{l-1, m-1}\partial_x L^{l-1,m-1}

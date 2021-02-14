@@ -35,7 +35,7 @@ The key assumption behind the classical diffusion approximation is that the radi
 \begin{align*}
 L(\vec{x}, \vec{\omega}) = L(\vec{x})
 \end{align*}
-This assumption allows finding an estimate $T$ for the second moment of the radiance distribution. Unit power $\phi = 1$ is assumed:
+This assumption allows for finding an estimate $T$ for the second moment of the radiance distribution. Unit power $\phi = 1$ is assumed:
 \begin{align*}
 1 = \phi\left(\vec{x}\right) = \int_\Omega{L\left(\vec{x}, \vec{\omega}\right)\ud\vec{\omega}}
 \end{align*}
@@ -97,4 +97,4 @@ This allows for some intuition about the diffusion approximation. Instead of dep
 \caption{Ficks first law of diffusion (visualized on the right) states that the diffusive flux can be related to the difference in concentration (of fluence $\phi$), allowing to approximate a global quantity (left) by a local quantity. This is the fundamental idea behind diffusion approximation.}
 \label{fig:da_moment_problem_flux_as_fluence_gradient}
 \end{figure}
-The problem is now uniquely defined and and can be solved with standard solvers. In the next section we discuss how results from diffusion approximation compare against the results from the $P_N$-method.
+The problem is now uniquely defined and can be solved with standard solvers. In the next section, we discuss how results from diffusion approximation compare against the results from the $P_N$-method.

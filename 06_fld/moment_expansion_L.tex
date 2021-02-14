@@ -1,11 +1,11 @@
 \section{Moment Expansion of the Radiance Field}
 \label{sec:da_moment_expansion_L}
 
-In section~\ref{sec:sh} it has been established that spherical functions can be represented using a linear combination of spherical harmonics basis functions (equation~\ref{eq:sh_reconstruction}). The coefficients of these basis functions are found by projection (equation~\ref{eq:sh_projection}). Another option for representing spherical functions is the coordinate free form given by tensor calculus. This form is derived by representing the spherical harmonics basis functions themself as linear combination of products of the components of the basis vectors, which establish the underlying coordinate system. Because this representation allows to change the coordinate system independently from the representation, it is referred to as being coordinate free. For a refresher on tensor calculus, an introductory standard such as Grinfeld~\cite{Grinfeld13} is recommended. As with the spherical harmonics expansion, the coordinate free representation can be found for the radiance field as well as the individual terms of the radiative transfer equation. This is referred to as the moment expansion or multipole expansion of the radiance field and the radiative transfer equation respectively.
+In section~\ref{sec:sh} it has been established that spherical functions can be represented using a linear combination of spherical harmonics basis functions (equation~\ref{eq:sh_reconstruction}). The coefficients of these basis functions are found by projection (equation~\ref{eq:sh_projection}). Another option for representing spherical functions is the coordinate free form given by tensor calculus. This form is derived by representing the spherical harmonics basis functions themself as linear combination of products of the components of the basis vectors, which establish the underlying coordinate system. Because this representation allows to change the coordinate system independently from the representation, it is referred to as being coordinate free. For a refresher on tensor calculus, an introductory standard such as Grinfeld~\cite{Grinfeld13} is recommended. As with the spherical harmonics expansion, the coordinate free representation can be found for the radiance field, as well as the individual terms of the radiative transfer equation. This is referred to as the moment expansion or multipole expansion of the radiance field and the radiative transfer equation respectively.
 
-The moment expansion is a different approach to represent the spherical harmonics expansion of the radiance field and the radiative transfer equation. Its benefit lies in its notational efficieny, especially for lower order. However, for truncation order of $N=2$ and higher, it introduces additional redundancy which makes the standard spherical harmonics expansion much better suited when deriving computational methods from the theory, such as the $P_N$-method in chapter~\ref{sec:pnmethod}. Because the flux-limited diffusion is related to the first order truncation $N=1$, the moment expansion is the standard way of representing the theory. No additional redundancy is introduced and the notational efficiency allows to express the underlying intuition easier.
+The moment expansion is a different approach to represent the spherical harmonics expansion of the radiance field and the radiative transfer equation. Its benefit lies in its notational efficiency, especially for lower order. However, for the truncation order of $N=2$ and higher, it introduces additional redundancy which makes the standard spherical harmonics expansion much better suited when deriving computational methods from the theory, such as the $P_N$-method in chapter~\ref{sec:pnmethod}. Because the flux-limited diffusion is related to the first order truncation $N=1$, the moment expansion is the standard way of representing the theory. No additional redundancy is introduced and the notational efficiency allows to express the underlying intuition easier.
 
-The moment expansion is derived starting from the spherical harmonics reconstruction of the radiance field:
+The moment expansion is derived, starting from the spherical harmonics reconstruction of the radiance field:
 \begin{align}
 \label{eq:fld_moment_expansion_sh_expansion}
 L\left(\vec{\omega}\right) =
@@ -38,7 +38,7 @@ Inserting this into the definition of the spherical harmonics basis function $\S
 \SHBC^{l,m}(\theta, \phi) = C^{l,m}\left(e^{i\phi}\operatorname{sin}\left(\phi\right)\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\operatorname{cos}^{l-m-2j}(\theta)
 \qquad \text{for } m \ge 0
 \end{align}
-As a next step $\SHBC^{l,m}$ will be expressed in terms of unit direction vector $\vec{\omega}$, instead of spherical coordinates. This is done by using the identity $e^{i\phi}\operatorname{sin}\left(\phi\right) = \vec{\omega}_x + i\vec{\omega}_y$ and $\operatorname{cos}(\theta) = \vec{\omega}_z$:
+As a next step, $\SHBC^{l,m}$ will be expressed in terms of unit direction vector $\vec{\omega}$, instead of spherical coordinates. This is done by using the identity $e^{i\phi}\operatorname{sin}\left(\phi\right) = \vec{\omega}_x + i\vec{\omega}_y$ and $\operatorname{cos}(\theta) = \vec{\omega}_z$:
 \begin{align}
 \SHBC^{l,m}(\vec{\omega}) &=  C^{l,m}\left( \vec{\omega}_x + i\vec{\omega}_y\right)^m \sum_j^{\lfloor\frac{l-m}{2}\rfloor}a^{lmj}\vec{\omega}_z^{l-m-2j}
 &\qquad \text{for } m \ge 0
@@ -88,7 +88,7 @@ After rearranging terms that leads to:
 L\left(\vec{\omega}\right) =
 \sum_{l=0}^{\infty}\sum_{m=-l}^{l}\sum_{j=0}^\infty{L^{l,m}y^{l,m}_j\odot N_j(\vec{\omega})}
 \end{align}
-For each spherical harmonics basis $l,m$, all rank $j$ tensors will be iterated, and contracted with their respective $N_j$ (after applying the respective spherical harmonics coefficient as weight). Since the indices $l$ and $j$ run over the same range, this can be swapped. This is identical to rearranging the order of terms:
+For each spherical harmonics basis $l,m$, all rank $j$ tensors will be iterated, and contracted with their respective $N_j$ (after applying the respective spherical harmonics coefficient as weight). Since the indices $l$ and $j$ run over the same range, these can be swapped. This is identical to rearranging the order of terms:
 \begin{align}
 L\left(\vec{\omega}\right) =
 \sum_{l=0}^{\infty}\underbrace{\sum_{j=0}^\infty\sum_{m=-j}^{j}{L^{j,m}y^{j,m}_l}}_{=f_l}
@@ -173,7 +173,7 @@ L^{1,1}y^{1,1}_1 &=
 0
 \end{pmatrix}
 \end{align}
-Subsequently $f_1$ can be merged. Note how all the imaginary terms cancel out:
+Subsequently $f_1$ can be merged. Note, how all the imaginary terms cancel out:
 \begin{align}
 f_1 &= 
 L^{1,-1}y^{1,-1}_1+L^{1,0}y^{1,0}_1+L^{1,1}y^{1,1}_1
@@ -203,7 +203,7 @@ f_0\odot N_0 + f_1\odot N_1
 &=
 \frac{1}{4\pi}\phi + \frac{3}{4\pi}\left(w \cdot \vec{E}\right)
 \end{align}
-The tensor $f_0$ is expressed in terms of the fluence $\phi$ and the tensor $f_1$ in terms of the flux vector $\vec{E}$. These quantities are often referred to as the zero and first moment of the radiance field respectively, generalize to higher order and are denoted $L_i$. They are computed using the moment projection operator $\mu_i$:
+The tensor $f_0$ is expressed in terms of the fluence $\phi$ and the tensor $f_1$ in terms of the flux vector $\vec{E}$. These quantities are often referred to as the zero and first moment of the radiance field respectively, they generalize to higher order and are denoted $L_i$. They are computed using the moment projection operator $\mu_i$:
 \begin{align}
 \label{eq:moment_expansion_mu}
 \mu_i\left[L\right] = L_i = \int_\Omega{L\left(\vec{\omega}\right)N_i\left(\vec{\omega}\right)\ud\vec{\omega}}

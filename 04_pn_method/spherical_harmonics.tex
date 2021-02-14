@@ -2,7 +2,7 @@
 \section{Spherical Harmonics}
 \label{sec:sh}
 
-Spherical harmonics are the Fourier series for the sphere, and are an important tool for solving numerical problems involving the spherical domain. They are often derived as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(d/dx)^2$ on a finite line with the boundary conditions that $y$ and $dy/dx$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$, which are defined as:
+Spherical harmonics play the role of Fourier series for the sphere and are an important tool for solving numerical problems involving the spherical domain. They are often optained as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(\operatorname{d}/\dx)^2$ on a finite line with the boundary conditions that $y$ and $\operatorname{dy}/\operatorname{dx}$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$, which are defined as:
 \begin{align}
 \label{eq:sh_definition}
 \SHBC^{l,m}(\theta, \phi)=
@@ -43,7 +43,7 @@ The factor $C^{l,m}$ in equation~\ref{eq:sh_definition} is defined as
 \label{eq:sh_definition_C}
 C^{l,m}=(-1)^m\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}
 \end{align}
-Since spherical harmonics are used in many different fields, their definition can vary and one has to be careful, when comparing them across literature. This concerns the $(-1)^m$ factor in particular, which is called the Condon-Shortley phase. Sometimes, this factor is part of the definition of the associated Legendre polynomial $P^{l,m}$ and therefore does not appear in $C^{l,m}$. More importantly, the definition of $C^{l,m}$ depends on how the spherical harmonics are expected to be normalized.
+Since spherical harmonics are widely used in science, their definition can vary and one has to be careful, when comparing them across literature. This concerns the $(-1)^m$ factor in particular, which is called the Condon-Shortley phase. Sometimes, this factor is part of the definition of the associated Legendre polynomial $P^{l,m}$ and therefore does not appear in $C^{l,m}$. More importantly, the definition of $C^{l,m}$ depends on how the spherical harmonics are expected to be normalized.
 \newline
 \begin{figure}[h]
 \centering
@@ -90,7 +90,7 @@ The coefficient $C^{l,m}$ has been defined as such that the spherical harmonics 
 \norm{\SHBC^{l,m}} = \sqrt{\left<\SHBC^{l,m}, \SHBC^{l,m}\right>} = 1
 \ .
 \end{align}
-Other spherical harmonics definitions use a different constant (e.g. $4\pi$) and therefore arrive at different $C^{l,m}$. Since the spherical harmonics functions $\SHBC$ are complex-valued functions on the unit sphere, they are elements of the Hilbert space, for which the inner product is defined as:
+Note that the normalization constant is sometimes chosen differently in the literature (e.g. $4\pi$), producing a different $C^{l,m}$. The unit constant we use here is one of the most common. Since the spherical harmonics functions $\SHBC$ are complex-valued functions on the unit sphere, for which the inner product is defined as:
 \begin{align}
 \label{eq:sh_inner_product}
 \left<f,g\right> = \int_\Omega f\left(\vec{\omega}\right)\overline{g}\left(\vec{\omega}\right)\ud\vec{\omega}
@@ -114,19 +114,19 @@ The properties of normalization (equation~\ref{eq:sh_normalization}) and orthogo
 
 \subsubsection*{Projection and Reconstruction}
 
-Because the spherical harmonics are orthonormal, a spherical functional $f\left(\vec{\omega}\right)$ can be projected into scalar spherical harmonics basis function coefficients $f^{l,m}$, using the inner product from equation~\ref{eq:sh_inner_product}. For notational convenience the projection operator $\mathcal{P}$ shall be defined, which takes a spherical functional and returns its spherical harmonics projection for a given pair of spherical harmonics coefficients $l,m$:
+Because the spherical harmonics are orthonormal, a spherical functional $f\left(\vec{\omega}\right)$ can be projected into scalar spherical harmonics basis function coefficients $f^{l,m}$, using the inner product from equation~\ref{eq:sh_inner_product}. For convenience, we define the projection operator $\mathcal{P}$. This operator takes an arbitrary spherical functional and returns its spherical harmonics projection for a given pair of spherical harmonics coefficients $l,m$:
 \begin{align}
 \label{eq:sh_projection}
 \mathcal{P}^{l, m}(f) =  \left<f,\SHBC^{l, m}\right> = 
 \int_\Omega f\left(\vec{\omega}\right)\overline{\SHBC^{l,m}}\left(\vec{\omega}\right)\ud\vec{\omega}
 \ .
 \end{align}
-Note, the use of the complex conjugate $\overline{\SHBC}$ for computing the coefficients $f^{l,m}$. This comes from the definition of the inner product (equation~\ref{eq:sh_inner_product}), which is a result of Hilbert space theory. 
+Note, the use of the complex conjugate $\overline{\SHBC}$ for computing the coefficients $f^{l,m}$. This is due to the definition of the inner product (equation~\ref{eq:sh_inner_product}). 
 
 Given the coefficients $f^{l, m} = \mathcal{P}^{l, m}(f)$, the function $f$ can be fully reconstructed by summing up the weighted contributions from the spherical harmonics basis functions
 \begin{align}
 \label{eq:sh_reconstruction}
-f\left(\vec{\omega}\right) = 
+f\left(\vec{\omega}\right) \approx 
 \sum_{l=0}^{N}
 {
 \sum_{m=-l}^{l}
@@ -136,17 +136,17 @@ f^{l,m}\left(\vec{x}\right)\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 \ .
 \end{align}
-The function can be fully reconstructed if $N=\infty$. However, as with the Fourier-expansion, it is useful to truncate the expansion at a specific $N$ (giving $P_N$-method its name). This limits the number of coefficients at the expense of introducing an approximation error by cutting off higher frequencies. The number of sperical harmonics coefficients for truncation order $N$ is $(N+1)\times(N+1)$.
+The function can be reconstructed if $N=\infty$. However, as with the Fourier-expansion, it is useful to truncate the expansion at a specific $N$ (giving $P_N$-method its name). This limits the number of coefficients at the expense of introducing an approximation error by cutting off higher frequencies. The number of sperical harmonics coefficients for truncation order $N$ is $(N+1)\times(N+1)$.
 
 \subsubsection*{Frequency-invariant Rotation and Rotational Symmetry}
 
-Applying a rotation to the argument of a spherical harmonics basis function of band $l$ can be expressed as a linear combination of spherical harmonics basis functions of the same order:
+Applying a rotation to the argument of a spherical harmonics basis function of band $l$ results in a linear combination of spherical harmonics basis functions of the same order:
 \begin{align}
 \label{eq:sh_rotation}
 \SHBC^{l,m}\left(R\vec{\omega}\right)=\sum_{j=-l}^{l}r^{l,j}\SHBC^{l,j}\left(\vec{\omega}\right)
 \ .
 \end{align}
-This is derived from the fact that the spherical harmonics basis functions of order $l$ form an irreducible basis for the group of 3D-rotations (see Corollary $17.17$ in \cite{Hall13}). Equation~\ref{eq:sh_rotation} implies that a rotation of a function represented in spherical harmonics, does not introduce or loose any frequencies from or to other spherical harmonic bands and therefore is not subject to aliasing.
+This is true since the spherical harmonics basis functions of order $l$ form an irreducible basis for the group of 3D-rotations (see Corollary $17.17$ in \cite{Hall13}). Equation~\ref{eq:sh_rotation} implies that a rotation of a function represented in spherical harmonics, does not introduce new or looses any frequencies from or to other spherical harmonic bands and therefore is not subject to aliasing.
 
 The spherical harmonics projection of a rotationally symmetric function $f$ simplifies to Zonal Spherical Harmonics, which are characterized by the fact that only coefficients with $f^{l,0}$ are needed for reconstruction. This property is needed for the derivation of the $P_N$-equations. In particular, the phase function depends only on the angle between incident direction $\vec{\omega}_i$ and outgoing direction $\vec{\omega}_o$, which means that the phase function will be rotationally symmetric around the outgoing direction, if it is fixed. 
 
@@ -192,7 +192,7 @@ As mentioned earlier, this will be useful during the derivation of the $P_N$-equ
 
 \subsubsection*{Recursive Relation}
 
-Another property, which will be important for the derivation of the $P_N$-equations and its derivative term in particular is the following recursive relation
+Another property, which will be important for the derivation of the $P_N$-equations (and its derivative term in particular) is the following recursive relation
 \begin{equation}
 \label{eq:recursive_relation}
 \resizebox{1.0\hsize}{!}{$\vec{\omega}\overline{\SHBC^{l,m}} = \frac{1}{2}

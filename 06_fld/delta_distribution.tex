@@ -33,22 +33,33 @@ Inserting the approximation $T\phi$ into the flux-vector definition (equation~\r
 \begin{align*}
 \vec{E}&= -\frac{1}{\sigma_t'}\operatorname{div}\left (T\phi\right )
 \end{align*}
-The key assumption used is that the spatial variations of $T$ can be neglected. Fundamentally, the approach is to assume, that the radiance field $L$ can be separated into a product of two functions: one depending on angle and another function depending on position. This allows to express the divergence of the second moment as a matrix product with a gradient vector:
+The key assumption used is that the spatial variations of $T$ can be neglected. Fundamentally, the approach is to assume, that the radiance field $L$ can be separated into a product of two functions: one depending on the angle and another function depending on the position. This allows expressing the divergence of the second moment as a matrix product with a gradient vector:
 \begin{align}
 \vec{E}&= -T\left(\frac{1}{\sigma_t'}\nabla\phi\right )
 \label{eq:second_moment_iso2}
 \end{align}
-For the derivation the normalized flux will be addressed, which is given by scaling the flux-vector with $1/\phi$:
+Then, the normalized flux will be addressed, which is given by scaling the flux-vector with $1/\phi$:
 \begin{align}
 \widehat{\vec{E}} = \frac{\vec{E}}{\phi}= -T\underbrace{\left(\frac{\nabla\phi}{\sigma_t'\phi}\right )}_{=\vec{R}}
 \label{eq:second_moment_iso3}
 \end{align}
-Equation~\ref{eq:first_moment_Lhat} showed, that $\vec{n}$ points into the same direction as the flux-vector $\vec{E}$. This means that the result of the transformation $T$ will be a vector, that is parallel to $\vec{n}$. Since the Eddington tensor has been constructed with $T_{ij}=\vec{n}_i\vec{n}_j$, it is known that $\vec{n}$ is the only eigenvector of $T$, with an eigenvalue greater than zero. It can be concluded that (under the assumption of negligible spatial variation of $T$) the transformation $T$ is applying a scaling operation and the dimensionless gradient $\vec{R}$ is parallel to $E$. Therefore the product of tensor $T$ is expressed with $\vec{R}$ as a scaling operation and equation~\ref{eq:second_moment_iso3} then becomes:
+Equation~\ref{eq:first_moment_Lhat} showed that $\vec{n}$ has the same direction as the flux-vector $\vec{E}$. This indicates that the result of the transformation $T$ will be a vector, that is parallel to $\vec{n}$. Since the Eddington tensor has been constructed with $T_{ij}=\vec{n}_i\vec{n}_j$, we can show that $\vec{n}$ is the only eigenvector of $T$ with eigenvalue $\norm{\vec{n}}$.
+
+Consider an arbitrary vector $\vec{u}$. The construction of $T_{ij}=\vec{n}_i\vec{n}_j$ can be also expressed as the outer product between $\vec{n}$ with itsself. Transforming $\vec{u}$ with $T$ gives:
+\begin{align}
+T\vec{u} = \left(\vec{n}\cdot\vec{n}^T\right)\vec{u} = \lambda\vec{u}
+\end{align}
+We can see that transforming any vector with $T$ results in a scaling of that vector with an unknown value $\lambda$. Therefore this value must be an eigenvalue of $T$ and all other eigenvalues of $T$ need to be zero. We can further derive an expression for the eigenvalue by forming the dot product between $\vec{n}$ and $T\vec{u}$:
+\begin{align}
+\vec{n}\cdot T\vec{u} = \vec{n}\cdot\left(\vec{n}\cdot\vec{n}\right)\vec{u} = \vec{n}\lambda\vec{u} \implies \lambda=\vec{n}\cdot\vec{n}=\norm{\vec{n}}^2
+\end{align}
+
+We see that $\vec{n}$ is the only eigenvector of $T$, with an eigenvalue greater than zero. It can be concluded that (under the assumption of negligible spatial variation of $T$) the transformation $T$ is applying a scaling operation and the dimensionless gradient $\vec{R}$ is parallel to $E$. Therefore the product of tensor $T$ is expressed with $\vec{R}$ being a scaling operation and equation~\ref{eq:second_moment_iso3} then becomes:
 \begin{align}
 \widehat{\vec{E}} = -\lambda\left(\frac{\nabla\phi}{\sigma_t'\phi}\right )
 \label{eq:second_moment_iso4}
 \end{align}
-With an assumption about the spatial variation of $T$, the normalized flux-vector $\hat{L}_1$ could be expressed with respect to the zero moment $\phi$ and its spatial derivatives. What remains to be done is to find an expression for the eigenvalue $\lambda$. Then an expression for $\vec{E}$ (by using $\vec{E}=\hat{L}_1\phi$) would be found, which has no self-dependence and therefore can be used to substitute $\vec{E}$ into the zero moment equation.
+Hence, under the above assumption about the spatial variation of $T$, the normalized flux-vector $\hat{L}_1$ could be expressed with respect to the zero moment $\phi$ and its spatial derivatives. What remains to be done is to find an expression for the eigenvalue $\lambda$. Then an expression for $\vec{E}$ (by using $\vec{E}=\hat{L}_1\phi$) would be found, that has no self-dependence and therefore can be used to substitute $\vec{E}$ into the zero moment equation.
 
 Apparently, finding $\lambda$ is easy in the case of a delta distribution of radiance. In that case it is known from equation~\ref{eq:iso_delta_normE}, that $\norm{\vec{E}}=\phi$ and therefore $\norm{\vec{E}/\phi}=1$. This requires that:
 \begin{align*}
@@ -59,7 +70,7 @@ Apparently, finding $\lambda$ is easy in the case of a delta distribution of rad
 \implies
 \lambda=\frac{\sigma_t'\phi}{\norm{\nabla\phi}}
 \end{align*}
-Note that lambda is under the vector norm, which would make the sign of lambda ambiguous (it could be positive or negative: in both cases the length of the normalized flux-vector would be one). However, as mentioned earlier, the way $T=\vec{n}_i\vec{n}_j$ is defined allows the conclusion that $\lambda$ is the only Eigenvalue of $T$ and must be greater one. This gives the final expression for the flux-vector $\vec{E}$:
+Note that is part of the vector norm, which would make the sign of lambda ambiguous (it could be positive or negative: in both cases, the length of the normalized flux-vector would be one). However, as mentioned earlier, the way $T=\vec{n}_i\vec{n}_j$ is defined allows the conclusion that $\lambda$ is the only eigenvalue of $T$ and that it must be greater than one. This gives the final expression for the flux-vector $\vec{E}$:
 \begin{align*}
 \vec{E}=\widehat{\vec{E}}\phi= -\lambda\left(\frac{\nabla\phi}{\sigma_t'\phi}\right )\phi= -\frac{\nabla\phi}{\norm{\nabla\phi}}\phi
 ,
@@ -77,4 +88,4 @@ If we consider a purely scattering medium without emission ($\vec{\omega}_a=0$ a
 
 In case of a radiance delta distribution in angular domain and with the assumption of negligible spatial variation of $T$, the moment equation expresses how the zero moment quantity $\phi$ is moved around by its normalized gradient.
 
-This section highlights that the streaming transport is best represented by advection in case of the two term expansion of the radiative transfer equations. The core idea behind flux-limited diffusion is, to mix diffusive transport and advective transport, depending on local properties at $\vec{x}$. This is developed in the next section.
+This section highlights, that streaming transport is best represented by advection in case of the two-term expansion of the radiative transfer equations. The core idea behind flux-limited diffusion is, to mix diffusive transport and advective transport, depending on local properties at $\vec{x}$. This is developed in the next section.

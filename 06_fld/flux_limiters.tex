@@ -6,7 +6,7 @@ Levermore et. al~\cite{Levermore81} construct their theory by starting from the 
 \label{eq:iso_var_fld_rte}
 \frac{1}{c}\frac{\partial (\phi\hat{L})}{\partial t} + \left(\vec{\omega}\cdot\nabla\right)(\phi\hat{L})&=-\sigma_t\phi\hat{L} + \frac{1}{4\pi}\sigma_s\phi + Q
 \end{align}
-After applying the moment expansion, for the first moment equations are as follows:
+After applying the moment expansion, the first moment equations are as follows:
 \begin{align}
 \label{eq:iso_var_fld_rte_zero}
 \frac{1}{c}\frac{\partial \phi}{\partial t} + \nabla\vec{E} &= -\sigma_a\phi + Q_0
@@ -44,13 +44,13 @@ Using this in equation~\ref{eq:iso_var_fld_Lhat} gives:
 \hat{L} = \frac{1}{4\pi}\frac{1}{1+\lambda(R)R^2-\vec{\omega}\cdot\vec{R}}
 \end{align}
 
-By enforcing that $\hat{L}$ integrates to one over the solid angle of the unit sphere, the following expression for $\lambda(R)$ can be derived:
+By enforcing that $\hat{L}$ integrates to one over the solid angle of the unit sphere, the following expression holds for $\lambda(R)$:
 \begin{align}
 \label{eq:iso_var_fld_lambdaR}
 \lambda(R) = \frac{1}{R}\left(\mathbf{\operatorname{coth}}R - \frac{1}{R}\right)
 \end{align}
 
-Using this result and equation~\ref{eq:iso_var_fld_relation_normalized_flux_R}, gives the following expression for the flux vector:
+Using this result and equation~\ref{eq:iso_var_fld_relation_normalized_flux_R}, yields the following expression for the flux vector:
 \begin{align}
 \label{eq:iso_var_fld_fluxvector}
 \vec{E} = \widehat{\vec{E}}\phi=-\frac{1}{\sigma_t'}\lambda(R)\nabla\phi
@@ -120,4 +120,4 @@ As mentioned in the previous section, the theory sets up the limits, which flux-
 %
 %\missingfigure{flux-limiters graphs}
 
-In this section a non-linear form of the diffusion equation is derived which respects the flux-limit constraint. The following section will present a novel solver, which solves flux-limited diffusion on a finite difference grid over a given domain.
+In this section, a non-linear form of the diffusion equation is derived which respects the flux-limit constraint. The following section will present a novel solver, which solves flux-limited diffusion on a finite difference grid over a given domain.

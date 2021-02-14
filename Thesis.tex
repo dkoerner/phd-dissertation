@@ -126,6 +126,12 @@
 \setlength{\itemsep}{11pt}
 \setlength{\parsep}{11pt}
 
+% math stretching
+\newcommand{\setmuskip}[2]{#1=#2\relax}
+\setmuskip{\medmuskip}{0mu}
+\setmuskip{\thinmuskip}{0mu}
+%\setmuskip{\thickmuskip}{0mu}
+
 %\setcounter{topnumber}{2} % max floats at top of page (Jan was 1)
 %\setcounter{bottomnumber}{2} % max floats at bottom of page (Jan was 0)
 %\setcounter{totalnumber}{4} % total floats per page (unless an all-float page) (Jan was 1)
