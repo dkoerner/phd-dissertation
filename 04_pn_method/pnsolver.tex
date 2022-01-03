@@ -15,7 +15,7 @@ We will now summarize the steps for building a linear system from a given partia
 
 As mentioned in section~\ref{sec:foundations_deterministic}, a discrete representation of the geometry that covers the problem domain is required in order to discretize the spatial variable. Throughout this thesis, a regular Cartesian grid is used, which will be referred to as a finite difference grid. This type of grid is simple and commonly used in graphics. In future it might be worth exploring other complex meshes, such as tetrahedral irregular grids, which are often used in the finite element analysis. 
 
-The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by a worldspace bounding box and a resolution $res=(I,J,K)$ or gridspacing $h=(h_x, h_y, h_z)$ in each dimension. The local space of the grid is referred to as a voxelspace.
+The finite difference grid defines the locations at which radiative transfer quantities and the solution will be specified. It is parameterized by a worldspace bounding box and a resolution $res=(I$, $J,$ $K)$ or gridspacing $h=(h_x$, $h_y,$ $h_z)$ in each dimension. The local space of the grid is referred to as a voxelspace.
 
 Using finite difference grids, the discretization consists of replacing quantities, which depend on the continuous variable~$\vec{x}$ with its discrete counterpart $x_{ijk}$, where $ijk$ is a coordinate in voxelspace. This coordinate is still continuous and $x_{i+\frac{1}{2}jk}$ is a valid coordinate. Quantities around grid point locations are found by interpolation. In this thesis a trilinear interpolation for three-dimensional grids and bilinear interpolation for two-dimensional grids will be used. Higher order interpolation would be possible and an avenue for future exploration.
 \begin{figure}[h]
@@ -296,9 +296,9 @@ Therefore, the details about the surrounding framework are not relevant to the m
 \label{fig:pn_classes}
 \end{figure}
 
-The \emph{Stencil} class is the key structure around which the system is designed, and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The \emph{Stencil} class also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important when staggered grids are introduced. The stencil specifies the highest order of any derivative operator, which was found during discretization. This affect the number of layers of boundary voxels around the computational domain. Finally, the \emph{Stencil} class has an apply function, which takes the reference to a \emph{StencilAPI} object as an input and runs the generated stencil code that uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
+The \emph{Stencil} class is the key structure around which the system is designed, and which serves as a wrapper around the generated stencil code. It specifies the dimension (two- or threedimensional) and the truncation order $N$, as these parameters are being decided during stencil code generation. The \emph{Stencil} class also indirectly specifies the number of spherical harmonics coefficients per voxel. It further specifies the placement of each spherical harmonics coefficient within the voxel. This will become important when staggered grids are introduced. The stencil specifies the highest order of any derivative operator, which was found during discretization. This affects the number of layers of boundary voxels around the computational domain. Finally, the \emph{Stencil} class has an apply function, which takes the reference to a \emph{StencilAPI} object as an input and runs the generated stencil code that uses that API to propagate the system matrix $A$ and right hand side vector $\vec{b}$.
 
-The \emph{StencilAPI} class serves as the single interface between the generated stencil code and the surrounding parts of the framework. Figure~\ref{fig:pn_discretization_codegen_stencilAPI} gives an overview of the different query functions offered by the API. Essential are functions for mapping between coordinate spaces, such as world-space, voxel-space, discrete grid coordinates $ijk$ and linear indices into the solution vector. Further, those functinos allow querying radiative transfer quantities, such as extinction coefficient or phase function spherical harmonics coefficients at world space positions. Both groups of functions will make use of a reference to a \emph{VoxelManager} and a \emph{Scene} class, respectively.
+The \emph{StencilAPI} class serves as the single interface between the generated stencil code and the surrounding parts of the framework. Figure~\ref{fig:pn_discretization_codegen_stencilAPI} gives an overview of the different query functions offered by the API. Essential are functions for mapping between coordinate spaces, such as world-space, voxel-space, discrete grid coordinates $ijk$ and linear indices into the solution vector. Further, those functions allow querying radiative transfer quantities, such as extinction coefficient or phase function spherical harmonics coefficients at world space positions. Both groups of functions will make use of a reference to a \emph{VoxelManager} and a \emph{Scene} class, respectively.
 
 The \emph{Scene} class contains all inputs required to specify the problem to be solved. A \emph{Domain} object describes the extent of the computational domain in world-space, as well as the resolution of the finite difference grid. Further attached are references to abstract \emph{Field} interfaces, which allow querying scalar or vector fields at arbitrary worldspace positions for extinction coefficient, albedo, and the spherical harmonics coefficients of phase function and emission field. This is the place where the problem description is provided as input to the system. Different implementations of these abstract interfaces can be used, such as \emph{Constant} fields or \emph{VoxelGrid} fields. This follows the idea of resolution independent volumes introduced by Tessendorf et al.~\cite{Tessendorf11}.
 
@@ -363,22 +363,19 @@ The discretization step will replace the evaluation of a coefficient at a partic
 
 Staggering spherical harmonics coefficients also makes handling boundary conditions more involved. With collocated grids, it is straightforward to identify boundary voxels and voxels in the computational domain. Each voxel in the computational domain contributes the same number of unknowns to the system. With staggered grids, some boundary voxels will have a subset of their unknowns that lie directly on the boundary. Without changes to the system, this will imply a shifted boundary interface and introduce an asymmetry. Coefficients, which are located on the boundary, will be unknowns and part of the solution vector on one side and subject to boundary conditions on the other side (figure~\ref{fig:pn_staggered_grid_unhandled_bc}~\subref{fig:pn_staggering_asymmetry_bc}). This creates different boundary conditions on opposite sides of the problem domain and causes an asymmetry in the solution for symmetric problems (figure~\ref{fig:pn_staggered_grid_unhandled_bc}~\subref{fig:pn_staggering_asymmetry_bc_checkerboard}).
 \begin{figure}[h]
-\centering
-\begin{subfigure}[t]{0.49\columnwidth}
-\centering
+\begin{subfigure}[t]{0.48\columnwidth}
+\hspace{0.5in}
 \includegraphics[width=1\textwidth]{04_pn_method/figures/fig_staggered_grid_domain_boundary_wrong.pdf}
 \caption{Per voxel staggered grid locations.}
 \label{fig:pn_staggering_asymmetry_bc}
-\end{subfigure}%
+\end{subfigure}
 \hspace{0.01\columnwidth}
-\begin{subfigure}[t]{0.49\columnwidth}
+\begin{subfigure}[t]{0.48\columnwidth}
 \centering
 \includegraphics[width=0.66\columnwidth]{04_pn_method/results/p1_staggered_grid_asymmetric_bc.png}
-%\missingfigure{checkerboard result for unhandled BC the asymmetry}
 \caption{$P_1$-solution.}
 \label{fig:pn_staggering_asymmetry_bc_checkerboard}
-\end{subfigure}%
-%\vspace{-0.2in}
+\end{subfigure}
 \caption{Dealing with staggered grid locations per voxel (left) implies a boundary interface which produces asymmetric results as seen for the solution of the checkerboard problem (right).}
 \label{fig:pn_staggered_grid_unhandled_bc}
 \end{figure}
@@ -391,16 +388,14 @@ The solution is to introduce additional unknowns to the system for every coeffic
 \includegraphics[width=1\textwidth]{04_pn_method/figures/fig_staggered_grid_domain_boundary_corrected.pdf}
 \caption{Adjusted placement of staggered grid coefficients.}
 \label{fig:pn_staggering_correct_bc}
-\end{subfigure}%
+\end{subfigure}
 \hspace{0.01\columnwidth}
 \begin{subfigure}[t]{0.34\columnwidth}
 \centering
 \includegraphics[width=\columnwidth]{04_pn_method/results/checkerboard2d_p5_neumann_staggered.png}
-%\missingfigure{checkerboard result for unhandled BC the asymmetry}
 \caption{$P_1$-solution of the checkerboard problem.}
 \label{fig:pn_staggering_correct_bc_checkerboard}
-\end{subfigure}%
-%\vspace{-0.2in}
+\end{subfigure}
 \caption{Placing staggered grid coefficients such that the defined boundary interface is symmetric (left) leads to a correct symmetric solution of the checkerboard problem (right).}
 \label{fig:pn_staggered_grid_handled_bc}
 \end{figure}

@@ -72,7 +72,7 @@ The introduction of a minimum threshold $\epsilon$ in the nominator and denomina
 
 \subsubsection*{Non-linear Gauss-Seidel Solver}
 
-The solver follows an iterative segregated approach for solving non-linear partial differential equations (Mazumder~\cite{Mazumder2015}). The idea is to update the diffusion coefficient from the current solution $\phi_{ijk}$ (initialized by an initial guess) and then update the solution using the updated diffusion coefficient values $D_{ijk}$ and repeat this update procedure until convergence to a final solution.
+The solver follows an iterative segregated approach for solving non-linear partial differential equations (Mazumder~\cite{Mazumder2015}). The idea is to update the diffusion coefficient from the current solution $\phi_{ijk}$ (initialized with a first guess) and then update the solution using the updated diffusion coefficient values $D_{ijk}$ and repeat this update procedure until convergence to a final solution.
 
 The iteration method used is the Gauss-Seidel fixpoint iteration scheme. The non-linearity is integrated by updating the diffusion coefficient in place during iteration over all voxels for a single Gauss-Seidel step.
 
@@ -109,9 +109,9 @@ D_{ijk} = \frac{\lambda\left(R_{ijk}\right)}{\sigma_t'}
 \end{align}
 This updating step is executed for every voxel of the finite difference grid and values are updated in place.
 
-The values $\phi_{ijk}$ and $D_{ijk}$ are initialized to small tolerances $\phi_{ijk} = \epsilon \bar{j}\Delta l$ and $D_{ijk} = \epsilon \Delta l$ for all voxels. Initially, these grid values do not satisfy equation~\ref{eq:fld_solver_gs_phi_update} and equation~\ref{eq:fld_solver_discrete_D}, but over several iterations, they converge to a consistent solution of both equations over the whole grid. 
+The values $\phi_{ijk}$ and $D_{ijk}$ are initialized to small tolerances $\phi_{ijk} = \epsilon \bar{j}\Delta l$ and $D_{ijk} = \epsilon \Delta l$ for all voxels. Initially, these grid values do not satisfy equation~\ref{eq:fld_solver_gs_phi_update} and equation~\ref{eq:fld_solver_discrete_D}, but after several iterations, they converge to a consistent solution of both equations over the whole grid. 
 
-Boundary conditions are accounted for by updating the values for $\phi_{ijk}$ and $D_{ijk}$ at the boundary voxels. For Dirichlet boundary conditions the values are set directly. For Neumann boundary conditions the boundary voxels are set according to the next inner voxel (section~\ref{sec:pn_bc}). This update is done at the beginning of each Gauss-Seidel iteration.
+Boundary conditions are accounted for by updating the values for $\phi_{ijk}$ and $D_{ijk}$ at the boundary voxels. For Dirichlet boundary conditions the values are set directly. For Neumann boundary conditions the boundary voxels are set according to the next inner voxel (section~\ref{sec:pn_bc}). This update is done at the start of each Gauss-Seidel iteration.
 
 A criteria is set to stop the Gauss-Seidel iterations. For real-time applications a specific user-decided number of iterations might be a reasonable choice. Here, convergence to machine precision may be compromised to retain interactivity. Another option is to compute the root mean square of the residual and stop the Gauss-Seidel algorithm as soon as this falls below a user-defined threshold.
 

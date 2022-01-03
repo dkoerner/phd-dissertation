@@ -3,7 +3,7 @@
 
 In this section a multigrid solver for the diffusion approximation is developed. Multigrid schemes are the most efficient iterative methods for solving diffusion-type equations. The core idea is to propagate the error on a coarse grid during each iteration and take that propagated error into account, when doing an iteration step on the original high resolution grid. Particularly useful is the fact that the multigrid method can be employed on any system of linear equations as long as so called restriction and interpolation operators are being provided. 
 
-The automatic discretization machinery, which was developed as part of the $P_N$-solver in section~\ref{sec:pn_solver} takes arbitrary systems of potentially coupled, linear partial differencial equations as input. The diffusion equation, which has been derived in section~\ref{sec:diffusion_approximation} is such a linear scalar partial differential equation and therefore can be fed into the automated stencil code generation from section~\ref{sec:pn_solver} to produce valid stencil code (independent of mesh resolution).
+The automatic discretization machinery, which was developed as part of the $P_N$-solver in section~\ref{sec:pn_solver} takes arbitrary systems of potentially coupled, linear partial differential equations as input. The diffusion equation, which has been derived in section~\ref{sec:diffusion_approximation} is such a linear scalar partial differential equation and therefore can be fed into the automated stencil code generation from section~\ref{sec:pn_solver} to produce valid stencil code (independent of mesh resolution).
 
 The idea behind the multigrid method is to accelerate the convergence by using a coarse grid on which information propagates faster throughout the spatial domain. The coarse solution is then used for updating the original grid.
 %\begin{figure}[h]
@@ -13,7 +13,7 @@ The idea behind the multigrid method is to accelerate the convergence by using a
 %\label{fig:da_solver_multigrid_mesh}
 %\end{figure}
 
-Quantities on the original fine mesh are denoted with the subscript $F$. Therefore the original system of equations is received:
+Quantities on the original fine mesh are denoted with the subscript $F$. Therefore the original system of equations becomes:
 \begin{align}
 \nonumber
 A_F\vec{u}_F = \vec{b}_F
@@ -38,7 +38,7 @@ Rearranging this equation allows us to use the downsampled residual as the right
 \nonumber
 \vec{b}_C - A_C\vec{u}_C^i = \vec{r}_C^i
 \end{align}
-When substituting $\vec{b}_C$ with $A_C\vec{u}_C=\vec{b}_C$ (using the fully converged yet unknown solution on the coarse grid $\vec{u}_C$) following is shown:
+When substituting $\vec{b}_C$ with $A_C\vec{u}_C=\vec{b}_C$ (using the fully converged yet unknown solution on the coarse grid $\vec{u}_C$) the following is shown:
 \begin{align}
 A_C\vec{u}_C - A_C\vec{u}_C^i &= \vec{r}_C^i
 \nonumber

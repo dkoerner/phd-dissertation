@@ -2,7 +2,7 @@
 \section{Spherical Harmonics}
 \label{sec:sh}
 
-Spherical harmonics play the role of Fourier series for the sphere and are an important tool for solving numerical problems involving the spherical domain. They are often optained as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(\operatorname{d}/\dx)^2$ on a finite line with the boundary conditions that $y$ and $\operatorname{dy}/\operatorname{dx}$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$, which are defined as:
+Spherical harmonics (SH) play the role of Fourier series for the sphere and are an important tool for solving numerical problems involving the spherical domain. They are often obtained as eigensolutions to the surface Laplacian, which is the analog to developing the Fourier series as eigensolutions of the operator $(\operatorname{d}/\dx)^2$ on a finite line with the boundary conditions that $y$ and $\operatorname{dy}/\operatorname{dx}$ match at the two ends (see Riley et al.~\cite{Riley2006}). The result of this derivation are complex-valued functions $\SHBC$, which are defined as:
 \begin{align}
 \label{eq:sh_definition}
 \SHBC^{l,m}(\theta, \phi)=
@@ -90,14 +90,14 @@ The coefficient $C^{l,m}$ has been defined as such that the spherical harmonics 
 \norm{\SHBC^{l,m}} = \sqrt{\left<\SHBC^{l,m}, \SHBC^{l,m}\right>} = 1
 \ .
 \end{align}
-Note that the normalization constant is sometimes chosen differently in the literature (e.g. $4\pi$), producing a different $C^{l,m}$. The unit constant we use here is one of the most common. Since the spherical harmonics functions $\SHBC$ are complex-valued functions on the unit sphere, for which the inner product is defined as:
+Note that the normalization constant is sometimes chosen differently in the literature (e.g. $4\pi$), producing a different $C^{l,m}$. The unit constant we use here is one of the most common. The spherical harmonics functions $\SHBC$ are complex-valued functions on the unit sphere, for which the inner product is defined as:
 \begin{align}
 \label{eq:sh_inner_product}
 \left<f,g\right> = \int_\Omega f\left(\vec{\omega}\right)\overline{g}\left(\vec{\omega}\right)\ud\vec{\omega}
 \end{align}
 with $\overline{g}$ being defined as the complex conjugate of $g$ (Folland~\cite{Folland92}).
 
-The spherical harmonics functions form a orthogonal family and thus result in:
+The spherical harmonics functions form an orthogonal family and thus result in:
 \begin{align}
 \left<\SHBC^{l_1, m_1},\SHBC^{l_2, m_2}\right>
 =
@@ -136,11 +136,11 @@ f^{l,m}\left(\vec{x}\right)\SHBC^{l,m}\left(\vec{\omega}\right)
 }
 \ .
 \end{align}
-The function can be reconstructed if $N=\infty$. However, as with the Fourier-expansion, it is useful to truncate the expansion at a specific $N$ (giving $P_N$-method its name). This limits the number of coefficients at the expense of introducing an approximation error by cutting off higher frequencies. The number of sperical harmonics coefficients for truncation order $N$ is $(N+1)\times(N+1)$.
+The function can be reconstructed if $N$ approaches infinity. However, as with the Fourier-expansion, it is useful to truncate the expansion at a specific $N$ (giving $P_N$-method its name). This limits the number of coefficients at the expense of introducing an approximation error by cutting off higher frequencies. The number of sperical harmonics coefficients for truncation order $N$ is $(N+1)\times(N+1)$.
 
 \subsubsection*{Frequency-invariant Rotation and Rotational Symmetry}
 
-Applying a rotation to the argument of a spherical harmonics basis function of band $l$ results in a linear combination of spherical harmonics basis functions of the same order:
+Applying a rotation $R$ to the argument of a spherical harmonics basis function of band $l$ results in a linear combination of spherical harmonics basis functions of the same order:
 \begin{align}
 \label{eq:sh_rotation}
 \SHBC^{l,m}\left(R\vec{\omega}\right)=\sum_{j=-l}^{l}r^{l,j}\SHBC^{l,j}\left(\vec{\omega}\right)
@@ -155,7 +155,7 @@ A rotation $R(\alpha)$ of angle $\alpha$ around the pole axis is expressed in sp
 \rho_{R(\alpha)}(\SHBC^{l,m}) = e^{-i m\alpha}\SHBC^{l,m}
 \ .
 \end{align*}
-If a function $f$ is rotationally symmetric around the pole axis, then following applies:
+If a function $f$ is rotationally symmetric around the pole axis, then the following applies:
 \begin{align*}
 \rho_{R(\alpha)}(f) = f
 \end{align*}
@@ -218,4 +218,4 @@ e^{l,m}= \sqrt{\frac{\left(l-m+1\right)\left(l-m+2\right)}{\left(2l+3\right)\lef
 f^{l,m}= \sqrt{\frac{\left(l+m\right)\left(l+m-1\right)}{\left(2l+1\right)\left(2l-1\right)}}
 $}
 \end{equation*}
-This relation implies that a direction vector $\vec{\omega}$ scaled by a complex SH basis function $\SHBC$ of order $lm$ can be expressed as a vector of complex values basis functions of higher and lower order. Such recursion relations seem to be hard to find in the standard literature and are preserved through citations in relevant articles\footnote{according to email exchange with experts from nuclear sciences}, such as Seibold et al.~\cite{Seibold14} or Brunner et al.~\cite{Brunner05}. The signs for the $x$- and $y$- component depend on the handedness of the coordinate system, in which the spherical harmonics basis functions are defined.
+This relation implies that a direction vector $\vec{\omega}$ scaled by a complex SH basis function $\SHBC$ of order $l$,$m$ can be expressed as a vector of complex values basis functions of higher and lower order. Such recursion relations seem to be hard to find in the standard literature and are preserved through citations in relevant articles\footnote{according to email exchange with experts from nuclear sciences}, such as Seibold et al.~\cite{Seibold14} or Brunner et al.~\cite{Brunner05}. The signs for the $x$- and $y$- component depend on the handedness of the coordinate system, in which the spherical harmonics basis functions are defined.

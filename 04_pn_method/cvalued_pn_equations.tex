@@ -4,7 +4,7 @@
 Equipped with key properties of the spherical harmonics expansion, the complex-valued $P_N$-equations are derived in this section. The derivation follows two basic steps, which are executed separately on each term of the radiative transfer equation. The first step is to substitute each angular dependent radiative transfer quantity, such as the radiance field $L$, by its (truncated) spherical harmonics projection (equation~\ref{eq:sh_projection}). The second step is to apply the spherical harmonics projection to each term of the radiative transfer equation. This results in terms, which will depend on the spherical harmonics indices $l,m$ and therefore form a system of equations. The size of this system is driven by the truncation order $N$. The higher the value $N$, the higher frequencies in angular domain are taken into account for an approximation of the radiative transport.
 % --------------------------------------------------------------
 \subsubsection*{Transport Term}
-The transport term of the RTE is given as
+The transport term $\mathcal{T}$ of the RTE is given as
 \begin{align*}
 (\vec{\omega}\cdot\nabla)L(\vec{x}, \vec{\omega})
 \end{align*}
@@ -21,6 +21,7 @@ L^{l,m}\left(\vec{x}\right )
 \end{align*}
 Next, the whole term is projected into spherical harmonics, which means a multiplication with $\overline{\SHBC^{l'm'}}$ and integration over solid angle:
 \begin{align*}
+P_\Omega\left(\mathcal{T}\right)=
 \int_\Omega
 {
 \overline{Y^{l'm'}}(\vec{\omega}\cdot\nabla)
@@ -34,6 +35,7 @@ L^{l,m}\left(\vec{x}\right)
 \end{align*}
 The spatial derivative can be extracted to get:
 \begin{align*}
+P_\Omega\left(\mathcal{T}\right)=
 \nabla\cdot\int_\Omega
 {
 \vec{\omega}\overline{\SHBC^{l'm'}}
@@ -45,7 +47,7 @@ L^{l,m}\left(\vec{x}\right)
 \ud\vec{\omega}
 }
 \end{align*}
-When applying the recursion relation (equation~\ref{eq:recursive_relation}) the following will be shown:
+Applying the recursion relation (equation~\ref{eq:recursive_relation}) will result in:
 \begin{equation*}
 \resizebox{1.0\hsize}{!}{$
 \begin{pmatrix}
@@ -66,7 +68,7 @@ L^{l,m}\left(\vec{x}\right )\SHBC^{l,m}\left(\vec{\omega}\right)
 \ud\vec{\omega}
 $}
 \end{equation*}
-Integrating the vector term over solid angle, can be expressed as seperate solid angle integrals over each component. These integrals over a sum of terms are split into seperate integrals:
+Integrating the vector term over solid angle, can be expressed as seperate solid angle integrals over each component. The integrals are split into separate terms:
 \begin{align*}
 \begin{pmatrix}
 \frac{1}{2}\partial_x\\
@@ -97,31 +99,33 @@ a^{l-1, m}L^{l-1,m}+b^{l+1, m}L^{l+1,m}
 $}
 \end{equation*}
 Which gives the projected transport term:
-\begin{align}
+\begin{flalign}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{T}\right) = 
 &
 \frac{1}{2}c^{l-1, m-1}\partial_x L^{l-1,m-1}
 -\frac{1}{2}d^{l+1, m-1}\partial_x L^{l+1,m-1}
 -\frac{1}{2}e^{l-1, m+1}\partial_x L^{l-1,m+1}
 \nonumber
-\\
+&\\
 &
 +\frac{1}{2}f^{l+1, m+1}\partial_x L^{l+1,m+1}
 -\frac{i}{2}c^{l-1, m-1}\partial_y L^{l-1,m-1}
 +\frac{i}{2}d^{l+1, m-1}\partial_y L^{l+1,m-1}
 \nonumber
-\\
+&\\
 &
 -\frac{i}{2}e^{l-1, m+1}\partial_y L^{l-1,m+1}
 +\frac{i}{2}f^{l+1, m+1}\partial_y L^{l+1,m+1}
 +
 a^{l-1, m}\partial_z L^{l-1,m}+b^{l+1, m}\partial_z L^{l+1,m}
+&
 \label{eq:sh_complex_transport}
-\end{align}
+\end{flalign}
 
 % --------------------------------------------------------------
 \subsubsection*{Scattering Term}
 
-The scattering term in the RTE is given as:
+The scattering term $\mathcal{S}$ in the RTE is given as:
 \begin{align*}
 \sigma_s(\vec{x})\int_{\Omega}\phase(\vec{x}, \vec{\omega}'\cdot\vec{\omega})L(\vec{x}, \vec{\omega}')\ud\vec{\omega}'
 \end{align*}
@@ -225,8 +229,8 @@ This allows to express the scattering term using SH expansions of phase function
 \SHBC^{l,m}
 }
 \end{align*}
-However, a spherical harmonics expansion of the term itsself has not been done yet. It is still a scalar function that depends on direction $\vec{\omega}$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\vec{\omega}$. All factors will be pulled out, that do not depend on $\vec{\omega}$, and apply the SH orthogonality property. Hence we optaion the scattering term of the complex-valued $P_N$-equations:
-\begin{align}
+However, a spherical harmonics expansion of the term itself has not been done yet. It is still a scalar function that depends on direction $\vec{\omega}$. The scattering term is projected into spherical harmonics, by multiplying with $\overline {\SHBC^{l'm'}}$ and integrating over solid angle $\vec{\omega}$. All factors that do not depend on $\vec{\omega}$ will be pulled out, and then the SH orthogonality property is applied:
+\begin{align*}
 &
 \int_{\Omega}
 {
@@ -268,6 +272,15 @@ However, a spherical harmonics expansion of the term itsself has not been done y
 \lambda_l
 \sigma_s(\vec{x})
 \phase^{l0}L^{l,m}(\vec{x})
+\end{align*}
+
+Hence we optain the scattering term of the complex-valued $P_N$-equations:
+\begin{align}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{S}\right)
+=
+\lambda_l
+\sigma_s(\vec{x})
+\phase^{l0}L^{l,m}(\vec{x})
 \label{eq:sh_complex_scattering}
 \end{align}
 
@@ -276,7 +289,7 @@ However, a spherical harmonics expansion of the term itsself has not been done y
 % ------------------------------------------------------------
 \subsubsection*{Collision and Emission Term}
 
-The collision term of the RTE is given as:
+The collision term $\mathcal{C}$ of the RTE is given as:
 \begin{align*}
 -\sigma_t\left(\vec{x}\right)L\left(\vec{x}, \vec{\omega}\right)
 \end{align*}
@@ -301,7 +314,8 @@ Multiplying with $\overline{\SHBC^{l'm'}}$ and integrating over solid angle, aft
 \end{align}
 The derivation of the projected emission term $Q$ is identical to the derivation of the projected collision term. After replacing the emission field $Q$ with its SH projection and multiplying the term with the conjugate complex of $\SHBC$ results (after application of the orthogonality property) in:
 \begin{align}
-Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{Q}\right)
+=Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 \label{eq:sh_complex_emission}
 \end{align}
 
@@ -309,7 +323,11 @@ Q^{l,m}\left(\vec{x}, \vec{\omega}\right)
 % --------------------------------------------------------------
 \subsubsection*{Final Equation}
 
-The results are the complex-valued $P_N$-equations, after putting the projected terms together (equation~\ref{eq:sh_complex_transport},~\ref{eq:sh_complex_collision},~\ref{eq:sh_complex_scattering} and~\ref{eq:sh_complex_emission}):
+After putting the projected terms together (equation~\ref{eq:sh_complex_transport},~\ref{eq:sh_complex_collision},~\ref{eq:sh_complex_scattering} and~\ref{eq:sh_complex_emission}) according to the radiative transfer equation:
+\begin{align}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{T}\right) = \mathcal{P}_{\vec{\omega}}\left(\mathcal{C}\right) + \mathcal{P}_{\vec{\omega}}\left(\mathcal{S}\right) + \mathcal{P}_{\vec{\omega}}\left(\mathcal{Q}\right)
+\end{align}
+we get, as the result, the complex-valued $P_N$-equations:
 \begin{align}
 &
 \frac{1}{2}c^{l-1, m-1}\partial_x L^{l-1,m-1}

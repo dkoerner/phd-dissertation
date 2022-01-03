@@ -4,12 +4,10 @@
 
 \usepackage{todonotes}
 
-% \usepackage{pdflscape} Not needed because I don't use landscape pages 
 \usepackage{tocloft} % toc entries spacing (https://latex.org/forum/viewtopic.php?t=7701)
-%\renewcommand{\cftchapafterpnum}{\vspace{5pt}}
-%\setlength\cftparskip{1pt}
-%\setlength\cftbeforesecskip{0pt}
-%\setlength\cftaftertoctitleskip{15pt}
+
+%% https://tex.stackexchange.com/questions/71129/bibliography-in-table-of-contents
+%\usepackage[nottoc,notlot,notlof]{tocbibind}
 
 % toc entries spacing (https://texblog.org/2013/07/16/how-to-add-extra-space-to-the-table-of-contents-list-of-figures-and-tables/)
 \usepackage{etoolbox}
@@ -18,10 +16,6 @@
 }
 
 \usepackage{epsfig}
-%%FONTS - if using Winedt then standard font is good
-%%%%\usepackage{pslatex} %provides times font for roman and maths and helvet for sansserif (ie same as mathptmx + helvet)
-%%%%\usepackage{mathptmx, helvet} % equivalent to (but not as good as) pslatex
-%%%%\usepackage{txfonts} % supposed to be a good times package
 \usepackage{times} % redundant use mathptmx and helvet together or pslatex
 \usepackage{amssymb, amsmath, amsbsy} % needed for AMSLatex maths fonts, amsbsy needed for \boldsymbol
 \usepackage{exscale, relsize} % allows relative sizes (\larger \smaller[2] \mathlarger etc) -needs exscale package
@@ -64,24 +58,20 @@
 
 \usepackage[sort, numbers]{natbib} % improved bibliography options (sort = sort citations in text, numbers = use numbers not alpha)
 
-% Jan enable to configure item lists
+% enable to configure item lists
 \usepackage{enumitem}
 
-% \usepackage[style = ieee]{biblatex} % Jan alternative
-% \bibliographystyle{abbrvnat} % natbib equivavlent of plain bibliography style
-
-\usepackage{mathtools} % Jan for floor and ceil
-% \newcommand{\noopsort}[1]{} % fix sorting in bibliography for Dutch names
+\usepackage{mathtools} % for floor and ceil
 
 \usepackage{scalerel} % very small subscripts (\scaleto)
 
-\usepackage{siunitx} % Jan e-8 notation
-\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}} % Jan e-8 notation
+\usepackage{siunitx} % e-8 notation
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}} % e-8 notation
 
-% Jan higher subs for Rec.709 notation
+% higher subs for Rec.709 notation
 \usepackage[low-sup]{subdepth}
 
-% Jan Hyperref should be loaded last
+% Hyperref should be loaded last
 \usepackage{hyperref} % hyperref creates clickable links in pdfs)
 
 % remove page number from empty pages
@@ -95,12 +85,9 @@
 \clubpenalty10000
 \widowpenalty10000
 
-%\DeclareGraphicsExtensions{.jpg, .eps}
-%\DeclareGraphicsRule{.jpg}{eps}{.jpg.bb}{`jpeg2ps -h -r 600 #1}
 
 % Define if Rasterized Gamut Plots or Trinagle Vector versions are used:
 \newcommand{\gamutPlotExtension}{_AI_Rasterized}
-% \newcommand{\gamutPlotExtension}{_AI}
 
 \setlength{\hoffset}{-1in} % move origin of margin measure to edge of page!
 \setlength{\oddsidemargin}{40mm}
@@ -149,39 +136,17 @@
 \renewcommand{\dbltopfraction}{.66}
 \renewcommand{\dblfloatpagefraction}{.66}
 
-% Jan: Remove Header from empty pages
-%\makeatletter
-%\renewcommand*{\cleardoublepage}{\clearpage\if@twoside \ifodd\c@page\else
-%	\hbox{}%
-%	% \thispagestyle{empty}%
-%	\fancyhead[LO]{~} 
-%	\fancyhead[RE]{~}
-%	\newpage%
-%	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
-%\makeatother
 
-% From Timo
-%\renewcommand{\topfraction}{0.85}
-%\renewcommand{\textfraction}{0.15}
 
 \setcounter{secnumdepth}{3} % set depth before subsections become unnumbered (i.e. at subsubsection)
 \setcounter{tocdepth}{3} % Set septh to include in TOC
 
 \usepackage[utf8]{inputenc} %% For ü ö
 \usepackage[charter,cal=cmcal]{mathdesign}
-%\usepackage{titlesec} 
-%\renewcommand*{\sfdefault}{phv}
 
 \author{David Koerner}
 \date{\today}
 
-%% Jan useful commands
-\newcommand{\jCom}[1]{\textcolor{blue}{\colorbox{lightgray}{Com: #1}}}
-\newcommand{\jToDo}[1]{\textcolor{red}{\colorbox{yellow}{#1}}}
-\newcommand{\jDan}[1]{\textcolor{red}{\colorbox{yellow}{Daniel: #1}}}
-\newcommand{\jJan}[1]{\textcolor{red}{\colorbox{yellow}{Jan: #1}}}
-\newcommand{\jBernd}[1]{\textcolor{red}{\colorbox{yellow}{Bernd: #1}}}
-\newcommand{\jAndreas}[1]{\textcolor{red}{\colorbox{yellow}{Andreas: #1}}}
 \newcommand{\jLaTeX}[1]{\textcolor{magenta}{\colorbox{cyan}{LaTeX: #1}}}
 
 % Possibility to comment in First names in the Related Work chapter.
@@ -242,10 +207,14 @@
 
 \input{macros.tex}
 
+
+% https://tex.stackexchange.com/questions/71129/bibliography-in-table-of-contents
+%\apptocmd{\thebibliography}{\csname phantomsection\endcsname\addcontentsline{toc}{chapter}{\bibname}}{}{}
+
+
 \begin{document}
 
 \include{01_preamble/Title} 
-%\cleardoublepage
 \clearpage{\pagestyle{empty}\cleardoublepage}
 
 \pagestyle{fancy}
@@ -257,18 +226,10 @@
 \fancyhead[RO]{\thepage}
 \fancyhead[LE]{\thepage}
 
-
-%\onehalfspacing % set one and a half linespacing
-%\begin{spacing}{0.5}
-{\hypersetup{linkcolor=black}  % begin: Make Links in TOCs black, but dark blue in the rest of the Document
-
+{
+\hypersetup{linkcolor=black}  % begin: Make Links in TOCs black, but dark blue in the rest of the Document
 
 \addtocontents{toc}{\vspace{\normalbaselineskip}} % hack: Add some space to aling toc haedlines better
-
-%\addcontentsline{toc}{chapter}{Table of Contents}
-%% Jan Fix for weird LaTex behaviour:
-%\fancyhead[LO]{\bfseries Table of Contents} 
-%\fancyhead[RE]{\bfseries Table of Contents}
 
 \renewcommand{\baselinestretch}{0.1}\normalsize
 \tableofcontents
@@ -276,63 +237,39 @@
 
 \cleardoublepage
 
-
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Figures}
-% Jan Fix for weird LaTex behaviour:
 \fancyhead[LO]{\bfseries List of Figures} 
 \fancyhead[RE]{\bfseries List of Figures}
 \listoffigures
+
 \cleardoublepage
 
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Tables}
-% Jan Fix for weird LaTex behaviour:
 \fancyhead[LO]{\bfseries List of Tables} 
 \fancyhead[RE]{\bfseries List of Tables}
 \listoftables
+
 \cleardoublepage
 
-
 } % end: Make Links in TOCs black, but dark blue in the rest of the Document
-%\end{spacing}
 
-%\onehalfspacing % set one and a half linespacing
-\addcontentsline{toc}{chapter}{List of Symbols}
-% Jan Fix for weird LaTex behaviour:
 \fancyhead[LO]{\bfseries List of Symbols} 
 \fancyhead[RE]{\bfseries List of Symbols}
 \include{01_Preamble/symbols}
-\cleardoublepage
-
-
-\addcontentsline{toc}{chapter}{List of Symbols}
-% Jan Fix for weird LaTex behaviour:
-\fancyhead[LO]{\bfseries List of Symbols} 
-\fancyhead[RE]{\bfseries List of Symbols}
-\include{01_Preamble/Notation}
 
 \cleardoublepage
-%\onehalfspacing % set one and a half linespacing
-\addcontentsline{toc}{chapter}{Abstract}
-% Jan Fix for weird LaTex behaviour:
+
 \fancyhead[LO]{\bfseries Abstract} 
 \fancyhead[RE]{\bfseries Abstract}
 \include{01_Preamble/Abstract} 
 \cleardoublepage
 
-\addcontentsline{toc}{chapter}{Zusammenfassung (German Abstract)}
-%\onehalfspacing % set one and a half linespacing
 % Jan Fix for weird LaTex behaviour:
 \fancyhead[LO]{\bfseries Zusammenfassung (German Abstract)} 
 \fancyhead[RE]{\bfseries Zusammenfassung (German Abstract)}
 \include{01_Preamble/AbstractDE} 
-\cleardoublepage
-
-%\begin{spacing}{1.19} % Hack to prevent the Acknowledgements to need more than 2 pages
-% Jan Fix for weird LaTex behaviour:
-%\fancyhead[LO]{\bfseries Acknowledgements} 
-%\fancyhead[RE]{\bfseries Acknowledgements}
-%\include{01_Preamble/Acknowledgements}
-%\end{spacing}
 \cleardoublepage
 
 % \include{01_Preamble/Declaration} 
@@ -343,10 +280,6 @@
 %
 
 \cleardoublepage % Beendet eine Seite und erzwingt auf den nachfolgenden Seiten die Ausgabe aller Gleitobjekte (z.B. Abbildungen), die bislang definiert, aber noch nicht ausgegeben wurden. Dieser Befehl fügt, falls nötig, eine leere Seite ein, sodaß die nächste Seite nach den Gleitobjekten eine ungerade Seitennummer hat.
-
-%\onehalfspacing % set one and a half linespacing
-
-
 
 
 \pagestyle{fancy}
@@ -367,38 +300,20 @@
 \include{02_Introduction/introduction}
 \include{03_foundations_of_light_transport_simulation/foundations}
 \include{04_pn_method/pn_method}
-%\include{05_diffusion_approximation/diffusion_approximation}
 \include{06_fld/fld}
 \include{07_conclusion/conclusion}
 
 
 
-
-%
-% Jan Fix for weird LaTex behaviour:
-%\fancyhead[LO]{\bfseries Publications} 
-%\fancyhead[RE]{\bfseries Publications}
-%\include{01_Preamble/Publications} 
-%\cleardoublepage
-%
-% Jan Fix for weird LaTex behaviour:
 \fancyhead[LO]{\bfseries Bibliography} 
 \fancyhead[RE]{\bfseries Bibliography}
-\addcontentsline{toc}{chapter}{Bibliography}
-%
-%%GATHER{Bibliography.bib}   % For Gather Purpose Only (v useful in winedt)
-%
-\singlespacing
-%
-%%\bibliographystyle{ACM-Reference-Format-Journals} % {abbrvnatjan}% {abbrvnat} % abbrvnat
-%\bibliographystyle{seg}
-\bibliographystyle{abbrvnatjan}
 
-%\bibliographystyle{abbrvnat}
-%%\bibliographystyle{ieeetr} % Jan 2016/05 better numbering but loosing URLs
-%
-%% \emergencystretch 1.5em % Should split URLS
-%%\interlinepenalty=10000 % should remove splitting of items over pages
+\singlespacing
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{abbrvnatjan}
 \bibliography{bibliography_cited}
 
 \cleardoublepage
@@ -414,6 +329,11 @@
 \phantomsection
 \include{08_appendices/appendix_derivation_rvalued_pn}
 \include{08_appendices/diffusion_approximation_solver}
+
+% append empty page
+\thispagestyle{empty}
+\null\newpage
+\cleardoublepage
 %
 %
 \end{document}

@@ -53,7 +53,7 @@ All properties of the complex-valued spherical harmonics basis functions, except
 % --------------------------------------------------------------
 \subsubsection*{Transport Term}
 
-Carrying out the derivation for the transport term of the radiative transfer equation produces very different terms compared to the complex-valued counterpart. The derivation is extensive and can be found in appendix~\ref{app:rpn}. As the spherical harmonics basis functions are different depending on the sign of $m$ (equation~\ref{eq:real_sh_basis}), the projected transport term differs accordingly. After carrying out the derivation steps, the result for $m<0$ is:
+Carrying out the derivation for the transport term $\mathcal{T}$ of the radiative transfer equation produces very different terms compared to the complex-valued counterpart. The derivation is extensive and can be found in appendix~\ref{app:rpn}. As the spherical harmonics basis functions are different depending on the sign of $m$ (equation~\ref{eq:real_sh_basis}), the projected transport term differs accordingly. After carrying out the derivation steps, the result for $m<0$ is:
 \begin{align*}
 &-\frac{1}{2}c^{{l-1,m-1}}
 \partial_y
@@ -139,10 +139,9 @@ Similar simplifications apply to the remaining terms of the spherical harmonics 
 &
 \frac{1}{\sqrt{2}}c^{{l-1,-1}}\partial_x L^{{l-1,1}}
 -\frac{1}{\sqrt{2}}d^{{l+1,-1}}\partial_x L^{{l+1,1}}
-\\&
-\frac{1}{\sqrt{2}}c^{{l-1,-1}}\partial_y L^{{l-1,-1}}
++\frac{1}{\sqrt{2}}c^{{l-1,-1}}\partial_y L^{{l-1,-1}}
+\nonumber\\&
 -\frac{1}{\sqrt{2}}d^{{l+1,-1}}\partial_y L^{{l+1,-1}}
-\\&
 a^{{l-1,0}}\partial_z L^{{l-1,0}}
 +b^{{l+1,0}}\partial_z L^{{l+1,0}}
 \end{align}
@@ -153,17 +152,23 @@ a^{{l-1,0}}\partial_z L^{{l-1,0}}
 The remaining terms of the radiative transfer equation are derived in the same way, as their complex-valued counterpart. The collision term for $m < 0$, $m=0$ and $m > 0$ is
 \begin{align}
 \label{eq:pn_rvalued_transport_collision}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{C}\right)
+=
 -\sigma_t L^{l,m}
 \ .
 \end{align}
 For the scattering term the equation is
 \begin{align}
 \label{eq:pn_rvalued_transport_scattering}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{S}\right)
+=
 \sigma_s\lambda_{l}\phase^{l,0}\left(\vec{x}\right)L^{l,m}
 \end{align}
 and finally for the emission term
 \begin{align}
 \label{eq:pn_rvalued_transport_emission}
+\mathcal{P}_{\vec{\omega}}\left(\mathcal{Q}\right)
+=
 Q^{l,m}
 \ .
 \end{align}
